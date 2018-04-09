@@ -23,72 +23,7 @@
 
         <main role="main">
             <h1>Deutsch's Algorithm</h1>
-            <!--<article>
-    <section class="header">
-        Posted on August 17, 2016
-        
-    </section>
-    <section>
-        <p>In this post I’ll present a quantum implementation of the Deutsch’s algorithm using a library <strong>QuantumComputingLib</strong> that I wrote this week.</p>
-<p>First, I should write a little about the library. It’s version <em>1.0-SNAPSHOT</em> only and it doesn’t have an official release version. For now, it only has a basic Javadoc and only provides methods for well-known operations on qubits and matrices. I hope that I will able to offer support for it and that this project will be active for a long time, I hope that at least 2 years. If someone want to use and test the library, it can be found at the next <a href="https://github.com/ardeleanasm/quantum_computing/tree/master/quantum">link</a>. Also, for using this algorithm, you’ll need the <strong>ComplexNumber</strong> library. This library can be found at the next <a href="https://github.com/ardeleanasm/projects/tree/master/complexnumbers">link</a>.</p>
-<h3 id="deutschs-algorithm">Deutsch’s algorithm</h3>
-<p>The problem that Deutsch’s algorithm solves is not an important problem in Computer Science but it’s a good problem to see how quantum computers can be used. This problem can be solved by a quantum computer faster that a traditional one, althoug not exponentially faster.</p>
-<p>Suppose there is a function f, which has 1-bit inputs/outputs. The maximum number of such function is four:</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">Function</th>
-<th align="center">Type</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">\[\f_{1}(0)=0, f_{1}(1)=0\]</td>
-<td align="center">constant</td>
-</tr>
-<tr class="even">
-<td align="left">\[\f_{2}(0)=1, f_{2}(1)=1\]</td>
-<td align="center">constant</td>
-</tr>
-<tr class="odd">
-<td align="left">\[\f_{3}(0)=0, f_{3}(1)=1\]</td>
-<td align="center">balanced</td>
-</tr>
-<tr class="even">
-<td align="left">\[\f_{4}(0)=1, f_{4}(1)=0\]</td>
-<td align="center">balanced</td>
-</tr>
-</tbody>
-</table>
-<p>The goal was to determine whether the function passed to an algorithm’s input is constant or not. Using a traditional computing this problem can be solved only by evaluating the function twice but using a quantum one, the type of the function can be determined by evaluating it once.</p>
-<h3 id="implementation">Implementation</h3>
-<div class="figure">
-<img src="http://ardeleanasm.github.io/resources/deutsch_quantum_circuits.png" alt="The quantum circuit of Deutsch’s algorithm[1]" />
-<p class="caption">The quantum circuit of Deutsch’s algorithm[1]</p>
-</div>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">gateH = gateFactory.<span class="fu">getGate</span>(EGateTypes.<span class="fu">E_HadamardGate</span>);
-gateX = gateFactory.<span class="fu">getGate</span>(EGateTypes.<span class="fu">E_XGate</span>);
-gateHH = MatrixOperations.<span class="fu">tensorProduct</span>(gateH.<span class="fu">getUnitaryMatrix</span>(), gateH.<span class="fu">getUnitaryMatrix</span>());</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">resultQubit = QuantumOperations.<span class="fu">applyGate</span>(QuantumOperations.<span class="fu">applyGate</span>(
-			    QuantumOperations.<span class="fu">applyGate</span>(
-				    QuantumOperations.<span class="fu">entangle</span>(QUBIT_<span class="dv">0</span>, QuantumOperations.<span class="fu">applyGate</span>(QUBIT_<span class="dv">0</span>, gateX)), gateHH),
-			    functionOperator), gateHH);</code></pre></div>
-<ul>
-<li>Apply the X-Gate on the second qubit.</li>
-<li>Determine the tensor product between the 2 qubits.</li>
-<li>Calculate the tensor product between the two Hadamard gates and apply the resulting gate.</li>
-<li>Apply U<sub>f</sub> operator.</li>
-<li>Apply again the Hadamard gate.</li>
-</ul>
-<hr />
-<p>References:</p>
-<p>[1] [http://kukuruku.co/hub/haskell/how-to-implement-deutschs-algorithm-in-haskell](http://kukuruku.co/hub/haskell/how-to-implement-deutschs-algorithm-in-haskell)</p>
-<p>[2] [http://www.cs.xu.edu/~kinne/quantum/deutche.html](http://www.cs.xu.edu/~kinne/quantum/deutche.html)</p>
-    </section>
-</article>
--->
-
-<article>
+            <article>
     <section class="header">
         Posted on August 17, 2016
         
@@ -113,19 +48,19 @@ gateHH = MatrixOperations.<span class="fu">tensorProduct</span>(gateH.<span clas
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">\[\f_{1}(0)=0, f_{1}(1)=0\]</td>
+<td align="left">\[f_{1}(0)=0, f_{1}(1)=0\]</td>
 <td align="center">constant</td>
 </tr>
 <tr class="even">
-<td align="left">\[\f_{2}(0)=1, f_{2}(1)=1\]</td>
+<td align="left">\[f_{2}(0)=1, f_{2}(1)=1\]</td>
 <td align="center">constant</td>
 </tr>
 <tr class="odd">
-<td align="left">\[\f_{3}(0)=0, f_{3}(1)=1\]</td>
+<td align="left">\[f_{3}(0)=0, f_{3}(1)=1\]</td>
 <td align="center">balanced</td>
 </tr>
 <tr class="even">
-<td align="left">\[\f_{4}(0)=1, f_{4}(1)=0\]</td>
+<td align="left">\[f_{4}(0)=1, f_{4}(1)=0\]</td>
 <td align="center">balanced</td>
 </tr>
 </tbody>

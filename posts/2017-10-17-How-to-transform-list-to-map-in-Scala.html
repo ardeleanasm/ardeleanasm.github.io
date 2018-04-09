@@ -23,37 +23,7 @@
 
         <main role="main">
             <h1>How to transform a List to a Map in Scala</h1>
-            <!--<article>
-    <section class="header">
-        Posted on October 17, 2017
-        
-    </section>
-    <section>
-        <p>Yesterday I faced a new, for me at least, problem when I wanted to read a file line by line into a List and transform the result to a Map.</p>
-<p>Basically, I had a file ( from Rosalind) like the one below, a file in FASTA format.</p>
-<pre><code>&gt;Tag_XXXX
-string
-&gt;Tag_YYYY
-string
-&gt;Tag_ZZZZ
-string</code></pre>
-<p>A FASTA file contains a labels that starts with ‘&gt;’ character and the associated information on the next line. So it seemed normally to use a Map instead of a List.</p>
-<p>So, I started by reading the file in a <code>List[String]</code></p>
-<div class="sourceCode"><pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">val</span> lines: Option[List[String]] = {
-    <span class="kw">if</span> (Files.<span class="fu">exists</span>(Paths.<span class="fu">get</span>(filePath))) {
-      Some(Source.<span class="fu">fromFile</span>(filePath, <span class="st">&quot;UTF-8&quot;</span>).<span class="fu">getLines</span>().<span class="fu">toList</span>)
-    } <span class="kw">else</span> {
-      None
-    }</code></pre></div>
-<p>The next step was to zip lines two by two and filter only the one that contains ‘&gt;’</p>
-<div class="sourceCode"><pre class="sourceCode scala"><code class="sourceCode scala">lines.<span class="fu">get</span>.<span class="fu">zip</span>(lines.<span class="fu">get</span>.<span class="fu">tail</span>).<span class="fu">filter</span> { <span class="kw">case</span> (k, _) =&gt; k.<span class="fu">contains</span>(<span class="ch">&#39;&gt;&#39;</span>) }</code></pre></div>
-<p>in this way I obtained a list of tuples. The final step was simple because I only had to call toMap function.</p>
-<p>Full code can be seen in this <a href="https://github.com/ardeleanasm/bioinformatics">REPO</a>.</p>
-    </section>
-</article>
--->
-
-<article>
+            <article>
     <section class="header">
         Posted on October 17, 2017
         
