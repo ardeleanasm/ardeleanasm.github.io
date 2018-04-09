@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>My Hakyll Blog - How to transform a List to a Map in Scala</title>
+        <link rel="stylesheet" href="../css/default.css" />
+        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <a href="../">My Hakyll Blog</a>
+            </div>
+            <nav>
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+            </nav>
+        </header>
+
+        <main role="main">
+            <h1>How to transform a List to a Map in Scala</h1>
+            <!--<article>
+    <section class="header">
+        Posted on October 17, 2017
+        
+    </section>
+    <section>
+        <p>Yesterday I faced a new, for me at least, problem when I wanted to read a file line by line into a List and transform the result to a Map.</p>
+<p>Basically, I had a file ( from Rosalind) like the one below, a file in FASTA format.</p>
+<pre><code>&gt;Tag_XXXX
+string
+&gt;Tag_YYYY
+string
+&gt;Tag_ZZZZ
+string</code></pre>
+<p>A FASTA file contains a labels that starts with ‘&gt;’ character and the associated information on the next line. So it seemed normally to use a Map instead of a List.</p>
+<p>So, I started by reading the file in a <code>List[String]</code></p>
+<div class="sourceCode"><pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">val</span> lines: Option[List[String]] = {
+    <span class="kw">if</span> (Files.<span class="fu">exists</span>(Paths.<span class="fu">get</span>(filePath))) {
+      Some(Source.<span class="fu">fromFile</span>(filePath, <span class="st">&quot;UTF-8&quot;</span>).<span class="fu">getLines</span>().<span class="fu">toList</span>)
+    } <span class="kw">else</span> {
+      None
+    }</code></pre></div>
+<p>The next step was to zip lines two by two and filter only the one that contains ‘&gt;’</p>
+<div class="sourceCode"><pre class="sourceCode scala"><code class="sourceCode scala">lines.<span class="fu">get</span>.<span class="fu">zip</span>(lines.<span class="fu">get</span>.<span class="fu">tail</span>).<span class="fu">filter</span> { <span class="kw">case</span> (k, _) =&gt; k.<span class="fu">contains</span>(<span class="ch">&#39;&gt;&#39;</span>) }</code></pre></div>
+<p>in this way I obtained a list of tuples. The final step was simple because I only had to call toMap function.</p>
+<p>Full code can be seen in this <a href="https://github.com/ardeleanasm/bioinformatics">REPO</a>.</p>
+    </section>
+</article>
+-->
+
+<article>
+    <section class="header">
+        Posted on October 17, 2017
+        
+    </section>
+    <div class="info">
+        
+        Tags: <a href="../tags/scala.html">scala</a>
+        
+    </div>
+    <section>
+        <p>Yesterday I faced a new, for me at least, problem when I wanted to read a file line by line into a List and transform the result to a Map.</p>
+<p>Basically, I had a file ( from Rosalind) like the one below, a file in FASTA format.</p>
+<pre><code>&gt;Tag_XXXX
+string
+&gt;Tag_YYYY
+string
+&gt;Tag_ZZZZ
+string</code></pre>
+<p>A FASTA file contains a labels that starts with ‘&gt;’ character and the associated information on the next line. So it seemed normally to use a Map instead of a List.</p>
+<p>So, I started by reading the file in a <code>List[String]</code></p>
+<div class="sourceCode"><pre class="sourceCode scala"><code class="sourceCode scala"><span class="kw">val</span> lines: Option[List[String]] = {
+    <span class="kw">if</span> (Files.<span class="fu">exists</span>(Paths.<span class="fu">get</span>(filePath))) {
+      Some(Source.<span class="fu">fromFile</span>(filePath, <span class="st">&quot;UTF-8&quot;</span>).<span class="fu">getLines</span>().<span class="fu">toList</span>)
+    } <span class="kw">else</span> {
+      None
+    }</code></pre></div>
+<p>The next step was to zip lines two by two and filter only the one that contains ‘&gt;’</p>
+<div class="sourceCode"><pre class="sourceCode scala"><code class="sourceCode scala">lines.<span class="fu">get</span>.<span class="fu">zip</span>(lines.<span class="fu">get</span>.<span class="fu">tail</span>).<span class="fu">filter</span> { <span class="kw">case</span> (k, _) =&gt; k.<span class="fu">contains</span>(<span class="ch">'&gt;'</span>) }</code></pre></div>
+<p>in this way I obtained a list of tuples. The final step was simple because I only had to call toMap function.</p>
+<p>Full code can be seen in this <a href="https://github.com/ardeleanasm/bioinformatics">REPO</a>.</p>
+    </section>
+</article>
+        </main>
+
+        <footer>
+            <link rel="stylesheet" href="../css/core.css" />
+
+
+
+
+
+<a href="https://github.com/ardeleanasm"><i class="svg-icon github"></i></a>
+<a href="https://www.linkedin.com/in/ardelean-sebastian-mihai"><i class="svg-icon linkedin"></i></a>
+<a href="https://ardeleanasm.github.io/feed.xml"><i class="svg-icon rss"></i></a>
+<a href="https://www.twitter.com/mihaiseba"><i class="svg-icon twitter"></i></a>
+<a href="http://stackoverflow.com/users/1462225/23ars"><i class="svg-icon stackoverflow"></i></a>
+
+
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </footer>
+    </body>
+</html>

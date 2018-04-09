@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>My Hakyll Blog - Monte Carlo Pi Estimation</title>
+        <link rel="stylesheet" href="../css/default.css" />
+        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <a href="../">My Hakyll Blog</a>
+            </div>
+            <nav>
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+            </nav>
+        </header>
+
+        <main role="main">
+            <h1>Monte Carlo Pi Estimation</h1>
+            <!--<article>
+    <section class="header">
+        Posted on February 15, 2018
+        
+    </section>
+    <section>
+        <p>In this post I’ll show how Pi can be computed using a Monte Carlo algorithm in F#. Basically, using the idea of a dartboard we can obtain the value of PI by simply calculating the number of darts that land in the dartboard verses those that land outside it. And by increasing the number of throws we will get closer to PI’s value, for example throwing the dart 1000 times will be closer to PI than throwing the dart 10 or 100 times.</p>
+<p>The formula that we will use to determine PI by throwing darts is:</p>
+<p><span class="math display">\[PI=4.0*\frac{hits}{darts thrown}\]</span></p>
+<p>In our implementation in F# we will have 3 simple functions. We start by defining a function that will generate random numbers as</p>
+<pre class="f#"><code>let rnd=System.Random(System.DateTime.Now.Millisecond)
+
+let genRandomNumbers (count:int) =
+    List.init count (fun _ -&gt; rnd.NextDouble ())</code></pre>
+<p>We initialize a System.Random object and we use it in <code>getRandomNumbers</code> to generate a value in interval [0,1]. The next thing we will have to do is to implement a function that will check if the thrown dart is in the dartboard or not. The function will have to return true if the distance between the coordinate of the dart and the center of the circle is less than 1, otherwise false.</p>
+<pre class="f#"><code>let isInside (x:double) (y:double)=(sqrt (x*x+y*y))&lt;1.0</code></pre>
+<p>The third function is just a helper to check if the generated coordinate is inside the circle or not.</p>
+<pre class="f#"><code>let sum (x:^a list)=
+    match (isInside (x.Head*2.0-1.0) (x.Tail.Head*2.0-1.0)) with
+        | false-&gt;0
+        | true-&gt; 1</code></pre>
+<p>Finally, we will implement a recursive function that computes PI. This function will take as arguments the number of throws, number of hits ( initially 0) and an index ( initially 0). If index value ( idx) reaches number of throws then we will return the value we calculated with the above formula. If not, then we will recursively call the function with <code>hits+1</code> if the newly generated number is inside the circle and with <code>idx+1</code>.</p>
+<pre class="f#"><code>let rec computePi (numThrows:int) (hits:int) (idx:int)=
+    if numThrows=idx then
+        4.0*((double)hits/(double)numThrows)
+    else
+          computePi numThrows (hits+(genRandomNumbers 2 |&gt; sum)) (idx+1) </code></pre>
+<p>And now, we can calculate PI:</p>
+<pre class="f#"><code>[&lt;EntryPoint&gt;]
+let main argv = 
+    let l=computePi 1000000000 0 0
+    printfn &quot;%F&quot; l
+    0</code></pre>
+    </section>
+</article>
+-->
+
+<article>
+    <section class="header">
+        Posted on February 15, 2018
+        
+    </section>
+    <div class="info">
+        
+        Tags: <a href="../tags/fsharp.html">fsharp</a>
+        
+    </div>
+    <section>
+        <p>In this post I’ll show how Pi can be computed using a Monte Carlo algorithm in F#. Basically, using the idea of a dartboard we can obtain the value of PI by simply calculating the number of darts that land in the dartboard verses those that land outside it. And by increasing the number of throws we will get closer to PI’s value, for example throwing the dart 1000 times will be closer to PI than throwing the dart 10 or 100 times.</p>
+<p>The formula that we will use to determine PI by throwing darts is:</p>
+<p><span class="math display">\[PI=4.0*\frac{hits}{darts thrown}\]</span></p>
+<p>In our implementation in F# we will have 3 simple functions. We start by defining a function that will generate random numbers as</p>
+<pre class="f#"><code>let rnd=System.Random(System.DateTime.Now.Millisecond)
+
+let genRandomNumbers (count:int) =
+    List.init count (fun _ -&gt; rnd.NextDouble ())</code></pre>
+<p>We initialize a System.Random object and we use it in <code>getRandomNumbers</code> to generate a value in interval [0,1]. The next thing we will have to do is to implement a function that will check if the thrown dart is in the dartboard or not. The function will have to return true if the distance between the coordinate of the dart and the center of the circle is less than 1, otherwise false.</p>
+<pre class="f#"><code>let isInside (x:double) (y:double)=(sqrt (x*x+y*y))&lt;1.0</code></pre>
+<p>The third function is just a helper to check if the generated coordinate is inside the circle or not.</p>
+<pre class="f#"><code>let sum (x:^a list)=
+    match (isInside (x.Head*2.0-1.0) (x.Tail.Head*2.0-1.0)) with
+        | false-&gt;0
+        | true-&gt; 1</code></pre>
+<p>Finally, we will implement a recursive function that computes PI. This function will take as arguments the number of throws, number of hits ( initially 0) and an index ( initially 0). If index value ( idx) reaches number of throws then we will return the value we calculated with the above formula. If not, then we will recursively call the function with <code>hits+1</code> if the newly generated number is inside the circle and with <code>idx+1</code>.</p>
+<pre class="f#"><code>let rec computePi (numThrows:int) (hits:int) (idx:int)=
+    if numThrows=idx then
+        4.0*((double)hits/(double)numThrows)
+    else
+          computePi numThrows (hits+(genRandomNumbers 2 |&gt; sum)) (idx+1) </code></pre>
+<p>And now, we can calculate PI:</p>
+<pre class="f#"><code>[&lt;EntryPoint&gt;]
+let main argv = 
+    let l=computePi 1000000000 0 0
+    printfn &quot;%F&quot; l
+    0</code></pre>
+    </section>
+</article>
+        </main>
+
+        <footer>
+            <link rel="stylesheet" href="../css/core.css" />
+
+
+
+
+
+<a href="https://github.com/ardeleanasm"><i class="svg-icon github"></i></a>
+<a href="https://www.linkedin.com/in/ardelean-sebastian-mihai"><i class="svg-icon linkedin"></i></a>
+<a href="https://ardeleanasm.github.io/feed.xml"><i class="svg-icon rss"></i></a>
+<a href="https://www.twitter.com/mihaiseba"><i class="svg-icon twitter"></i></a>
+<a href="http://stackoverflow.com/users/1462225/23ars"><i class="svg-icon stackoverflow"></i></a>
+
+
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </footer>
+    </body>
+</html>
