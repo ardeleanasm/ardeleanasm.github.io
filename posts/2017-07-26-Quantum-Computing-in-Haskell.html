@@ -37,17 +37,17 @@
     <section>
         <h2 id="articles">Articles</h2>
 <ul>
-<li><a href="https://ardeleanasm.github.io/Quantum-Computing-in-Haskell/">Quantum Computing in Haskell - I part</a></li>
-<li><a href="https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-second-part/">Quantum Computing in Haskell - II part</a></li>
-<li><a href="https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-third-part/">Quantum Computing in Haskell - III part</a></li>
-<li><a href="https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-fourth-part/">Quantum Computing in Haskell - IV part</a></li>
+<li><a href="2017-07-26-Quantum-Computing-in-Haskell.html">Quantum Computing in Haskell - I part</a></li>
+<li><a href="2017-07-28-Quantum-Computing-in-Haskell-second-part.html">Quantum Computing in Haskell - II part</a></li>
+<li><a href="2017-08-01-Quantum-Computing-in-Haskell-third-part.html">Quantum Computing in Haskell - III part</a></li>
+<li><a href="2017-08-18-Quantum-Computing-in-Haskell-fourth-part.html">Quantum Computing in Haskell - IV part</a></li>
 <li><a href="https://github.com/ardeleanasm/qchas">Github Repository</a></li>
 <li><a href="https://ardeleanasm.github.io/qchas/">Project’s Haddock Documentation</a></li>
 <li><a href="https://hackage.haskell.org/package/qchas">QChas Package</a></li>
 </ul>
 <h2 id="long-story-made-short">Long story made short</h2>
 <p>1 year ago I started studying the topics of Quantum Computing and Quantum Algorithms and I was fascinated. Is interresting and, like Niels Bohr said, “Anyone who is not shocked by quantum theory has not understood it.”</p>
-<p>As doing my research I found quite interesting to post some small articles on these topics, some articles on CodeProject (<a href="https://www.codeproject.com/Articles/1130092/Java-based-Quantum-Computing-library">Java based Quantum Computing Library</a> and <a href="https://www.codeproject.com/Articles/1131573/Grovers-Search-Algorithm-explained">Grover’s Search Algorithm Explained</a>) and one on my website about <a href="https://ardeleanasm.github.io/deutschs-algorithm/">Deutsch’s algorithm</a>. For those articles I used a Java library that I created myself with the help of some of my colleagues. Now, after a year and after playing a little with Haskell, I found quite interesting to review the topic and to start posting a series of small articles about Quantum Computing.</p>
+<p>As doing my research I found quite interesting to post some small articles on these topics, some articles on CodeProject (<a href="https://www.codeproject.com/Articles/1130092/Java-based-Quantum-Computing-library">Java based Quantum Computing Library</a> and <a href="https://www.codeproject.com/Articles/1131573/Grovers-Search-Algorithm-explained">Grover’s Search Algorithm Explained</a>) and one on my website about <a href="2016-08-17-deutschs-algorithm.html">Deutsch’s algorithm</a>. For those articles I used a Java library that I created myself with the help of some of my colleagues. Now, after a year and after playing a little with Haskell, I found quite interesting to review the topic and to start posting a series of small articles about Quantum Computing.</p>
 <h2 id="introduction">Introduction</h2>
 <p>I’ll start by talking a little about the difference between a quantum computer and a traditional one. A lot of information about how a quantum computer works can be found in online courses, research papers and books. It’s not the scope of this post to explain in details how it works, just to present some basic differences.</p>
 <p>As someone can expect, a quantum computer use the quantum mechanical effects, such as superposition, to carry out computations. We already know that in a traditional computer, the <strong>bit</strong> is the basic unit and it can be 0 or 1. The value is defined by a voltage level, in TTL technology, ideally, a 1 value is represented by 5.00 volts while a 0 value is represented by 0.00 volts. For a quantum computer, there are some differences. For example, the basic unit is the <strong>qubit</strong> (quantum bit) and can, at one time, represent value 0 and 1, by exploiting superposition. A qubit is defined by the equation presented below:</p>
