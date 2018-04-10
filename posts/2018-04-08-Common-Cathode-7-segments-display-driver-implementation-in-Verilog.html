@@ -42,8 +42,14 @@
 <li><strong>Common Cathode Display</strong> - all the cathode connections of the LED segments are joined together to <strong>Gnd</strong>. This means that a segment is illuminated by applying a logic ‘1’ signal to the <em>Anode</em> terminal. (Img 1a)</li>
 <li><strong>Common Anode Display</strong> - all the anode connections of the LED segments are joined together to <strong>Vcc</strong> which means that to illuminate a segment a logic ‘0’ needs to be applied to the <em>Cathode</em> terminal. (Img 1b)</li>
 </ol>
-<p>{% include img.html img=“resources/common_cathode_anode_leds.png” title=“Img 1:LED display types” caption=“Img 1:LED display types” %}</p>
-<p>{% include img.html img=“resources/led_scheme.png” title=“Img 2:7-segment display format” caption=“Img 2: 7-segment display format” %}</p>
+<div class="figure">
+<img src="../images/common_cathode_anode_leds.png" title="Img 1:LED display types" alt="Img 1:LED display types" />
+<p class="caption">Img 1:LED display types</p>
+</div>
+<div class="figure">
+<img src="../images/led_scheme.png" title="Img 2: 7-segment display format" alt="Img 2: 7-segment display format" />
+<p class="caption">Img 2: 7-segment display format</p>
+</div>
 <p>Considering Img 2 we can create the truth table below. Because we use a common cathode 7 segment display we will have 1 for each illuminated segment and 0 for not illuminated. Since we will design a BCD to 7-segments the values from 10 to 15 are invalid. For there values we will mark the corresponding segment with X, meaning don’t care.</p>
 <table>
 <thead>
@@ -306,7 +312,10 @@
 <p><span class="math display">\[f=\overline{A}(B\overline{CD}+\overline{C}\overline{D})+A\overline{B}\overline{C}\]</span></p>
 <p><span class="math display">\[g=\overline{A}(C\overline{BD}+B\overline{C})+A\overline{B}\overline{C}\]</span></p>
 <h3 id="implementation">Implementation</h3>
-<p>{% include img.html img=“resources/hc4511_block_scheme.png” title=“Img 3:TI HC4511 block scheme” caption=“Img 3: TI HC4511 block scheme” %}</p>
+<div class="figure">
+<img src="../images/hc4511_block_scheme.png" title="Img 3:TI HC4511 block scheme" alt="Img 3:TI HC4511 block scheme" />
+<p class="caption">Img 3:TI HC4511 block scheme</p>
+</div>
 <p>In Img 3 is the block scheme of the TI HC4511 BCD-to-7 segment latch/decoder/driver.</p>
 <h4 id="decoder-implementation">Decoder Implementation</h4>
 <p>The <strong>decoder</strong> will have 2 input ports ( <em>BL</em> signal, <em>D[0:3]</em>) and one output port, <em>D[0:7]</em>and will contain the implementation of the above equations. Moreover, the output of decoder will be blank ( 0 ) if <strong>BL</strong> signal is 0.</p>
