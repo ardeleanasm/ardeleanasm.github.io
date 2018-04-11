@@ -119,6 +119,22 @@ CKeyQuery::~CKeyQuery()
 <p>RegistryOpenKey is a wrapper on RegOpenKeyEx system call. Here, I only test if hkey and lpSubKey are not nullptr( are not default values) and call RegOpenKeyEx. Here is where I used the exceptions, cause I don’t like returning error codes. :)</p>
 <p>And now, surprise, I won’t describe the most important method, <code>void CKeyQuery::QueryKey(HKEY hKey, UINT32 *subKeys)</code>. Why? Because the most part of it was took from <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms724256(v=vs.85).aspx">Microsoft</a>. When the application will be more complex and this function will not be “copy-paste” entirely I’ll come with another article describing the modifications that I done.</p>
 <p>Conclusions? Hmmm, I’m really impressed until now. I searched and found a book about <a href="http://www.amazon.com/Windows-Programming-Addison-Wesley-Microsoft-Technology/dp/0321657748">Windows System Programming</a> and I start to read it. I really like, even if the Hungarian notation conventions adopded by Microsoft maybe seems strange ( trust me, I saw notations even stranger). I’m really curious what I’ll can do, maybe I’ll start also to read more about drivers ( even if I participated at a course about Windows Device Drivers, I never wrote one by myself, I just copy-pasted some code).</p>
+        <div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = '23ars';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
     </section>
 </article>
         </main>
