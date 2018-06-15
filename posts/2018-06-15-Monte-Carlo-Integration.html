@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="../assets/favicon.png">
+        <link rel="apple-touch-icon" href="../assets/touch-icon.png">
+        <title>Laziness leads to progress - Monte Carlo Integration</title>
+        <link rel="stylesheet" href="../css/default.css" />
+        <link rel="stylesheet" href="../css/syntax.css" />
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <a href="../">Laziness leads to progress!</a>
+            </div>
+            <nav>
+                <a href="../">Home</a>
+                <a href="../about.html">About</a>
+                <a href="../contact.html">Contact</a>
+                <a href="../archive.html">Archive</a>
+            </nav>
+        </header>
+
+        <main role="main">
+            <h1>Monte Carlo Integration</h1>
+            <article>
+    <section class="header">
+        Posted on June 15, 2018
+        
+    </section>
+    <div class="info">
+        
+        Tags: <a href="../tags/OCaml.html">OCaml</a>
+        
+    </div>
+    <section>
+        <p>Monte Carlo methods are numerical techniques which rely on random sampling to approximate their results. Thus, in Monte Carlo integration, the process of numerical estimation of integrals is applied.</p>
+<p>Considering we want to integrate a one-dimensional function <span class="math inline">\(f(x)\)</span> from <span class="math inline">\(\textit{a}\)</span> to <span class="math inline">\(\textit{b}\)</span>: <span class="math display">\[F=\int_a^b f(x)\,\mathrm{d}x\]</span>. Since the integral of a function <span class="math inline">\(f(x)\)</span> can be interpreted as the area below the function’s curve, we can pick up a random value <span class="math inline">\(x \in [a,b]\)</span> and evaluate the function at <span class="math inline">\(\textit{x}\)</span> and multiply the result by <span class="math inline">\((b-a)\)</span>. If we plot the function’s curve and the result we will obtain a rectangle where <em>f(x)</em> is the height and <em>(b-a)</em> is the width, basically a crude approximation of the area under the curve. If we continue to evaluate the function at different random points between <em>a</em> and <em>b</em>, adding up the area of the rectangles and averaging the sum, the resulting number gets closer to the actual results of the integral.</p>
+<p>Let’s consider an example in which the function we want to integrate is <span class="math inline">\(f(x)=\sin{x}\)</span> on interval <span class="math inline">\([0,\pi]\)</span> and write some <strong>OCaml</strong> code. The function plot can be seen in Fig. 1.</p>
+<div class="figure">
+<img src="../images/integration-sinx-curve.png" alt="Fig. 1:sin(x) curve" />
+<p class="caption">Fig. 1:sin(x) curve</p>
+</div>
+<p>We will create a new module <strong>MonteCarlo</strong> with the interface defined in the below snippet:</p>
+<div class="sourceCode"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span class="kw">module</span> <span class="kw">type</span> MonteCarlo_type=<span class="kw">sig</span>
+  <span class="kw">val</span> initializePRNG:<span class="dt">unit</span>-&gt;<span class="dt">unit</span>
+  <span class="kw">val</span> getRandomNumber:<span class="dt">unit</span>-&gt;<span class="dt">float</span>
+  <span class="kw">val</span> approximate:(<span class="dt">float</span>-&gt;<span class="dt">float</span>)-&gt;<span class="dt">float</span>-&gt;<span class="dt">float</span>-&gt;<span class="dt">int</span>-&gt;<span class="dt">int</span>-&gt;<span class="dt">float</span>-&gt;<span class="dt">float</span>  
+<span class="kw">end</span></code></pre></div>
+<p>We have a function <em>initializePRNG</em> which will initialize the pseudorandom number generator, <code>let initializePRNG ()=Random.self_init()</code>. <code>let getRandomNumber ()=Random.float 1.0</code> function will only generate a pseudorandom number distributed on <span class="math inline">\([0,1]\)</span>. Finally, the most interesting function, <em>approximate</em> receives 6 parameters as follow: <em>. First parameter is the function <span class="math inline">\(f(x)\)</span> </em>. Second and third parameters are the limits <em>a</em> and <em>b</em>. <em>. Fourth parameter is the number of iterations. </em>. Fifth parameter is the current iteration *. Sixth parameter is the sumed value.</p>
+<div class="sourceCode"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span class="kw">let</span> <span class="kw">rec</span> approximate f a b n index value=
+    <span class="kw">if</span> index=(n<span class="dv">-1</span>) <span class="kw">then</span>
+      ((b-.a)/.(<span class="dt">float_of_int</span> index))*.value
+    <span class="kw">else</span>
+      <span class="kw">let</span> randVal=getRandomNumber() <span class="kw">in</span>
+      <span class="kw">let</span> inInterval=a+.randVal*.(b-.a) <span class="kw">in</span>
+      <span class="kw">let</span> fVal=f inInterval <span class="kw">in</span>
+      approximate f a b n (index+<span class="dv">1</span>) (value+.fVal)</code></pre></div>
+<p>The complete <em>MonteCarlo</em> module is implemented bellow:</p>
+<div class="sourceCode"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span class="kw">open</span> <span class="dt">Random</span>
+<span class="kw">open</span> MonteCarlo_type
+
+<span class="kw">module</span> MonteCarlo:MonteCarlo_type=<span class="kw">struct</span>
+  <span class="kw">let</span> initializePRNG ()=<span class="dt">Random</span>.self_init()
+  <span class="kw">let</span> getRandomNumber ()=<span class="dt">Random</span>.<span class="dt">float</span> <span class="fl">1.0</span>
+  
+  <span class="kw">let</span> <span class="kw">rec</span> approximate f a b n index value=
+    <span class="kw">if</span> index=(n<span class="dv">-1</span>) <span class="kw">then</span>
+      ((b-.a)/.(<span class="dt">float_of_int</span> index))*.value
+    <span class="kw">else</span>
+      <span class="kw">let</span> randVal=getRandomNumber() <span class="kw">in</span>
+      <span class="kw">let</span> inInterval=a+.randVal*.(b-.a) <span class="kw">in</span>
+      <span class="kw">let</span> fVal=f inInterval <span class="kw">in</span>
+      approximate f a b n (index+<span class="dv">1</span>) (value+.fVal)
+<span class="kw">end</span></code></pre></div>
+<p>Finally, to use the code we just need to define the function that we want to integrate and call approximate, as bellow:</p>
+<div class="sourceCode"><pre class="sourceCode ocaml"><code class="sourceCode ocaml"><span class="kw">open</span> MonteCarlo
+
+<span class="kw">let</span> pi = <span class="fl">4.0</span> *. <span class="dt">atan</span> <span class="fl">1.0</span>;;
+<span class="kw">let</span> func (x:<span class="dt">float</span>)=<span class="dt">sin</span> x
+<span class="kw">let</span> () = 
+  MonteCarlo.initializePRNG();
+  <span class="dt">print_float</span> (MonteCarlo.approximate func <span class="fl">0.0</span> pi <span class="dv">100000</span> <span class="dv">0</span> <span class="fl">0.0</span>)</code></pre></div>
+        <div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = '23ars';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+    </section>
+</article>
+        </main>
+
+        <footer>
+            <link rel="stylesheet" href="../css/core.css" />
+
+
+
+
+
+<a href="https://github.com/ardeleanasm"><i class="svg-icon github"></i></a>
+<a href="https://www.linkedin.com/in/ardelean-sebastian-mihai"><i class="svg-icon linkedin"></i></a>
+<a href="https://ardeleanasm.github.io/atom.xml"><i class="svg-icon rss"></i></a>
+<a href="https://www.twitter.com/mihaiseba"><i class="svg-icon twitter"></i></a>
+<a href="http://stackoverflow.com/users/1462225/23ars"><i class="svg-icon stackoverflow"></i></a>
+
+
+            Site proudly generated by
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>
+        </footer>
+    </body>
+</html>
