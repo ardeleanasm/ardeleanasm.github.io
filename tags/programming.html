@@ -35,6 +35,183 @@
     
         <li>
             <a href="../posts/2016-04-24-first-experience-winapi.html">First experience with WinApi</a> - April 24, 2016
+            
+                <!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="../assets/favicon.png">
+        <link rel="apple-touch-icon" href="../assets/touch-icon.png">
+        <title>Laziness leads to progress - First experience with WinApi</title>
+        <link rel="stylesheet" href="../css/default.css" />
+        <link rel="stylesheet" href="../css/syntax.css" />
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+      <div class="highbar">&nbsp;</div>
+        <div id="header">
+          <div class="box">
+            <div id="logo" class="name">
+              <h2><a href="../">Laziness leads to progress!</a></h2>
+            </div>
+            <div id="navigation" class="pageslinks">
+              <nav class="menuNav">
+                <div class="menuItems">
+                <a href="../" class="posts/2016-04-24-first-experience-winapi.md">Home</a>
+                <a href="../about.html" class="posts/2016-04-24-first-experience-winapi.md">About</a>
+                <a href="../archive.html" class="posts/2016-04-24-first-experience-winapi.md">Archive</a>
+                </div>
+              </nav>
+            </div>
+        </div>
+        </div>
+        <div class="container-gallery">
+        <div id="content" class="inside">
+            <article>
+    <section class="header">
+        Posted on April 24, 2016
+        
+    </section>
+    <div class="info">
+        
+        Tags: <a href="../tags/programming.html">programming</a>, <a href="../tags/c%2B%2B.html">c++</a>
+        
+    </div>
+    <section>
+        <p>I discovered Linux Api, Linux System Programming some time ago and I found it amazing but I always thought “that’s not enough!”.</p>
+<!--more-->
+<p>I discovered Linux Api, Linux System Programming some time ago and I found it amazing but I always thought “that’s not enough!”. And it’s not! I have a lot of experience on Linux, I wrote device drivers, userspace applications using C and Linux API but I never tried to wrote some applications that use Windows API.</p>
+<p>This post will be the first about my experience with WinApi, system calls etc. I’m getting really tired to write apps on Windows in C++ CLR or C# and I want to try something more “low level”. Note, all my small projects using WinApi will be integrated in Git under <a href="https://github.com/ardeleanasm/projects/tree/master/winapi/RegistryList">projects/winapi</a>.</p>
+<p>Now, I should talk about the first small project, not done yet. RegistryList will be an application that will dump all Registry Entries<Key,Value> and will allow user to set some filters, also maybe to clean/fix Registry Entries and extract and save data from entries. Maybe, in the last iteration, I’ll add some UI to application and maybe I’ll maintain it. But now, the application is just a bunch of C++ classes and can only dump Registry Entries<Key, Value> and print them. It’s not so nice…</p>
+<p>Code…. hmmm, code can be found <a href="https://github.com/ardeleanasm/projects/tree/master/winapi/RegistryList">HERE</a> but, let’s talk a little.</p>
+<p>I wrote a lot of C code and I don’t really like return codes, if I can throw an exception. OK, on Linux, where I try to wrote all the applications in C code, I need to use return codes, but if I use WinApi and C++… Why not use exceptions?</p>
+<p>So, in <strong>KeyQueryExceptions.h</strong> I defined some custom exceptions for the case where some parameters are not set or the some call to WinApi function return an error that is not <em>ERROR_SUCCESS</em> ( I really found this name funny, ERROR_SUCCESS… It’s a success or failure? :) ).</p>
+<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">class</span> CRegOpenKeyExException :<span class="kw">public</span> <span class="bu">std::</span>exception
+{
+<span class="kw">private</span>:
+	<span class="bu">std::</span>string <span class="va">g_msg</span>;
+<span class="kw">public</span>:
+	CRegOpenKeyExException(<span class="at">const</span> <span class="bu">std::</span>string&amp; msg) :<span class="va">g_msg</span>(msg)
+	{}
+
+	CRegOpenKeyExException() :<span class="va">g_msg</span>(<span class="st">&quot;RegOpenKeyEx call failed!&quot;</span>){}
+	<span class="at">const</span> <span class="dt">char</span> *ShowReason() <span class="at">const</span>
+	{
+		<span class="cf">return</span> <span class="va">g_msg</span>.c_str();
+	}
+
+
+};</code></pre></div>
+<p>In the code snippet is defined an exception that is thrown when RegOpenKeyExt function call return a value different from ERROR_SUCCESS.</p>
+<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="pp">#pragma once</span>
+
+
+<span class="kw">class</span> CKeyQuery
+{
+	CKeyQuery(CKeyQuery <span class="at">const</span> &amp;) = <span class="kw">delete</span>;
+	CKeyQuery(CKeyQuery &amp;&amp;) = <span class="kw">delete</span>;
+	CKeyQuery &amp;<span class="kw">operator</span>=(CKeyQuery <span class="at">const</span> &amp;) = <span class="kw">delete</span>;
+	CKeyQuery &amp;<span class="kw">operator</span>=(CKeyQuery &amp;&amp;) = <span class="kw">delete</span>;
+<span class="kw">public</span>:
+	CKeyQuery();
+	~CKeyQuery();
+	<span class="dt">void</span> QueryKey(HKEY hKey, UINT32 * subKeys);
+	<span class="dt">void</span> RegistryOpenKey(_Out_ PHKEY phkResult) <span class="cf">throw</span> (<span class="bu">std::</span>exception);
+	<span class="dt">void</span> SethKey(HKEY hkey);
+	<span class="dt">void</span>  SetSubKey(LPCTSTR lpSubKey);
+	<span class="dt">void</span>  SetulOptions(DWORD ulOptions);
+	<span class="dt">void</span>  SetSamdesired(REGSAM samDesired);
+	<span class="dt">void</span> RegistryClose(_In_ HKEY hKey);
+<span class="kw">private</span>:
+	HKEY key;
+	HKEY <span class="va">g_hkey</span>;
+	LPCTSTR <span class="va">g_lpSubKey</span>;
+	DWORD <span class="va">g_ulOptions</span>;
+	REGSAM <span class="va">g_samDesired</span>;
+	
+
+};</code></pre></div>
+<p>The above code define a class CKeyQuery. The set methods are used to set the values that will be used as parameters to RegOpenKeyEx function. The constructor and destructor of this class are used only for setting some default values, for now.</p>
+<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">CKeyQuery::CKeyQuery()
+{
+	<span class="va">g_hkey</span> = <span class="kw">nullptr</span>;
+	<span class="va">g_lpSubKey</span> = <span class="kw">nullptr</span>;
+	<span class="va">g_ulOptions</span> = <span class="dv">0</span>;
+	<span class="va">g_samDesired</span> = <span class="dv">0</span>;
+}
+CKeyQuery::~CKeyQuery()
+{
+	<span class="va">g_hkey</span> = <span class="kw">nullptr</span>;
+	<span class="va">g_lpSubKey</span> = <span class="kw">nullptr</span>;
+	<span class="va">g_ulOptions</span> = <span class="dv">0</span>;
+	<span class="va">g_samDesired</span> = <span class="dv">0</span>;
+}</code></pre></div>
+<p>The methods SethKey, SetSubKey,SetulOptions and SetSamdesired are simple one-line methods that will only set the values.</p>
+<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">void</span> CKeyQuery::RegistryOpenKey(_Out_ PHKEY phkResult) <span class="cf">throw</span> (<span class="bu">std::</span>exception)
+{
+	<span class="cf">if</span> (<span class="va">g_hkey</span> == <span class="kw">nullptr</span>)
+	{
+		<span class="cf">throw</span> <span class="kw">new</span> CParametersNotSetException(<span class="st">&quot;hkey parameter was not set&quot;</span>);
+	}
+	<span class="cf">if</span> (<span class="va">g_lpSubKey</span> == <span class="kw">nullptr</span>){
+		<span class="cf">throw</span> <span class="kw">new</span> CParametersNotSetException(<span class="st">&quot;lpSubKey was not set!&quot;</span>);
+	}
+	<span class="cf">if</span> (RegOpenKeyEx(<span class="va">g_hkey</span>, <span class="va">g_lpSubKey</span>, <span class="va">g_ulOptions</span>, <span class="va">g_samDesired</span>, phkResult) != ERROR_SUCCESS)
+	{
+		<span class="cf">throw</span> <span class="kw">new</span> CRegOpenKeyExException();
+	}
+}</code></pre></div>
+<p>RegistryOpenKey is a wrapper on RegOpenKeyEx system call. Here, I only test if hkey and lpSubKey are not nullptr( are not default values) and call RegOpenKeyEx. Here is where I used the exceptions, cause I don’t like returning error codes. :)</p>
+<p>And now, surprise, I won’t describe the most important method, <code>void CKeyQuery::QueryKey(HKEY hKey, UINT32 *subKeys)</code>. Why? Because the most part of it was took from <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms724256(v=vs.85).aspx">Microsoft</a>. When the application will be more complex and this function will not be “copy-paste” entirely I’ll come with another article describing the modifications that I done.</p>
+<p>Conclusions? Hmmm, I’m really impressed until now. I searched and found a book about <a href="http://www.amazon.com/Windows-Programming-Addison-Wesley-Microsoft-Technology/dp/0321657748">Windows System Programming</a> and I start to read it. I really like, even if the Hungarian notation conventions adopded by Microsoft maybe seems strange ( trust me, I saw notations even stranger). I’m really curious what I’ll can do, maybe I’ll start also to read more about drivers ( even if I participated at a course about Windows Device Drivers, I never wrote one by myself, I just copy-pasted some code).</p>
+        <div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = '23ars';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+    </section>
+</article>
+
+        </div>
+        </div>
+        <div id="footer">
+          <div class="inside">
+            Site proudly generated by
+	     <link rel="stylesheet" href="../css/core.css" />
+
+
+
+
+
+<a href="https://github.com/ardeleanasm"><i class="svg-icon github"></i></a>
+<a href="https://www.linkedin.com/in/ardelean-sebastian-mihai"><i class="svg-icon linkedin"></i></a>
+<a href="https://ardeleanasm.github.io/atom.xml"><i class="svg-icon rss"></i></a>
+<a href="https://www.twitter.com/mihaiseba"><i class="svg-icon twitter"></i></a>
+<a href="http://stackoverflow.com/users/1462225/23ars"><i class="svg-icon stackoverflow"></i></a>
+<a href="https://www.haskellers.com/user/4914"><img src="https://www.haskellers.com/static/badge.png" alt="I'm a Haskeller">
+</a>
+</br>
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>.
+
+          </div>
+        </div>
+    </body>
+</html>
+
+            
         </li>
     
 </ul>
