@@ -33,6 +33,7 @@
         <div id="content" class="inside">
             <article>
     <section class="header">
+        <h2>Common-Cathode 7-segments display driver implementation in Verilog</h2>
         Posted on April  8, 2018
         
     </section>
@@ -43,8 +44,7 @@
     </div>
     <section>
         <h3 id="description">Description</h3>
-<p>7-segment LED type displays provide a convenient way to display data, like numbers, letters, and typically consist of seven individual LEDs within one single display package. In order to produce the required data ( HEX characters from 0 to 9 and A to F), on the display the correct combination of LED segments need to be illuminated. However, to display BCD information on 7-segments we need to use a BCD to 7 segments decoder like 74LS47 or HC4511.</p>
-<p>A 7-segment LED display usually have 8 connections for each LED segment and one that acts as a GND or VCC. There are some displays that have an additional input pin used to display a decimal point. Anyway, in electronics there are 2 types of 7-segment displays:</p>
+<p>7-segment LED type displays provide a convenient way to display data, like numbers, letters, and typically consist of seven individual LEDs within one single display package. In order to produce the required data ( HEX characters from 0 to 9 and A to F), on the display the correct combination of LED segments need to be illuminated. However, to display BCD information on 7-segments we need to use a BCD to 7 segments decoder like 74LS47 or HC4511. <!--more--> A 7-segment LED display usually have 8 connections for each LED segment and one that acts as a GND or VCC. There are some displays that have an additional input pin used to display a decimal point. Anyway, in electronics there are 2 types of 7-segment displays:</p>
 <ol style="list-style-type: decimal">
 <li><strong>Common Cathode Display</strong> - all the cathode connections of the LED segments are joined together to <strong>Gnd</strong>. This means that a segment is illuminated by applying a logic ‘1’ signal to the <em>Anode</em> terminal. (Img 1a)</li>
 <li><strong>Common Anode Display</strong> - all the anode connections of the LED segments are joined together to <strong>Vcc</strong> which means that to illuminate a segment a logic ‘0’ needs to be applied to the <em>Cathode</em> terminal. (Img 1b)</li>

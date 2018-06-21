@@ -33,6 +33,7 @@
         <div id="content" class="inside">
             <article>
     <section class="header">
+        <h2>Monte Carlo Pi Estimation</h2>
         Posted on February 15, 2018
         
     </section>
@@ -42,8 +43,7 @@
         
     </div>
     <section>
-        <p>In this post I’ll show how Pi can be computed using a Monte Carlo algorithm in F#. Basically, using the idea of a dartboard we can obtain the value of PI by simply calculating the number of darts that land in the dartboard verses those that land outside it. And by increasing the number of throws we will get closer to PI’s value, for example throwing the dart 1000 times will be closer to PI than throwing the dart 10 or 100 times.</p>
-<p>The formula that we will use to determine PI by throwing darts is:</p>
+        <p>In this post I’ll show how Pi can be computed using a Monte Carlo algorithm in F#. Basically, using the idea of a dartboard we can obtain the value of PI by simply calculating the number of darts that land in the dartboard verses those that land outside it. And by increasing the number of throws we will get closer to PI’s value, for example throwing the dart 1000 times will be closer to PI than throwing the dart 10 or 100 times. <!--more--> The formula that we will use to determine PI by throwing darts is:</p>
 <p><span class="math display">\[PI=4.0*\frac{hits}{darts thrown}\]</span></p>
 <p>In our implementation in F# we will have 3 simple functions. We start by defining a function that will generate random numbers as</p>
 <pre class="f#"><code>let rnd=System.Random(System.DateTime.Now.Millisecond)

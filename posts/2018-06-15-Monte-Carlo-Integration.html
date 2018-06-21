@@ -33,6 +33,7 @@
         <div id="content" class="inside">
             <article>
     <section class="header">
+        <h2>Monte Carlo Integration</h2>
         Posted on June 15, 2018
         
     </section>
@@ -42,10 +43,7 @@
         
     </div>
     <section>
-        <p>Monte Carlo methods are numerical techniques which rely on random sampling to approximate their results. Thus, in Monte Carlo integration, the process of numerical estimation of integrals is applied.</p>
-<!--more-->
-<p>Monte Carlo methods are numerical techniques which rely on random sampling to approximate their results. Thus, in Monte Carlo integration, the process of numerical estimation of integrals is applied.</p>
-<p>Considering we want to integrate a one-dimensional function <span class="math inline">\(f(x)\)</span> from <span class="math inline">\(\textit{a}\)</span> to <span class="math inline">\(\textit{b}\)</span>: <span class="math display">\[F=\int_a^b f(x)\,\mathrm{d}x\]</span>. Since the integral of a function <span class="math inline">\(f(x)\)</span> can be interpreted as the area below the function’s curve, we can pick up a random value <span class="math inline">\(x \in [a,b]\)</span> and evaluate the function at <span class="math inline">\(\textit{x}\)</span> and multiply the result by <span class="math inline">\((b-a)\)</span>. If we plot the function’s curve and the result we will obtain a rectangle where <em>f(x)</em> is the height and <em>(b-a)</em> is the width, basically a crude approximation of the area under the curve. If we continue to evaluate the function at different random points between <em>a</em> and <em>b</em>, adding up the area of the rectangles and averaging the sum, the resulting number gets closer to the actual results of the integral.</p>
+        <p>Monte Carlo methods are numerical techniques which rely on random sampling to approximate their results. Thus, in Monte Carlo integration, the process of numerical estimation of integrals is applied. <!--more--> Considering we want to integrate a one-dimensional function <span class="math inline">\(f(x)\)</span> from <span class="math inline">\(\textit{a}\)</span> to <span class="math inline">\(\textit{b}\)</span>: <span class="math display">\[F=\int_a^b f(x)\,\mathrm{d}x\]</span>. Since the integral of a function <span class="math inline">\(f(x)\)</span> can be interpreted as the area below the function’s curve, we can pick up a random value <span class="math inline">\(x \in [a,b]\)</span> and evaluate the function at <span class="math inline">\(\textit{x}\)</span> and multiply the result by <span class="math inline">\((b-a)\)</span>. If we plot the function’s curve and the result we will obtain a rectangle where <em>f(x)</em> is the height and <em>(b-a)</em> is the width, basically a crude approximation of the area under the curve. If we continue to evaluate the function at different random points between <em>a</em> and <em>b</em>, adding up the area of the rectangles and averaging the sum, the resulting number gets closer to the actual results of the integral.</p>
 <p>Let’s consider an example in which the function we want to integrate is <span class="math inline">\(f(x)=\sin{x}\)</span> on interval <span class="math inline">\([0,\pi]\)</span> and write some <strong>OCaml</strong> code. The function plot can be seen in Fig. 1.</p>
 <div class="figure">
 <img src="../images/integration-sinx-curve.png" alt="Fig. 1:sin(x) curve" />
