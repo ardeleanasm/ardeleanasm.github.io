@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="../assets/favicon.png">
+        <link rel="apple-touch-icon" href="../assets/touch-icon.png">
+        <title>Laziness leads to progress - Checksum generator in Haskell</title>
+        <link rel="stylesheet" href="../css/default.css" />
+        <link rel="stylesheet" href="../css/syntax.css" />
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-54128414-2"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-54128414-2');
+      </script>
+    </head>
+    <body>
+      <div class="highbar">&nbsp;</div>
+        <div id="header">
+          <div class="box">
+            <div id="logo" class="name">
+              <h2><a href="../">Laziness leads to progress!</a></h2>
+            </div>
+            <div id="navigation" class="pageslinks">
+              <nav class="menuNav">
+                <div class="menuItems">
+                <a href="../" class="posts/2018-06-22-checksum-generator-haskell.md">Home</a>
+                <a href="../about.html" class="posts/2018-06-22-checksum-generator-haskell.md">About</a>
+                <a href="../archive.html" class="posts/2018-06-22-checksum-generator-haskell.md">Archive</a>
+                </div>
+              </nav>
+            </div>
+        </div>
+        </div>
+        <div class="container-gallery">
+        <div id="content" class="inside">
+            <article>
+    <section class="header">
+        <h2>Checksum generator in Haskell</h2>
+        Posted on June 22, 2018
+        
+    </section>
+    <div class="info">
+        
+        Tags: <a href="../tags/haskell.html">haskell</a>
+        
+    </div>
+    <section>
+        <p>A few years ago I wrote a checksum generator app in C++ and evolved in, what I like to say, an app with password cracking capabilities. In fact, it was only an app that opened a file and calculated the hash for each line and tested with the target hash value. Simple!</p>
+<!--more-->
+<p>Simple and badly written. I even remove it because I remember that it was “OOP-like” written with a lot of duplicated code, implementations in .h file and so on. A collection of bad practices! It was working but, as I like to say, it was a miracle. :) I’m ashamed of that code and I hope that it cannot be found!</p>
+<p>Anyway, since I started to work with Haskell a lot, I thought that I should rewrite that app. So, Hasher was implemented. It’s a command line tool that can work in interactive mode or by passing the options as command line arguments and can calculate MD5, SHA-1, SHA-256, SHA-512 hashes.</p>
+<p>Hasher is implemented in three modules:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Main</strong>-&gt; contains functions for printing help, app name and version and also contains the implementation of the interactive menu.</li>
+<li><strong>HashGenerator</strong>-&gt; is a layer over cryptonite package.</li>
+<li><strong>CommandLineParser</strong> -&gt; contains the implementation of command line arguments parsing.</li>
+</ol>
+<p>From the point of view of dependencies, as it can be seen in cabal file, the build depends on the following packages:</p>
+<ul>
+<li>bytestring</li>
+<li>cryptonite</li>
+<li>text</li>
+<li>directory</li>
+</ul>
+<p>From the point of view of usage, as I said, it has implemented two modes, interactive and command line options.</p>
+<h3 id="interactive-mode-example">Interactive Mode Example</h3>
+<pre><code>$./hasher
+  _    _           _               
+ | |  | |         | |              
+ | |__| | __ _ ___| |__   ___ _ __ 
+ |  __  |/ _` / __| '_ \ / _ \ '__|
+ | |  | | (_| \__ \ | | |  __/ |   
+ |_|  |_|\__,_|___/_| |_|\___|_|   
+Available Hash Functions:
+	1. MD5
+	2. SHA1
+	3. SHA256
+	4. SHA512
+Select Hash Function:1
+1. Hash plaintext
+2. Hash File
+1
+Enter Plaintext:This is a test
+&quot;ce114e4501d2f4e2dcea3e17b546f339&quot;
+1. Continue
+2. Exit
+2</code></pre>
+<h3 id="command-line-mode-example">Command Line Mode Example</h3>
+<pre><code>$ ./hasher -h
+  _    _           _               
+ | |  | |         | |              
+ | |__| | __ _ ___| |__   ___ _ __ 
+ |  __  |/ _` / __| '_ \ / _ \ '__|
+ | |  | | (_| \__ \ | | |  __/ |   
+ |_|  |_|\__,_|___/_| |_|\___|_|   
+hasher-exe &lt;parameter&gt; [&lt;value&gt;]
+parameters:
+		-h/--help	 help
+		-v		 version
+		-i		 interactive
+		-f &lt;option&gt; &lt;file&gt;
+		-s &lt;option&gt; &lt;plaintext&gt;
+	_________________________________________________________
+	|	Implemented Hash Functions	|	Option	|
+	|		 MD5 			|	MD5	|
+	|		 SHA1 			|	SHA1	|
+	|		 SHA256 		|	SHA256	|
+	|		 SHA512 		|	SHA512	|
+	---------------------------------------------------------
+
+$./hasher -s MD5 &quot;This is a test&quot;
+  _    _           _               
+ | |  | |         | |              
+ | |__| | __ _ ___| |__   ___ _ __ 
+ |  __  |/ _` / __| '_ \ / _ \ '__|
+ | |  | | (_| \__ \ | | |  __/ |   
+ |_|  |_|\__,_|___/_| |_|\___|_|   
+&quot;ce114e4501d2f4e2dcea3e17b546f339&quot;
+</code></pre>
+<p>If you want to test Hasher, you want to fill an issue or you want to contribute, you can find Hasher’s source code in this <a href="https://github.com/ardeleanasm/hasher">REPO</a>.</p>
+<h3 id="usage">Usage</h3>
+<ul>
+<li>Clone or download repository</li>
+<li>stack init</li>
+<li>stack build</li>
+</ul>
+        <div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = '23ars';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+    </section>
+</article>
+
+        </div>
+        </div>
+        <div id="footer">
+          <div class="inside">
+            Site proudly generated by
+	     <link rel="stylesheet" href="../css/core.css" />
+
+
+
+
+
+<a href="https://github.com/ardeleanasm"><i class="svg-icon github"></i></a>
+<a href="https://www.linkedin.com/in/ardelean-sebastian-mihai"><i class="svg-icon linkedin"></i></a>
+<a href="https://ardeleanasm.github.io/atom.xml"><i class="svg-icon rss"></i></a>
+<a href="https://www.twitter.com/mihaiseba"><i class="svg-icon twitter"></i></a>
+<a href="http://stackoverflow.com/users/1462225/23ars"><i class="svg-icon stackoverflow"></i></a>
+<a href="https://www.haskellers.com/user/4914"><img src="https://www.haskellers.com/static/badge.png" alt="I'm a Haskeller">
+</a>
+</br>
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>.
+
+          </div>
+        </div>
+    </body>
+</html>

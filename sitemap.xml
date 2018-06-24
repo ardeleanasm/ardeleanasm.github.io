@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <url>
+        <loc>http://ardeleanasm.github.io/posts/2018-06-22-checksum-generator-haskell.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
         <loc>http://ardeleanasm.github.io/posts/2018-06-15-Monte-Carlo-Integration.html</loc>
         <changefreq>weekly</changefreq>
         

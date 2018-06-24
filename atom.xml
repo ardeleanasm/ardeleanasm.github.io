@@ -8,8 +8,16 @@
         <name>ardeleanasm</name>
         <email>ardeleanasm@gmail.com</email>
     </author>
-    <updated>2018-06-15T00:00:00Z</updated>
+    <updated>2018-06-22T00:00:00Z</updated>
     <entry>
+    <title>Checksum generator in Haskell</title>
+    <link href="http://ardeleanasm.github.io/posts/2018-06-22-checksum-generator-haskell.html" />
+    <id>http://ardeleanasm.github.io/posts/2018-06-22-checksum-generator-haskell.html</id>
+    <published>2018-06-22T00:00:00Z</published>
+    <updated>2018-06-22T00:00:00Z</updated>
+    <summary type="html"><![CDATA[Simple checksum generator in Haskell]]></summary>
+</entry>
+<entry>
     <title>Monte Carlo Integration</title>
     <link href="http://ardeleanasm.github.io/posts/2018-06-15-Monte-Carlo-Integration.html" />
     <id>http://ardeleanasm.github.io/posts/2018-06-15-Monte-Carlo-Integration.html</id>
@@ -80,14 +88,6 @@
     <published>2017-07-26T00:00:00Z</published>
     <updated>2017-07-26T00:00:00Z</updated>
     <summary type="html"><![CDATA[Quantum Computing intro with Haskell]]></summary>
-</entry>
-<entry>
-    <title>Deutsch's Algorithm</title>
-    <link href="http://ardeleanasm.github.io/posts/2016-08-17-deutschs-algorithm.html" />
-    <id>http://ardeleanasm.github.io/posts/2016-08-17-deutschs-algorithm.html</id>
-    <published>2016-08-17T00:00:00Z</published>
-    <updated>2016-08-17T00:00:00Z</updated>
-    <summary type="html"><![CDATA[]]></summary>
 </entry>
 
 </feed>
