@@ -52,17 +52,19 @@
     </div>
     <section>
         <p>This post won’t be a tutorial on electronic circuits but will present a free method to desing and simulate electronic circuits on Linux using <strong>Geda</strong> and <strong>ngspice</strong>. <!--more--></p>
-<p>To start, I will chose a simple diode clipping circuit which consist of the following elements: 1. 2 1N4007 diodes</p>
-<ol start="2" style="list-style-type: decimal">
-<li>2 10K resistors</li>
+<p>To start, I will chose a simple diode clipping circuit which consist of the following elements:</p>
+<ol style="list-style-type: decimal">
+<li><p>2 1N4007 diodes</p></li>
+<li><p>2 10K resistors</p></li>
 </ol>
 <div class="figure">
 <img src="../images/Circuit-Design-and-Simulation-in-Geda-pic1.png" title="Img 1:Diode clipping circuit on both half cycles" alt="Img 1:Diode clipping circuit on both half cycles" />
 <p class="caption">Img 1:Diode clipping circuit on both half cycles</p>
 </div>
 <p>The schematic is available in Img 1. Note that for this circuit is mandatory to have the <em>.mod</em> file for 1N4007 diode.</p>
-<p>Now, using the terminal run the following commands: * <em>gnetlist -g spice-sdb -o diode.net diode.sch</em> to generate the netlist</p>
+<p>Now, using the terminal run the following commands:</p>
 <ul>
+<li><p><em>gnetlist -g spice-sdb -o diode.net diode.sch</em> to generate the netlist</p></li>
 <li><em>ngspice</em> to run ngspice
 <ul>
 <li><p><em>source diode.net</em> to load the netlist</p></li>
