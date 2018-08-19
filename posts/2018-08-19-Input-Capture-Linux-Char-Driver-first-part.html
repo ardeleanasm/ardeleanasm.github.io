@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="../assets/favicon.png">
+        <link rel="apple-touch-icon" href="../assets/touch-icon.png">
+        <title>Laziness leads to progress - Input Capture Linux Char Driver - I part</title>
+        <link rel="stylesheet" href="../css/default.css" />
+        <link rel="stylesheet" href="../css/syntax.css" />
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- Global Site Tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-54128414-2"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-54128414-2');
+      </script>
+    </head>
+    <body>
+      <div class="highbar">&nbsp;</div>
+        <div id="header">
+          <div class="box">
+            <div id="logo" class="name">
+              <h2><a href="../">Laziness leads to progress!</a></h2>
+            </div>
+            <div id="navigation" class="pageslinks">
+              <nav class="menuNav">
+                <div class="menuItems">
+                <a href="../" class="posts/2018-08-19-Input-Capture-Linux-Char-Driver-first-part.md">Home</a>
+                <a href="../blog.html" class="posts/2018-08-19-Input-Capture-Linux-Char-Driver-first-part.md">Blog</a>
+                <a href="../archive.html" class="posts/2018-08-19-Input-Capture-Linux-Char-Driver-first-part.md">Archive</a>
+                </div>
+              </nav>
+            </div>
+        </div>
+        </div>
+        <div class="container-gallery">
+        <div id="content" class="inside">
+            <article>
+    <section class="header">
+        <h2>Input Capture Linux Char Driver - I part</h2>
+        Posted on August 19, 2018
+        
+    </section>
+    <div class="info">
+        
+        Tags: <a href="../tags/linux.html">linux</a>, <a href="../tags/char%20drivers.html">char drivers</a>, <a href="../tags/drivers.html">drivers</a>
+        
+    </div>
+    <section>
+        <h2 id="introduction">Introduction</h2>
+<p>To the best I know, on Linux there is no way to configure a hardware timer in input capture mode although, since it can be used on embedded systems, this feature can be needed. For example, if one needs to measure the period of a signal on a development board running a Linux distro, it have no other way than sampling the GPIOs in userspace with the cost of a resolution of milliseconds. <!--more--></p>
+<h2 id="input-capture">Input Capture</h2>
+<p>Considering a rectangular signal like in Figure 1 and one want to measure the period of the signal or the pulse width. Basically, to measure the period of the signal two successive edges of the same polarity are captured. To measure the pulse width two alternate polarity edges are captured.</p>
+<div class="figure">
+<img src="../images/pwm_signal.jpg" title="Rectangular Signal" alt="Figure 1:Rectangular Signal" />
+<p class="caption">Figure 1:Rectangular Signal</p>
+</div>
+<p>For example, if one wants to measure the high time of a pulse it is enough to subtract the time captured when the rissing edge occurs from the time captured for the subsequent falling edge. This scenario can be easily implemented on a microcontroller using a hardware time in input capture mode and I won’t get into details.</p>
+<p>But if one have only a development board with a Linux based OS it’s hard to implement this task. The only available option I can imagine is to use the GPIOs with rising and falling edges events enabled and to poll them. Of course, the obtained samples will be horrible and the resolution in milliseconds range. Or it’ll be almost imposible.</p>
+<p>The options to “hack” the timers are excluded. Personally, I wanted to do that and I didn’t found a proof that worked for someone. And also I didn’t found some APIs, libraries to select a timer and put it into input capture mode. Of course, I didn’t allocate much time for searching but the idea is that I couldn’t found and maybe there isn’t something like that.</p>
+<p>One can say that another option is to use a microcontroller and program it to perform the task of measuring the signal and to communicate with the development board via I2C, for example. Yes, it is possible but sometimes you don’t have a microcontroller that you want to use only for this small task.</p>
+<h2 id="linux-char-driver">Linux Char Driver</h2>
+<p>The solution described in this post: implementing a char driver.</p>
+<p><strong>Requirements</strong>: 1. Service the interrupt thrown when rising, falling or both are detected on a GPIO. 2. Sample a timer to get the timestamp 3. Detection of rising, falling or both must be configurable 4. GPIO pin used must be configurable 5. Notify userspace that a new value was read.</p>
+<p>In this article I won’t describe how to create a character driver for Linux, there are a lot of articles, quite nice described but somehow incomplete, on Web and also some very good books. In a future post I will shortly describe how the driver was implemented and also the needed device tree file to test it on a Beaglebone Black device.</p>
+<p>Basically the third, fourth and fifth requirements are the easiest to implement. Basically, we need to define a variable of type <strong>file_operations</strong> structure and to implement some basic functions like: open, release, read, ioctl and poll. It will be discussed in future article the implementation and the need for those functions.</p>
+<p>To implement the first requirement a interrupt will be required and registered for the GPIO pin. The registers will be configured such that the interrupt will be thrown when the event will be detected.</p>
+<p>Finally, the second requirement is somehow problematic. The simple solution is to use <strong>get_cycles()</strong> function which will return the number of clock cycles but on ARM microprocessors this function returns 0. So, guards should be used to call <strong>get_cycles()</strong> when the driver is not running on ARM microprocessor and to call another function for getting a timestamp when running on ARM.</p>
+<h2 id="conclusions">Conclusions</h2>
+<p>The implementation of the driver was quite easy after deciding what features should be implemented and after experimenting a few with <em>rw locks</em>, <em>tasklets</em> and so on. The most challenging part was debugging since for this driver I used only <strong>printk-technique</strong>, basically I printed logs for where I considered to be the problem. A step-by-step debugger, even on assembly code, would be much more appreciated.</p>
+        <div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = '23ars';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+    </section>
+</article>
+
+        </div>
+        </div>
+        <div id="footer">
+          <div class="inside">
+            Site proudly generated by
+	     <link rel="stylesheet" href="../css/core.css" />
+
+
+
+
+
+<a href="https://github.com/ardeleanasm"><i class="svg-icon github"></i></a>
+<a href="https://www.linkedin.com/in/ardelean-sebastian-mihai"><i class="svg-icon linkedin"></i></a>
+<a href="https://ardeleanasm.github.io/atom.xml"><i class="svg-icon rss"></i></a>
+<a href="https://www.twitter.com/mihaiseba"><i class="svg-icon twitter"></i></a>
+<a href="http://stackoverflow.com/users/1462225/23ars"><i class="svg-icon stackoverflow"></i></a>
+
+</br>
+            <a href="http://jaspervdj.be/hakyll">Hakyll</a>.
+
+          </div>
+        </div>
+    </body>
+</html>

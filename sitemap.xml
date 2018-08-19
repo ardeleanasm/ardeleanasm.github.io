@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <url>
+        <loc>http://ardeleanasm.github.io/posts/2018-08-19-Input-Capture-Linux-Char-Driver-first-part.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
         <loc>http://ardeleanasm.github.io/posts/2018-07-29-Circuit-Design-and-Simulation-in-Geda.html</loc>
         <changefreq>weekly</changefreq>
         

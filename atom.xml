@@ -8,8 +8,16 @@
         <name>ardeleanasm</name>
         <email>ardeleanasm@gmail.com</email>
     </author>
-    <updated>2018-07-29T00:00:00Z</updated>
+    <updated>2018-08-19T00:00:00Z</updated>
     <entry>
+    <title>Input Capture Linux Char Driver - I part</title>
+    <link href="http://ardeleanasm.github.io/posts/2018-08-19-Input-Capture-Linux-Char-Driver-first-part.html" />
+    <id>http://ardeleanasm.github.io/posts/2018-08-19-Input-Capture-Linux-Char-Driver-first-part.html</id>
+    <published>2018-08-19T00:00:00Z</published>
+    <updated>2018-08-19T00:00:00Z</updated>
+    <summary type="html"><![CDATA[Input Capture Linux Char Driver]]></summary>
+</entry>
+<entry>
     <title>Circuit Design and Simulation in Geda</title>
     <link href="http://ardeleanasm.github.io/posts/2018-07-29-Circuit-Design-and-Simulation-in-Geda.html" />
     <id>http://ardeleanasm.github.io/posts/2018-07-29-Circuit-Design-and-Simulation-in-Geda.html</id>
@@ -79,14 +87,6 @@
     <id>http://ardeleanasm.github.io/posts/2017-08-01-Quantum-Computing-in-Haskell-third-part.html</id>
     <published>2017-08-01T00:00:00Z</published>
     <updated>2017-08-01T00:00:00Z</updated>
-    <summary type="html"><![CDATA[Quantum Computing with Haskell]]></summary>
-</entry>
-<entry>
-    <title>Quantum Computing in Haskell - II part</title>
-    <link href="http://ardeleanasm.github.io/posts/2017-07-28-Quantum-Computing-in-Haskell-second-part.html" />
-    <id>http://ardeleanasm.github.io/posts/2017-07-28-Quantum-Computing-in-Haskell-second-part.html</id>
-    <published>2017-07-28T00:00:00Z</published>
-    <updated>2017-07-28T00:00:00Z</updated>
     <summary type="html"><![CDATA[Quantum Computing with Haskell]]></summary>
 </entry>
 
