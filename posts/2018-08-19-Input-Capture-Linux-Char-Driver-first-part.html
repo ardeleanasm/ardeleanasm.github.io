@@ -65,7 +65,14 @@
 <p>One can say that another option is to use a microcontroller and program it to perform the task of measuring the signal and to communicate with the development board via I2C, for example. Yes, it is possible but sometimes you don’t have a microcontroller that you want to use only for this small task.</p>
 <h2 id="linux-char-driver">Linux Char Driver</h2>
 <p>The solution described in this post: implementing a char driver.</p>
-<p><strong>Requirements</strong>: 1. Service the interrupt thrown when rising, falling or both are detected on a GPIO. 2. Sample a timer to get the timestamp 3. Detection of rising, falling or both must be configurable 4. GPIO pin used must be configurable 5. Notify userspace that a new value was read.</p>
+<p><strong>Requirements</strong>:</p>
+<ol style="list-style-type: decimal">
+<li><p>Service the interrupt thrown when rising, falling or both are detected on a GPIO.</p></li>
+<li><p>Sample a timer to get the timestamp</p></li>
+<li><p>Detection of rising, falling or both must be configurable</p></li>
+<li><p>GPIO pin used must be configurable</p></li>
+<li><p>Notify userspace that a new value was read.</p></li>
+</ol>
 <p>In this article I won’t describe how to create a character driver for Linux, there are a lot of articles, quite nice described but somehow incomplete, on Web and also some very good books. In a future post I will shortly describe how the driver was implemented and also the needed device tree file to test it on a Beaglebone Black device.</p>
 <p>Basically the third, fourth and fifth requirements are the easiest to implement. Basically, we need to define a variable of type <strong>file_operations</strong> structure and to implement some basic functions like: open, release, read, ioctl and poll. It will be discussed in future article the implementation and the need for those functions.</p>
 <p>To implement the first requirement a interrupt will be required and registered for the GPIO pin. The registers will be configured such that the interrupt will be thrown when the event will be detected.</p>
