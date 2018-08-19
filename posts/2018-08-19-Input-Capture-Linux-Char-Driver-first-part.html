@@ -52,7 +52,7 @@
     </div>
     <section>
         <h2 id="introduction">Introduction</h2>
-<p>To the best I know, on Linux there is no way to configure a hardware timer in input capture mode although, since it can be used on embedded systems, this feature can be needed. For example, if one needs to measure the period of a signal on a development board running a Linux distro, it have no other way than sampling the GPIOs in userspace with the cost of a resolution of milliseconds. <!--more--></p>
+<p>To the best of my knowledge, on Linux there is no way to configure a hardware timer in input capture mode although, since it can be used on embedded systems, this feature can be needed. For example, if one needs to measure the period of a signal on a development board running a Linux distro, it have no other way than sampling the GPIOs in userspace with the cost of a resolution of milliseconds. <!--more--></p>
 <h2 id="input-capture">Input Capture</h2>
 <p>Considering a rectangular signal like in Figure 1 and one want to measure the period of the signal or the pulse width. Basically, to measure the period of the signal two successive edges of the same polarity are captured. To measure the pulse width two alternate polarity edges are captured.</p>
 <div class="figure">
