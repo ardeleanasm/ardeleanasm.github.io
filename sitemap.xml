@@ -9,7 +9,28 @@
     </url>
 
     <url>
+        <loc>http://ardeleanasm.github.io/posts/2018-08-19-Input-Capture-Linux-Char-Driver-first-part.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
         <loc>http://ardeleanasm.github.io/posts/2018-07-29-Circuit-Design-and-Simulation-in-Geda.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>http://ardeleanasm.github.io/posts/2018-07-29-Circuit-Design-and-Simulation-in-Geda.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>http://ardeleanasm.github.io/posts/2018-06-22-checksum-generator-haskell.html</loc>
         <changefreq>weekly</changefreq>
         
         <priority>0.8</priority>
@@ -30,7 +51,28 @@
     </url>
 
     <url>
+        <loc>http://ardeleanasm.github.io/posts/2018-06-15-Monte-Carlo-Integration.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
         <loc>http://ardeleanasm.github.io/posts/2018-04-08-Common-Cathode-7-segments-display-driver-implementation-in-Verilog.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>http://ardeleanasm.github.io/posts/2018-04-08-Common-Cathode-7-segments-display-driver-implementation-in-Verilog.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>http://ardeleanasm.github.io/posts/2018-02-15-Monte-Carlo-Pi-Estimation.html</loc>
         <changefreq>weekly</changefreq>
         
         <priority>0.8</priority>
@@ -51,7 +93,28 @@
     </url>
 
     <url>
+        <loc>http://ardeleanasm.github.io/posts/2017-11-30-Polynomial-Value-in-Haskell.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
         <loc>http://ardeleanasm.github.io/posts/2017-10-17-How-to-transform-list-to-map-in-Scala.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>http://ardeleanasm.github.io/posts/2017-10-17-How-to-transform-list-to-map-in-Scala.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>http://ardeleanasm.github.io/posts/2017-08-18-Quantum-Computing-in-Haskell-fourth-part.html</loc>
         <changefreq>weekly</changefreq>
         
         <priority>0.8</priority>
@@ -72,6 +135,20 @@
     </url>
 
     <url>
+        <loc>http://ardeleanasm.github.io/posts/2017-08-01-Quantum-Computing-in-Haskell-third-part.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>http://ardeleanasm.github.io/posts/2017-07-28-Quantum-Computing-in-Haskell-second-part.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
         <loc>http://ardeleanasm.github.io/posts/2017-07-28-Quantum-Computing-in-Haskell-second-part.html</loc>
         <changefreq>weekly</changefreq>
         
@@ -86,7 +163,28 @@
     </url>
 
     <url>
+        <loc>http://ardeleanasm.github.io/posts/2017-07-26-Quantum-Computing-in-Haskell.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
         <loc>http://ardeleanasm.github.io/posts/2016-08-17-deutschs-algorithm.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>http://ardeleanasm.github.io/posts/2016-08-17-deutschs-algorithm.html</loc>
+        <changefreq>weekly</changefreq>
+        
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>http://ardeleanasm.github.io/posts/2016-04-24-first-experience-winapi.html</loc>
         <changefreq>weekly</changefreq>
         
         <priority>0.8</priority>
