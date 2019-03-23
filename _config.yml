@@ -1,6 +1,6 @@
 # Site Info
-title:              "Just Computer Engineering"
-name:               "Just Computer Engineering" 
+title:              "Bending bits..."
+name:               "Bending bits..." 
 description:        "Lazyness leads to progress"
 #google_verify:      epFgX0s_0RM3CdjwFcsewfXzPov2g8s9ZBOLyaIUH-o # Put your Google Verification here
 google_analytics:   UA-54128414-2 # Put your Google Analytics code
@@ -46,7 +46,7 @@ mathjax:            true  # enables support for mathjax - set to false to disabl
 # Site Build
 highlighter:        rouge
 markdown:           kramdown
-theme: 				minima
+theme:              minima
 kramdown:
     input:          GFM
     auto_ids:      true
