@@ -3,7 +3,7 @@ layout: post
 title: "Quantum Computing in Haskell - III part"
 description: "Quantum Computing with Haskell"
 category: quantum computing
-tags:  haskell 
+tags: [ haskell ]
 ---
 
 ## Articles
@@ -19,7 +19,6 @@ tags:  haskell
 ## Introduction
 
 In the second part of this series I talked about the Haskell implementation of Qubits. There are two more articles about the library and after that I will start posting about algorithms. In this article we will define some Quantum Gates that we will use in our algorithms, even if in the first article I wrote a little about this topic and I presented some matrices.
-<!--more-->
 
 ## Background
 
@@ -41,8 +40,8 @@ $$X=\begin{pmatrix}0 & 1 \\ 1 & 0 \end{pmatrix}$$
 
 *Transformation:*
 
-$\newcommand{\ket}[1]{\left|{#1}\right\rangle}$
-$\newcommand{\bra}[1]{\left\langle{#1}\right|}$
+$$\newcommand{\ket}[1]{\left|{#1}\right\rangle}$$
+$$\newcommand{\bra}[1]{\left\langle{#1}\right|}$$
 $$X\ket{0}=\ket{1}, X\ket{1}=\ket{0}$$
 
 #### Pauli Y-Gate
@@ -99,7 +98,7 @@ Controlled Quantum Gates are useful for implementing **IF-THEN-ELSE** type opera
 
 *Truth Table:*
 
-| x | y | x $(x\oplus y)$ |
+| x | y | x $$(x\oplus y)$$ |
 |:-:|:-:|:---------------:|
 | 0 | 0 | 0 0             | 
 | 0 | 1 | 0 1             |
@@ -170,10 +169,10 @@ zGate :: Gate
 
 In this article we implemented some 1-qubit Gates and some Controlled-Gate. In next articles we will define some functions to apply those gate on qubits and also to create gates, starting from 1-qubit ones, that apply on multiple qubits. New ideas, features, issues are welcomed and I encourage every reader to submit them on Github or ask questions using Disquss.
 
-[first_article]: 2017-07-26-Quantum-Computing-in-Haskell.html
-[second_article]: 2017-07-28-Quantum-Computing-in-Haskell-second-part.html
-[third_article]: 2017-08-01-Quantum-Computing-in-Haskell-third-part.html
-[fourth_article]: 2017-08-18-Quantum-Computing-in-Haskell-fourth-part.html
+[first_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell/
+[second_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-second-part/
+[third_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-third-part/
+[fourth_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-fourth-part/
 [git_repo]: https://github.com/ardeleanasm/qchas
 [documentation]: https://ardeleanasm.github.io/qchas/
 [package]: https://hackage.haskell.org/package/qchas
@@ -182,8 +181,8 @@ In this article we implemented some 1-qubit Gates and some Controlled-Gate. In n
 [2]: https://github.com/ardeleanasm/quantum_computing
 
 
-[xgate_img]: ../images/xgate.png "Pauli XGate"
-[ygate_img]: ../images/ygate.png "Pauli YGate"
-[zgate_img]: ../images/zgate.png "Pauli ZGate"
-[hgate_img]: ../images/hgate.png "Hadamard Gate"
-[cnotgate_img]: ../images/cnotgate.png "Controlled-NOT"
+[xgate_img]: https://ardeleanasm.github.io/resources/quantum_serie/xgate.png "Pauli XGate"
+[ygate_img]: https://ardeleanasm.github.io/resources/quantum_serie/ygate.png "Pauli YGate"
+[zgate_img]: https://ardeleanasm.github.io/resources/quantum_serie/zgate.png "Pauli ZGate"
+[hgate_img]: https://ardeleanasm.github.io/resources/quantum_serie/hgate.png "Hadamard Gate"
+[cnotgate_img]: https://ardeleanasm.github.io/resources/quantum_serie/cnotgate.png "Controlled-NOT"

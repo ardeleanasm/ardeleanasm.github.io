@@ -3,16 +3,8 @@ layout: page
 title: About
 permalink: /about/
 ---
+<section id="archive">
+Sebastian Mihai, known with nickname 23ars, is a Computer Engineer and software developer at a multinational automotive company. 
+This website is only used for publishing some articles about ongoing personal projects. 
+</section>
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](https://jekyllrb.com/)
-
-You can find the source code for Minima at GitHub:
-[jekyll][jekyll-organization] /
-[minima](https://github.com/jekyll/minima)
-
-You can find the source code for Jekyll at GitHub:
-[jekyll][jekyll-organization] /
-[jekyll](https://github.com/jekyll/jekyll)
-
-
-[jekyll-organization]: https://github.com/jekyll

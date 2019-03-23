@@ -1,0 +1,27 @@
+<aside class="logo">
+
+	{% if page.url == '/index.html' or page.url == '/' %}
+		{% assign link = '/about' %}
+		{% assign prompt = 'About the Author' %}
+	{% else %}
+		{% assign link = '/' %}
+		{% assign prompt = 'Back to Home' %}
+	{% endif %}
+
+	<a href="{{ link | prepend: site.baseurl }}">
+		<img src="http://www.gravatar.com/avatar/{{ site.author_gravatar }}.png?s=80" class="gravatar">
+	</a>
+</aside>
+<div align="center">
+	<a href="{{ link | prepend: site.baseurl }}">Home</a>
+	<a href="/about">About</a>
+	<a href="/articles">Articles</a>
+	<a href="https://github.com/ardeleanasm" target="_blank">Projects</a>
+	<a href="/archive">Archive</a>
+	<a href="/categories">Categories</a>
+	<a href="/tags">Tags</a>
+    
+</div>
+<div align="center">
+	<p><article><font color="blue">{% include messages.html %}</font></article></p>
+</div>	

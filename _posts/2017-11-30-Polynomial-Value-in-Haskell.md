@@ -3,11 +3,11 @@ layout: post
 title: "Polynomial Value in Haskell"
 description: ""
 category: functional programming
-tags:  haskell 
+tags: [ haskell ]
 ---
 
 While working on a project that analyze some signals in Haskell I found that I need a simple function `polyVal` that evaluates a polynomial at specific values. 
-<!--more-->
+
 After a failed search for this function ( I thought that I can find a library or an implementation) I decided to write it on my own, anyway, it's a simple function.
 
 So, let's suppose we have a polynomial *p* of degree *N*, this function returns the value:

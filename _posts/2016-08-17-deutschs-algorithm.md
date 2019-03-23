@@ -3,12 +3,11 @@ layout: post
 title: "Deutsch's Algorithm"
 description: ""
 category: quantum computing
-tags: java
+tags: [java]
 ---
 
 In this post I'll present a quantum implementation of the Deutsch's algorithm using a library **QuantumComputingLib** that I wrote this week. 
 
-<!--more-->
 First, I should write a little about the library. It's version *1.0-SNAPSHOT* only and it doesn't have an official release version. 
 For now, it only has a basic Javadoc and only provides methods for well-known operations on qubits and matrices. 
 I hope that I will able to offer support for it and that this project will be active for a long time, I hope that at least 2 years. 
@@ -24,12 +23,28 @@ to see how quantum computers can be used. This problem can be solved by a quantu
 
 Suppose there is a function f, which has 1-bit inputs/outputs. The maximum number of such function is four:
 
-| Function                 | Type     |
-|:-------------------------|:--------:|
-| \\[f_{1}(0)=0, f_{1}(1)=0\\] | constant |
-| \\[f_{2}(0)=1, f_{2}(1)=1\\] | constant |
-| \\[f_{3}(0)=0, f_{3}(1)=1\\] | balanced |
-| \\[f_{4}(0)=1, f_{4}(1)=0\\] | balanced |
+<table style="border:1px solid black;">
+  <tr>
+    <th style="border:1px solid black;">Function</th>
+    <th style="border:1px solid black;">Type</th> 
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">f<sub>1</sub>(0)=0<br> f<sub>1</sub>(1)=0</td>
+    <td style="border:1px solid black;">constant</td> 
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">f<sub>2</sub>(0)=1<br> f<sub>2</sub>(1)=1  </td>
+    <td style="border:1px solid black;">constant</td> 
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">f<sub>3</sub>(0)=0<br> f<sub>3</sub>(1)=1</td>
+    <td style="border:1px solid black;">balanced</td> 
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">f<sub>4</sub>(0)=1<br> f<sub>4</sub>(1)=0</td>
+    <td style="border:1px solid black;">balanced</td> 
+  </tr>
+</table>
 
 
 The goal was to determine whether the function passed to an algorithm's input is constant or not. 
@@ -40,7 +55,7 @@ the type of the function can be determined by evaluating it once.
 ### Implementation
 
 
-![The quantum circuit of Deutsch’s algorithm[1]](../images/deutsch_quantum_circuits.png)
+![The quantum circuit of Deutsch’s algorithm[1]](http://ardeleanasm.github.io/resources/deutsch_quantum_circuits.png)
 
 
 ```java

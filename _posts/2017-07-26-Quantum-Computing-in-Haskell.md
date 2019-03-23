@@ -19,7 +19,6 @@ tags: [ haskell ]
 ## Long story made short
 
 1 year ago I started studying the topics of Quantum Computing and Quantum Algorithms and I was fascinated. Is interresting and, like Niels Bohr said, "Anyone who is not shocked by quantum theory has not understood it." 
-<!--more-->
 
 As doing my research I found quite interesting to post some small articles on these topics, some articles on CodeProject ([Java based Quantum Computing Library][2] and [Grover's Search Algorithm Explained][3]) and one on my website about [Deutsch's algorithm][1]. For those articles I used a Java library that I created myself with the help of some of my colleagues. Now, after a year and after playing a little with Haskell, I found quite interesting to review the topic and to start posting a series of small articles about Quantum Computing. 
 
@@ -29,9 +28,9 @@ I'll start by talking a little about the difference between a quantum computer a
 
 As someone can expect, a quantum computer use the quantum mechanical effects, such as superposition, to carry out computations. We already know that in a traditional computer, the **bit** is the basic unit and it can be 0 or 1. The value is defined by a voltage level, in TTL technology, ideally, a 1 value is represented by 5.00 volts while a 0 value is represented by 0.00 volts. For a quantum computer, there are some differences. For example, the basic unit is the **qubit** (quantum bit) and can, at one time, represent value 0 and 1, by exploiting superposition. A qubit is defined by the equation presented below:
 
-$\newcommand{\ket}[1]{\left|{#1}\right\rangle}$
-$\newcommand{\bra}[1]{\left\langle{#1}\right|}$
-$\ket{v}=\alpha\ket{0}+\beta\ket{1}$
+$$\newcommand{\ket}[1]{\left|{#1}\right\rangle}$$
+$$\newcommand{\bra}[1]{\left\langle{#1}\right|}$$
+$$\ket{v}=\alpha\ket{0}+\beta\ket{1}$$
 
 
 Before diving deeper into the subject, we will firstly review some mathematical aspects of the topic. 
@@ -40,9 +39,12 @@ Before diving deeper into the subject, we will firstly review some mathematical 
 
 Since probability amplitudes of a qubit are complex numbers I prefer to start with a very short introduction in the mathematics of complex numbers. 
 
-A complex number q is defined as $q=a+bi$ where a and b $\in \mathcal{R}$ and $i=\sqrt{-1}$ is the imaginary basis unit. 
+A complex number q is defined as 
 
-We can see that **a** is the real component of a complex number and **bi** is the imaginary one. We can obtain the complex conjugate by simply negating the sign of the imaginary component $\overline{q}=a-bi$.
+
+$$q=a+bi$$ where a and b $$\in \mathcal{R}$$ and $$i=\sqrt{-1}$$ is the imaginary basis unit. 
+
+We can see that **a** is the real component of a complex number and **bi** is the imaginary one. We can obtain the complex conjugate by simply negating the sign of the imaginary component $$\overline{q}=a-bi$$.
 
 Some basic formulas that we will use during this series of articles will be addition, multiplication, and modulus.
 
@@ -70,7 +72,7 @@ $$|x|=\sqrt{a^2+b^2}$$
 
 While Complex Numbers are used to represent the probability amplitudes of a qubit, vectors and linear algebra helps us to represent qubits, so I decided that it'll be usefull to present some notations and operations before starting to write code.
 
-Basically, the state of a qubit is a unit vector in a 2-dimensional complex vector space $\mathcal{C}^2$.
+Basically, the state of a qubit is a unit vector in a 2-dimensional complex vector space $$\mathcal{C}^2$$.
 
 The vector $$\begin{bmatrix}\alpha\\ \beta\end{bmatrix}$$ can be written as
 
@@ -88,7 +90,7 @@ $$\ket{1}=\begin{bmatrix}0\\1\end{bmatrix}$$
 In the above example I used the **bra-ket** notation, the notation of a column vector is called **ket** while the notation of a row vector is called **bra**. Next, I will define 3 basic operations that will be used heavily in the examples from the next articles on this topic, the inner product, outer product and tensor product.
 
 
-The inner product, $\bra{v}\ket{v}$ is the product between the bra and the ket vectors:
+The inner product, $$\bra{v}\ket{v}$$ is the product between the bra and the ket vectors:
 
 $$\bra{v}\ket{v}=\begin{pmatrix}{c_1}^* & {c_2}^* \end{pmatrix}\begin{pmatrix}{c_1} \\ {c_2} \end{pmatrix}={c_1}^*{c_1}+{c_2}^*{c_2}={|c_1|}^2+{|c_2|}^2$$
 
@@ -110,7 +112,7 @@ Quantum mechanics tells that any such system can exist in a superposition of sta
 
 $$\ket{v}=\alpha\ket{0}+\beta\ket{1}$$ 
 
-where $\alpha$ and $\beta$ are complex number that satisfy the relation 
+where $$\alpha$$ and $$\beta$$ are complex number that satisfy the relation 
 
 $${|\alpha|}^2+{|\beta|}^2=1$$
 
@@ -143,15 +145,15 @@ $$Controlled Not=\begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 1
 
 In the next article we will write some code that implements some basic operations. 
 
-[1]: 2016-08-17-deutschs-algorithm.html
+[1]: https://ardeleanasm.github.io/deutschs-algorithm/
 [2]: https://www.codeproject.com/Articles/1130092/Java-based-Quantum-Computing-library
 [3]: https://www.codeproject.com/Articles/1131573/Grovers-Search-Algorithm-explained
 
 
-[first_article]: 2017-07-26-Quantum-Computing-in-Haskell.html
-[second_article]: 2017-07-28-Quantum-Computing-in-Haskell-second-part.html
-[third_article]: 2017-08-01-Quantum-Computing-in-Haskell-third-part.html
-[fourth_article]: 2017-08-18-Quantum-Computing-in-Haskell-fourth-part.html
+[first_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell/
+[second_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-second-part/
+[third_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-third-part/
+[fourth_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-fourth-part/
 [git_repo]: https://github.com/ardeleanasm/qchas
 [documentation]: https://ardeleanasm.github.io/qchas/
 [package]: https://hackage.haskell.org/package/qchas

@@ -3,7 +3,7 @@ layout: post
 title: "Quantum Computing in Haskell - II part"
 description: "Quantum Computing with Haskell"
 category: quantum computing
-tags:  haskell 
+tags: [ haskell ]
 ---
 
 ## Articles
@@ -19,14 +19,13 @@ tags:  haskell
 ## Introduction
 
 In the first article from this series I presented some basic math and I suggest reading that article first if someone is not familiar with the topic of Quantum Computing. In this article, the second from the series I will present the implementation in Haskell. The plan is that after a few articles in which I will present the data types, modules, functions, we will implement some Quantum algorithms like Deutsch's Algorithm, Grover's Algorithm, Deutsch-Josza's Algorithm and maybe Shor's algorithm.
-<!--more-->
 
 ## Background
 
 We saw in the previous article that the state of a qubit can be described by
 
-$\newcommand{\ket}[1]{\left|{#1}\right\rangle}$
-$\newcommand{\bra}[1]{\left\langle{#1}\right|}$
+$$\newcommand{\ket}[1]{\left|{#1}\right\rangle}$$
+$$\newcommand{\bra}[1]{\left\langle{#1}\right|}$$
 $$\ket{v}=\alpha\ket{0}+\beta\ket{1}$$
 
 where
@@ -38,7 +37,7 @@ and
 $$\ket{0}=\begin{bmatrix} 1 \\ 0\end{bmatrix}$$
 $$\ket{1}=\begin{bmatrix} 0 \\ 1\end{bmatrix}$$
 
-It's clearly, from the above equations, that we have to implement a Qubit type and the qubits $\ket{0}$ and $\ket{1}$.
+It's clearly, from the above equations, that we have to implement a Qubit type and the qubits $$\ket{0}$$ and $$\ket{1}$$.
 
 ## Implementation
 
@@ -91,7 +90,7 @@ ghci>qubitState q
  , 0.0 :+ 0.0 ]
 ```
 
-Basically, in the above example we created the $\ket{0}$. Since in our future examples we will use it a lot alongside $\ket{1}$ we should define some functions that will return them.
+Basically, in the above example we created the $$\ket{0}$$. Since in our future examples we will use it a lot alongside $$\ket{1}$$ we should define some functions that will return them.
 
 ```haskell
 qZero::Qubit
@@ -115,7 +114,7 @@ Qubit {qubitState = (2><1)
 ```
 we see that we have two functions that returns our needed qubits. 
 
-After the experience that I have with [Java Library for Quantum Computing][2] I think that is useful to also define two more qubits, $\ket{+}$ and $\ket{-}$. Those qubits can be simply obtained by simply applying the Hadamard Gate on $\ket{0}$ and on $\ket{1}$ respectively.
+After the experience that I have with [Java Library for Quantum Computing][2] I think that is useful to also define two more qubits, $$\ket{+}$$ and $$\ket{-}$$. Those qubits can be simply obtained by simply applying the Hadamard Gate on $$\ket{0}$$ and on $$\ket{1}$$ respectively.
 
 ```haskell
 qPlus::Qubit
@@ -131,10 +130,10 @@ For now, we have defined a Qubit type and we can create any qubit. We also defin
 
 Based on my experience that I have on this topic after doing some research and implementing from scratch a library in Java I was surprised when I saw how fast I can implement this code in Haskell. It was quite simple and it took less time.
 
-[first_article]: 2017-07-26-Quantum-Computing-in-Haskell.html
-[second_article]: 2017-07-28-Quantum-Computing-in-Haskell-second-part.html
-[third_article]: 2017-08-01-Quantum-Computing-in-Haskell-third-part.html
-[fourth_article]: 2017-08-18-Quantum-Computing-in-Haskell-fourth-part.html
+[first_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell/
+[second_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-second-part/
+[third_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-third-part/
+[fourth_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-fourth-part/
 [git_repo]: https://github.com/ardeleanasm/qchas
 [documentation]: https://ardeleanasm.github.io/qchas/
 [package]: https://hackage.haskell.org/package/qchas

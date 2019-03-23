@@ -3,13 +3,13 @@ layout: post
 title: "Monte Carlo Pi Estimation"
 description: "A Monte Carlo Pi estimation algorithm implemented in F#"
 category: functional programming
-tags: fsharp 
+tags: [fsharp ]
 ---
 
 In this post I'll show how Pi can be computed using a Monte Carlo algorithm in F#. Basically, using the idea of a dartboard we can obtain the value of PI by simply 
 calculating the number of darts that land in the dartboard verses those that land outside it. And by increasing the number of throws we will get closer to PI's value, for example
 throwing the dart 1000 times will be closer to PI than throwing the dart 10 or 100 times. 
-<!--more-->
+
 The formula that we will use to determine PI by throwing darts is:
 
 $$PI=4.0*\frac{hits}{darts thrown}$$

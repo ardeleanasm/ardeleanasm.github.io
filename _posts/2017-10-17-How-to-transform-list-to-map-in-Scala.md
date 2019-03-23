@@ -3,11 +3,11 @@ layout: post
 title: "How to transform a List to a Map in Scala"
 description: ""
 category: functional programming
-tags: scala
+tags: [scala]
 ---
 
 Yesterday I faced a new, for me at least, problem when I wanted to read a file line by line into a List and transform the result to a Map. 
-<!--more-->
+
 Basically, I had a file ( from Rosalind) like the one below, a file in FASTA format.
 
 ```

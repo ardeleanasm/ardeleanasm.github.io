@@ -3,25 +3,29 @@ layout: post
 title: "Common-Cathode 7-segments display driver implementation in Verilog"
 description: "Common-Cathode 7-segments display driver implementation in Verilog"
 category: hdl
-tags: verilog,7-segments driver
+tags: [verilog,7-segments driver]
 ---
 
 
 ### Description
 
-7-segment LED type displays provide a convenient way to display data, like numbers, letters, and typically consist of seven individual LEDs within one single display package. In order to produce the required data ( HEX characters from 0 to 9 and A to F), on the display the correct combination of LED segments need to be illuminated. However, to display BCD information on 7-segments we need to use a BCD to 7 segments decoder like 74LS47 or HC4511.
-<!--more-->
+7-segment LED type displays provide a convenient way to display data, like numbers, letters, and typically consist of seven individual LEDs within one single display package. In order to produce the required data ( HEX characters from 0 to 9 and A to F) on the display the correct combination of LED segments need to be illuminated. However, to display BCD information on 7-segments we need to use a BCD to 7 segments decoder like 74LS47 or HC4511.
+
 A 7-segment LED display usually have 8 connections for each LED segment and one that acts as a GND or VCC. There are some displays that have an additional input pin used to display a decimal point. Anyway, in electronics there are 2 types of 7-segment displays:
 
 1. **Common Cathode Display** - all the cathode connections of the LED segments are joined together to **Gnd**. This means that a segment is illuminated by applying a logic '1' signal to the *Anode* terminal. (Img 1a)
-2. **Common Anode Display** - all the anode connections of the LED segments are joined together to **Vcc** which means that to illuminate a segment a logic '0' needs to be applied to the *Cathode* terminal. (Img 1b)
+2. **Common Anode Display** - all the anode connections of the LED segments are joined together to **Vdd** which means that to illuminate a segment a logic '0' needs to be applied to the *Cathode* terminal. (Img 1b)
 
 
-![Img 1:LED display types][led_display_types]
+{% include img.html img="resources/common_cathode_anode_leds.png"
+            title="Img 1:LED display types"
+            caption="Img 1:LED display types" %}
 
 
-![Img 2: 7-segment display format][7_seg_display_format]
 
+{% include img.html img="resources/led_scheme.png"
+            title="Img 2:7-segment display format"
+            caption="Img 2: 7-segment display format" %}
 
 
 Considering Img 2 we can create the truth table below. Because we use a common cathode 7 segment display we will have 1 for each illuminated segment and 0 for not illuminated. Since we will design a BCD to 7-segments the values from 10 to 15 are invalid. For there values we will mark the corresponding segment with X, meaning don't care. 
@@ -47,7 +51,7 @@ Considering Img 2 we can create the truth table below. Because we use a common c
 |  1  |  1  |  1  |  1  |  x  |  0  |  0  | 0   |  x  |  x  |  x  |  -  |
 
 
-Based on the above table we can express output as minterm expansions:
+Based on the above table we can express the output as minterm expansions:
 
 $$a = F_{1} (A, B, C, D) = \sum m(0, 2, 3, 5, 7, 8, 9)$$
 
@@ -64,7 +68,7 @@ $$f = F_{6} (A, B, C, D) = \sum m(0, 4, 5, 6, 8, 9)$$
 $$g = F_{7} (A, B, C, D) = \sum m(2, 3, 4, 5, 6, 8, 9)$$
 
 
-Now we can construct the Karnaugh's Map for each output term and then simplify it to obtain a logic combination of inputs for each output.
+Now we can construct the Karnaugh's Map for each output term and then simplify it to obtain a logic combination of inputs for each output. **Note** that in the following equations we considered 0 instead of X for inputs between 10 and 15.
 
 $$a=A\overline{B}\overline{C}+\overline{A}(C+\overline{B}\overline{D}+BD)$$
 
@@ -82,7 +86,9 @@ $$g=\overline{A}(C\overline{BD}+B\overline{C})+A\overline{B}\overline{C}$$
 
 ### Implementation
 
-![Img 3:TI HC4511 block scheme][circuit_scheme]
+{% include img.html img="resources/hc4511_block_scheme.png"
+            title="Img 3:TI HC4511 block scheme"
+            caption="Img 3: TI HC4511 block scheme" %}
 
 In Img 3 is the block scheme of the TI HC4511 BCD-to-7 segment latch/decoder/driver.
 
@@ -132,7 +138,7 @@ endmodule // decoder
 #### Latch Implementation
 
 We can easily implement a D-type latch using an **always** block. We will need 5 ports,
-3 for input signals ( data in, enable, $\overline{enable}$ ) and 2 for output signals ( q and $\overline{q}$).
+3 for input signals ( data in, enable, $$\overline{enable}$$ ) and 2 for output signals ( q and $$\overline{q} $$).
 
 
 ```verilog
@@ -304,11 +310,3 @@ endmodule // segments_driver_tb
 1. [TI HC4511 Datasheet](http://www.ti.com/lit/ds/symlink/cd74hc4511.pdf)
 2. [Electronics Hub](https://www.electronicshub.org/bcd-7-segment-led-display-decoder-circuit/)
 3. [Electronics Tutorials](https://www.electronics-tutorials.ws/combination/comb_6.html)
-
-
-
-[led_display_types]: ../images/common_cathode_anode_leds.png "Img 1:LED display types"
-
-[7_seg_display_format]: ../images/led_scheme.png "Img 2: 7-segment display format"
-
-[circuit_scheme]: ../images/hc4511_block_scheme.png "Img 3:TI HC4511 block scheme"

@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+	<title>Common-Cathode 7-segments display driver implementation in Verilog · Just Computer Engineering</title>
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@mihaiseba" />
+<meta name="twitter:title" content="Common-Cathode 7-segments display driver implementation in Verilog" />
+<meta name="twitter:description" content="Description">
+
+<meta name="description" content="Description">
+
+
+
+<link rel="icon" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/touch-icon.png">
+<link rel="stylesheet" href="/assets/core.css">
+<link rel="canonical" href="/Common-Cathode-7-segments-display-driver-implementation-in-Verilog/">
+<link rel="alternate" type="application/atom+xml" title="Just Computer Engineering" href="/feed.xml" />
+
+
+
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+		<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54128414-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+	</head>
+
+	<body>
+
+		<aside class="logo">
+
+	
+
+	<a href="/">
+		<img src="http://www.gravatar.com/avatar/0afb9a47eb6654437c6986283cff151c.png?s=80" class="gravatar">
+	</a>
+</aside>
+<div align="center">
+	<a href="/">Home</a>
+	<a href="/about">About</a>
+	<a href="/articles">Articles</a>
+	<a href="https://github.com/ardeleanasm" target="_blank">Projects</a>
+	<a href="/archive">Archive</a>
+	<a href="/categories">Categories</a>
+	<a href="/tags">Tags</a>
+    
+</div>
+<div align="center">
+	<p><article><font color="blue">
+</font></article></p>
+</div>	
+
+
+		<article>
+			<article>
+
+	<div class="center">
+		<h1>Common-Cathode 7-segments display driver implementation in Verilog</h1>
+		<time>April 8, 2018</time>
+	</div>
+
+	<div class="divider"></div>
+
+	<h3 id="description">Description</h3>
+
+<p>7-segment LED type displays provide a convenient way to display data, like numbers, letters, and typically consist of seven individual LEDs within one single display package. In order to produce the required data ( HEX characters from 0 to 9 and A to F) on the display the correct combination of LED segments need to be illuminated. However, to display BCD information on 7-segments we need to use a BCD to 7 segments decoder like 74LS47 or HC4511.</p>
+
+<p>A 7-segment LED display usually have 8 connections for each LED segment and one that acts as a GND or VCC. There are some displays that have an additional input pin used to display a decimal point. Anyway, in electronics there are 2 types of 7-segment displays:</p>
+
+<ol>
+  <li><strong>Common Cathode Display</strong> - all the cathode connections of the LED segments are joined together to <strong>Gnd</strong>. This means that a segment is illuminated by applying a logic ‘1’ signal to the <em>Anode</em> terminal. (Img 1a)</li>
+  <li><strong>Common Anode Display</strong> - all the anode connections of the LED segments are joined together to <strong>Vdd</strong> which means that to illuminate a segment a logic ‘0’ needs to be applied to the <em>Cathode</em> terminal. (Img 1b)</li>
+</ol>
+
+<!-- _includes/image.html -->
+<div class="image-wrapper">
+    
+        <img src="http://localhost:4000/resources/common_cathode_anode_leds.png" alt="Img 1:LED display types" />
+    
+    
+        <p class="image-caption">Img 1:LED display types</p>
+    
+</div>
+
+<!-- _includes/image.html -->
+<div class="image-wrapper">
+    
+        <img src="http://localhost:4000/resources/led_scheme.png" alt="Img 2:7-segment display format" />
+    
+    
+        <p class="image-caption">Img 2: 7-segment display format</p>
+    
+</div>
+
+<p>Considering Img 2 we can create the truth table below. Because we use a common cathode 7 segment display we will have 1 for each illuminated segment and 0 for not illuminated. Since we will design a BCD to 7-segments the values from 10 to 15 are invalid. For there values we will mark the corresponding segment with X, meaning don’t care.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center"><script type="math/tex">X_{3}</script></th>
+      <th style="text-align: center"><script type="math/tex">X_{2}</script></th>
+      <th style="text-align: center"><script type="math/tex">X_{1}</script></th>
+      <th style="text-align: center"><script type="math/tex">X_{0}</script></th>
+      <th style="text-align: center">a</th>
+      <th style="text-align: center">b</th>
+      <th style="text-align: center">c</th>
+      <th style="text-align: center">d</th>
+      <th style="text-align: center">e</th>
+      <th style="text-align: center">f</th>
+      <th style="text-align: center">g</th>
+      <th style="text-align: center">Display</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">2</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">3</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">4</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">5</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">6</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">7</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">8</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">9</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">-</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">-</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">-</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">-</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">-</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">x</td>
+      <td style="text-align: center">-</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Based on the above table we can express the output as minterm expansions:</p>
+
+<script type="math/tex; mode=display">a = F_{1} (A, B, C, D) = \sum m(0, 2, 3, 5, 7, 8, 9)</script>
+
+<script type="math/tex; mode=display">b = F_{2} (A, B, C, D) = \sum m(0, 1, 2, 3, 4, 7, 8, 9)</script>
+
+<script type="math/tex; mode=display">c = F_{3} (A, B, C, D) = \sum m(0, 1, 3, 4, 5, 6, 7, 8, 9)</script>
+
+<script type="math/tex; mode=display">d = F_{4} (A, B, C, D) = \sum m(0, 2, 3, 5, 6, 8)</script>
+
+<script type="math/tex; mode=display">e = F_{5} (A, B, C, D) = \sum m(0, 2, 6, 8)</script>
+
+<script type="math/tex; mode=display">f = F_{6} (A, B, C, D) = \sum m(0, 4, 5, 6, 8, 9)</script>
+
+<script type="math/tex; mode=display">g = F_{7} (A, B, C, D) = \sum m(2, 3, 4, 5, 6, 8, 9)</script>
+
+<p>Now we can construct the Karnaugh’s Map for each output term and then simplify it to obtain a logic combination of inputs for each output. <strong>Note</strong> that in the following equations we considered 0 instead of X for inputs between 10 and 15.</p>
+
+<script type="math/tex; mode=display">a=A\overline{B}\overline{C}+\overline{A}(C+\overline{B}\overline{D}+BD)</script>
+
+<script type="math/tex; mode=display">b=\overline{AC}\overline{B}+\overline{A}(CD+\overline{C}\overline{D})</script>
+
+<script type="math/tex; mode=display">c=\overline{B}\overline{C}+\overline{A}(B+D)</script>
+
+<script type="math/tex; mode=display">d=\overline{A}\overline{B}(C+\overline{D})+\overline{A}(C\overline{D}+BD\overline{C})+A\overline{B}\overline{C}</script>
+
+<script type="math/tex; mode=display">e=\overline{D}(\overline{B}\overline{C}+\overline{A}C)</script>
+
+<script type="math/tex; mode=display">f=\overline{A}(B\overline{CD}+\overline{C}\overline{D})+A\overline{B}\overline{C}</script>
+
+<script type="math/tex; mode=display">g=\overline{A}(C\overline{BD}+B\overline{C})+A\overline{B}\overline{C}</script>
+
+<h3 id="implementation">Implementation</h3>
+
+<!-- _includes/image.html -->
+<div class="image-wrapper">
+    
+        <img src="http://localhost:4000/resources/hc4511_block_scheme.png" alt="Img 3:TI HC4511 block scheme" />
+    
+    
+        <p class="image-caption">Img 3: TI HC4511 block scheme</p>
+    
+</div>
+
+<p>In Img 3 is the block scheme of the TI HC4511 BCD-to-7 segment latch/decoder/driver.</p>
+
+<h4 id="decoder-implementation">Decoder Implementation</h4>
+
+<p>The <strong>decoder</strong> will have 2 input ports ( <em>BL</em> signal, <em>D[0:3]</em>) and one output port, <em>D[0:7]</em>and will contain the implementation of the above equations. Moreover, the output of decoder will be blank ( 0 ) if <strong>BL</strong> signal is 0.</p>
+
+<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="n">dec_7seg</span><span class="p">(</span>
+    <span class="n">datain</span><span class="o">,</span><span class="n">bl</span><span class="o">,</span><span class="n">dataout</span>
+    <span class="p">)</span><span class="o">;</span>
+
+    <span class="kt">input</span>   <span class="p">[</span><span class="mi">3</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span>   <span class="n">datain</span><span class="o">;</span> 
+    <span class="kt">input</span>           <span class="n">bl</span><span class="o">;</span>
+    <span class="kt">output</span>  <span class="p">[</span><span class="mi">7</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span>   <span class="n">dataout</span><span class="o">;</span>
+    
+    <span class="k">assign</span> <span class="n">dataout</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">bl</span><span class="o">==</span><span class="mb">1'b0</span><span class="p">)</span><span class="o">?</span><span class="mb">8'b00000000</span><span class="o">:</span><span class="p">(</span><span class="n">datain</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">|</span>
+                <span class="p">((</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">|</span><span class="p">(((</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">|</span><span class="p">(</span><span class="n">datain</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&amp;</span><span class="n">datain</span><span class="p">[</span><span class="mi">0</span><span class="p">]))))</span><span class="o">;</span>
+
+    <span class="k">assign</span> <span class="n">dataout</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">bl</span><span class="o">==</span><span class="mb">1'b0</span><span class="p">)</span><span class="o">?</span><span class="mb">8'b00000000</span><span class="o">:</span><span class="p">((</span><span class="o">~</span><span class="p">(</span><span class="n">datain</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">&amp;</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span><span class="o">|</span>
+                        <span class="p">((</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">&amp;</span><span class="p">((</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&amp;</span><span class="n">datain</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">|</span><span class="p">((</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">0</span><span class="p">]))))</span><span class="o">;</span>
+
+    <span class="k">assign</span> <span class="n">dataout</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">bl</span><span class="o">==</span><span class="mb">1'b0</span><span class="p">)</span><span class="o">?</span><span class="mb">8'b00000000</span><span class="o">:</span><span class="p">((</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">|</span>
+                        <span class="p">((</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(</span><span class="n">datain</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">|</span><span class="n">datain</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">;</span>
+
+	<span class="k">assign</span> <span class="n">dataout</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">bl</span><span class="o">==</span><span class="mb">1'b0</span><span class="p">)</span><span class="o">?</span><span class="mb">8'b00000000</span><span class="o">:</span>
+                <span class="p">((</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">|</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span><span class="o">|</span>
+                <span class="p">((</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">&amp;</span><span class="p">((</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">|</span><span class="p">(</span><span class="n">datain</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&amp;</span><span class="n">datain</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">]))))</span><span class="o">|</span>
+                <span class="p">(</span><span class="n">datain</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">;</span>
+
+    <span class="k">assign</span> <span class="n">dataout</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">bl</span><span class="o">==</span><span class="mb">1'b0</span><span class="p">)</span><span class="o">?</span><span class="mb">8'b00000000</span><span class="o">:</span>
+                <span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(((</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">|</span><span class="p">((</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">&amp;</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">;</span>
+
+    <span class="k">assign</span> <span class="n">dataout</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">bl</span><span class="o">==</span><span class="mb">1'b0</span><span class="p">)</span><span class="o">?</span><span class="mb">8'b00000000</span><span class="o">:</span>
+        <span class="p">((</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">&amp;</span><span class="p">((</span><span class="n">datain</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="p">(</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&amp;</span><span class="n">datain</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span><span class="o">|</span><span class="p">((</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">0</span><span class="p">]))))</span><span class="o">|</span>
+        <span class="p">(</span><span class="n">datain</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">;</span>
+
+    <span class="k">assign</span> <span class="n">dataout</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">bl</span><span class="o">==</span><span class="mb">1'b0</span><span class="p">)</span><span class="o">?</span><span class="mb">8'b00000000</span><span class="o">:</span>
+            <span class="p">((</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">&amp;</span><span class="p">((</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="p">(</span><span class="n">datain</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&amp;</span><span class="n">datain</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span><span class="o">|</span><span class="p">(</span><span class="n">datain</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">]))))</span><span class="o">|</span>
+            <span class="p">(</span><span class="n">datain</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">&amp;</span><span class="p">(</span><span class="o">~</span><span class="n">datain</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">;</span>
+
+    <span class="k">assign</span> <span class="n">dataout</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mb">1'b0</span><span class="o">;</span><span class="c1">//dot
+</span><span class="k">endmodule</span> <span class="c1">// decoder
+</span>
+</code></pre></div></div>
+
+<h4 id="latch-implementation">Latch Implementation</h4>
+
+<p>We can easily implement a D-type latch using an <strong>always</strong> block. We will need 5 ports,
+3 for input signals ( data in, enable, <script type="math/tex">\overline{enable}</script> ) and 2 for output signals ( q and <script type="math/tex">\overline{q}</script>).</p>
+
+<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="n">dlatch</span><span class="p">(</span>
+    <span class="n">d</span><span class="o">,</span><span class="n">q</span><span class="o">,</span><span class="n">nq</span><span class="o">,</span><span class="n">ena</span><span class="o">,</span><span class="n">nena</span>
+    <span class="p">)</span><span class="o">;</span>
+    
+    <span class="kt">input</span>       <span class="n">d</span><span class="o">;</span>
+    <span class="kt">input</span>       <span class="n">ena</span><span class="o">;</span>
+    <span class="kt">input</span>       <span class="n">nena</span><span class="o">;</span>
+    <span class="kt">output</span>  <span class="kt">reg</span> <span class="n">q</span><span class="o">;</span>
+    <span class="kt">output</span>  <span class="kt">reg</span> <span class="n">nq</span><span class="o">;</span>
+
+    <span class="k">always</span> <span class="o">@</span><span class="p">(</span><span class="n">d</span><span class="o">,</span><span class="n">ena</span><span class="o">,</span><span class="n">nena</span><span class="p">)</span> <span class="k">begin</span><span class="o">:</span> <span class="n">d_latch_procedure</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">ena</span><span class="p">)</span> <span class="k">begin</span>
+            <span class="n">q</span><span class="o">&lt;=</span><span class="n">d</span><span class="o">;</span>
+            <span class="n">nq</span><span class="o">&lt;=~</span><span class="n">d</span><span class="o">;</span>
+        <span class="k">end</span> <span class="c1">// if( le='1')
+</span>        <span class="k">else</span> <span class="k">begin</span>
+        <span class="k">end</span>
+
+    <span class="k">end</span> <span class="c1">// d_latch_procedure
+</span>
+<span class="k">endmodule</span> <span class="c1">// dlatch
+</span>
+</code></pre></div></div>
+
+<h4 id="driver-implementation">Driver Implementation</h4>
+
+<p>The driver will have to set output to 1 if <em>LT</em> (Lamp Test) signal is low, otherwise the output will be transparent to input. In other words, in can be implemented as a latch.</p>
+
+<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="n">drv_7seg</span><span class="p">(</span>
+    <span class="n">lt</span><span class="o">,</span><span class="n">inbus</span><span class="o">,</span><span class="n">outbus</span>
+    <span class="p">)</span><span class="o">;</span>
+
+    <span class="kt">input</span>               <span class="n">lt</span><span class="o">;</span>
+    <span class="kt">input</span>       <span class="p">[</span><span class="mi">7</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span>   <span class="n">inbus</span><span class="o">;</span>
+    <span class="kt">output</span>  <span class="kt">reg</span> <span class="p">[</span><span class="mi">7</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span>   <span class="n">outbus</span><span class="o">;</span>
+
+    <span class="k">always</span> <span class="o">@</span><span class="p">(</span><span class="n">lt</span><span class="o">,</span><span class="n">inbus</span><span class="p">)</span> <span class="k">begin</span> <span class="o">:</span> <span class="n">drv_7seg</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">lt</span><span class="p">)</span> <span class="k">begin</span>
+            <span class="n">outbus</span><span class="o">&lt;=</span><span class="n">inbus</span><span class="o">;</span>
+        <span class="k">end</span> <span class="k">else</span> <span class="k">begin</span>
+            <span class="n">outbus</span><span class="o">&lt;=</span><span class="mb">8'b11111111</span><span class="o">;</span> 
+        <span class="k">end</span>
+    <span class="k">end</span>
+
+<span class="k">endmodule</span> <span class="c1">// drv_7seg
+</span>
+</code></pre></div></div>
+
+<h4 id="modules-instantiation-and-testbench">Modules Instantiation and testbench</h4>
+
+<p>Now that we have all the modules defined we can create a new module <strong>driver_7_segments</strong> and instantiate them.</p>
+
+<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">module</span> <span class="n">driver_7_segments</span><span class="p">(</span>
+    <span class="n">inbus</span><span class="o">,</span><span class="n">le</span><span class="o">,</span><span class="n">lt</span><span class="o">,</span><span class="n">bl</span><span class="o">,</span><span class="n">outbus</span><span class="o">,</span>
+    <span class="p">)</span><span class="o">;</span>
+    
+    <span class="kt">input</span>       <span class="p">[</span><span class="mi">3</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span>   <span class="n">inbus</span><span class="o">;</span>      <span class="c1">//input data
+</span>    <span class="kt">input</span>               <span class="n">le</span><span class="o">;</span>             <span class="c1">//latch-enable
+</span>    <span class="kt">input</span>               <span class="n">lt</span><span class="o">;</span>             <span class="c1">//lamp-test-&gt;displays 8
+</span>    <span class="kt">input</span>               <span class="n">bl</span><span class="o">;</span>             <span class="c1">//blanking-&gt; blank
+</span>    <span class="kt">output</span> <span class="kt">reg</span>  <span class="p">[</span><span class="mi">7</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span>   <span class="n">outbus</span><span class="o">;</span>
+
+
+    <span class="kt">wire</span> <span class="p">[</span><span class="mi">3</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">latch_output</span><span class="o">;</span>
+    <span class="kt">wire</span> <span class="p">[</span><span class="mi">7</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span>  <span class="n">decoder_output</span><span class="o">;</span>
+
+    <span class="n">dlatch</span> <span class="n">latch0</span><span class="p">(</span><span class="o">.</span><span class="n">d</span>  <span class="p">(</span><span class="n">inbus</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">,.</span><span class="n">ena</span> <span class="p">(</span><span class="o">~</span><span class="n">le</span><span class="p">)</span><span class="o">,.</span><span class="n">nena</span><span class="p">(</span><span class="n">le</span><span class="p">)</span><span class="o">,.</span><span class="n">q</span>  <span class="p">(</span><span class="n">latch_output</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">,.</span><span class="n">nq</span> <span class="p">())</span><span class="o">;</span>
+    
+    <span class="n">dlatch</span> <span class="n">latch1</span><span class="p">(</span><span class="o">.</span><span class="n">d</span>  <span class="p">(</span><span class="n">inbus</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">,.</span><span class="n">ena</span> <span class="p">(</span><span class="o">~</span><span class="n">le</span><span class="p">)</span><span class="o">,.</span><span class="n">nena</span><span class="p">(</span><span class="n">le</span><span class="p">)</span><span class="o">,.</span><span class="n">q</span>  <span class="p">(</span><span class="n">latch_output</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">,.</span><span class="n">nq</span> <span class="p">())</span><span class="o">;</span>
+    
+    <span class="n">dlatch</span> <span class="n">latch2</span><span class="p">(</span><span class="o">.</span><span class="n">d</span>  <span class="p">(</span><span class="n">inbus</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">,.</span><span class="n">ena</span> <span class="p">(</span><span class="o">~</span><span class="n">le</span><span class="p">)</span><span class="o">,.</span><span class="n">nena</span><span class="p">(</span><span class="n">le</span><span class="p">)</span><span class="o">,.</span><span class="n">q</span>  <span class="p">(</span><span class="n">latch_output</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">,.</span><span class="n">nq</span> <span class="p">())</span><span class="o">;</span>
+
+    <span class="n">dlatch</span> <span class="n">latch3</span><span class="p">(</span><span class="o">.</span><span class="n">d</span>  <span class="p">(</span><span class="n">inbus</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">,.</span><span class="n">ena</span> <span class="p">(</span><span class="o">~</span><span class="n">le</span><span class="p">)</span><span class="o">,.</span><span class="n">nena</span><span class="p">(</span><span class="n">le</span><span class="p">)</span><span class="o">,.</span><span class="n">q</span>  <span class="p">(</span><span class="n">latch_output</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">,.</span><span class="n">nq</span> <span class="p">())</span><span class="o">;</span>
+    
+    <span class="n">dec_7seg</span> <span class="n">decoder_7_segments</span><span class="p">(</span><span class="o">.</span><span class="n">datain</span> <span class="p">(</span><span class="n">latch_output</span><span class="p">)</span><span class="o">,.</span><span class="n">bl</span>     <span class="p">(</span><span class="n">bl</span><span class="p">)</span><span class="o">,.</span><span class="n">dataout</span><span class="p">(</span><span class="n">decoder_output</span><span class="p">))</span><span class="o">;</span>
+    
+    <span class="n">drv_7seg</span> <span class="n">driver_7_segments</span><span class="p">(</span><span class="o">.</span><span class="n">inbus</span> <span class="p">(</span><span class="n">decoder_output</span><span class="p">)</span><span class="o">,.</span><span class="n">lt</span>    <span class="p">(</span><span class="n">lt</span><span class="p">)</span><span class="o">,.</span><span class="n">outbus</span><span class="p">(</span><span class="n">outbus</span><span class="p">))</span><span class="o">;</span>
+   
+<span class="k">endmodule</span> <span class="c1">// segments_driver
+</span>
+</code></pre></div></div>
+
+<div class="language-verilog highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="cp">`include</span> <span class="s">"testbench/test_inc.v"</span>
+<span class="k">module</span> <span class="n">driver_7_segments_tb</span><span class="o">;</span>
+
+	<span class="kt">reg</span>       <span class="p">[</span><span class="mi">3</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span>   <span class="n">inbus</span><span class="o">;</span>      <span class="c1">//input data
+</span>    <span class="kt">reg</span>               <span class="n">le</span><span class="o">;</span>             <span class="c1">//latch-enable
+</span>    <span class="kt">reg</span>               <span class="n">lt</span><span class="o">;</span>             <span class="c1">//lamp-test-&gt;displays 8
+</span>    <span class="kt">reg</span>               <span class="n">bl</span><span class="o">;</span>             <span class="c1">//blanking-&gt; blank
+</span>    <span class="kt">wire</span> <span class="kt">reg</span>  <span class="p">[</span><span class="mi">7</span><span class="o">:</span><span class="mi">0</span><span class="p">]</span>   <span class="n">outbus</span><span class="o">;</span>
+
+    <span class="n">driver_7_segments</span> <span class="n">driver</span><span class="p">(</span><span class="o">.</span><span class="n">inbus</span> <span class="p">(</span><span class="n">inbus</span><span class="p">)</span><span class="o">,.</span><span class="n">le</span> <span class="p">(</span><span class="n">le</span><span class="p">)</span><span class="o">,.</span><span class="n">lt</span> <span class="p">(</span><span class="n">lt</span><span class="p">)</span><span class="o">,.</span><span class="n">bl</span> <span class="p">(</span><span class="n">bl</span><span class="p">)</span><span class="o">,.</span><span class="n">outbus</span><span class="p">(</span><span class="n">outbus</span><span class="p">))</span><span class="o">;</span>
+
+    <span class="k">initial</span> <span class="k">begin</span>
+        <span class="p">$</span><span class="nb">dumpfile</span><span class="p">(</span><span class="s">"segments_driver_tb.vcd"</span><span class="p">)</span><span class="o">;</span>
+        <span class="p">$</span><span class="nb">dumpvars</span><span class="o">;</span>
+
+        <span class="c1">//Lamp Test
+</span>        <span class="n">le</span><span class="o">&lt;=</span><span class="mb">1'b0</span><span class="o">;</span><span class="c1">//latch is transparent
+</span>        <span class="n">bl</span><span class="o">&lt;=</span><span class="mb">1'b1</span><span class="o">;</span><span class="c1">//blanking is disabled
+</span>        <span class="n">inbus</span><span class="o">&lt;=</span><span class="mb">4'b0000</span><span class="o">;</span><span class="c1">//0 on inbus
+</span>        <span class="n">lt</span><span class="o">&lt;=</span><span class="mb">1'b0</span><span class="o">;</span><span class="c1">//lamp test enabled
+</span>        <span class="p">#</span><span class="mi">25</span> <span class="cp">`assert</span><span class="p">(</span><span class="n">outbus</span><span class="o">,</span><span class="mb">8'b11111111</span><span class="p">)</span><span class="o">;</span>
+
+        <span class="p">#</span><span class="mi">50</span> 
+        <span class="c1">//Blanking Test
+</span>        <span class="n">le</span><span class="o">&lt;=</span><span class="mb">1'b0</span><span class="o">;</span><span class="c1">//latch is transparent
+</span>        <span class="n">bl</span><span class="o">&lt;=</span><span class="mb">1'b0</span><span class="o">;</span><span class="c1">//blanking is enabled
+</span>		<span class="n">inbus</span><span class="o">&lt;=</span><span class="mb">4'b0000</span><span class="o">;</span><span class="c1">//0 on inbus
+</span>        <span class="n">lt</span><span class="o">&lt;=</span><span class="mb">1'b1</span><span class="o">;</span><span class="c1">//lamp test disabled
+</span>        <span class="p">#</span><span class="mi">25</span> <span class="cp">`assert</span><span class="p">(</span><span class="n">outbus</span><span class="o">,</span><span class="mb">8'b00000000</span><span class="p">)</span><span class="o">;</span>        
+
+        <span class="p">#</span><span class="mi">50</span>
+        <span class="c1">//test all values
+</span>        <span class="n">le</span><span class="o">&lt;=</span><span class="mb">1'b0</span><span class="o">;</span><span class="c1">//latch is transparent
+</span>        <span class="n">bl</span><span class="o">&lt;=</span><span class="mb">1'b1</span><span class="o">;</span><span class="c1">//blanking is disabled
+</span>        <span class="n">lt</span><span class="o">&lt;=</span><span class="mb">1'b1</span><span class="o">;</span> <span class="c1">//lamp test is disabled
+</span>        
+        <span class="p">#</span><span class="mi">25</span> <span class="n">inbus</span><span class="o">&lt;=</span><span class="mb">4'b0000</span><span class="o">;</span>
+        <span class="p">#</span><span class="mi">25</span> <span class="cp">`assert</span><span class="p">(</span><span class="n">outbus</span><span class="o">,</span><span class="mb">8'b11111100</span><span class="p">)</span><span class="o">;</span>
+		
+		<span class="p">#</span><span class="mi">25</span> <span class="n">inbus</span><span class="o">&lt;=</span><span class="mb">4'b0001</span><span class="o">;</span>
+        <span class="p">#</span><span class="mi">25</span> <span class="cp">`assert</span><span class="p">(</span><span class="n">outbus</span><span class="o">,</span><span class="mb">8'b01100000</span><span class="p">)</span><span class="o">;</span>
+
+		<span class="p">#</span><span class="mi">25</span> <span class="n">inbus</span><span class="o">&lt;=</span><span class="mb">4'b0010</span><span class="o">;</span>
+        <span class="p">#</span><span class="mi">25</span> <span class="cp">`assert</span><span class="p">(</span><span class="n">outbus</span><span class="o">,</span><span class="mb">8'b11011010</span><span class="p">)</span><span class="o">;</span>
+
+        <span class="p">#</span><span class="mi">25</span> <span class="n">inbus</span><span class="o">&lt;=</span><span class="mb">4'b0011</span><span class="o">;</span>
+        <span class="p">#</span><span class="mi">25</span> <span class="cp">`assert</span><span class="p">(</span><span class="n">outbus</span><span class="o">,</span><span class="mb">8'b11110010</span><span class="p">)</span><span class="o">;</span>
+
+        <span class="p">#</span><span class="mi">25</span> <span class="n">inbus</span><span class="o">&lt;=</span><span class="mb">4'b0100</span><span class="o">;</span>
+        <span class="p">#</span><span class="mi">25</span> <span class="cp">`assert</span><span class="p">(</span><span class="n">outbus</span><span class="o">,</span><span class="mb">8'b01100110</span><span class="p">)</span><span class="o">;</span>
+
+        <span class="p">#</span><span class="mi">25</span> <span class="n">inbus</span><span class="o">&lt;=</span><span class="mb">4'b0101</span><span class="o">;</span>
+        <span class="p">#</span><span class="mi">25</span> <span class="cp">`assert</span><span class="p">(</span><span class="n">outbus</span><span class="o">,</span><span class="mb">8'b10110110</span><span class="p">)</span><span class="o">;</span>
+
+        <span class="p">#</span><span class="mi">25</span> <span class="n">inbus</span><span class="o">&lt;=</span><span class="mb">4'b0110</span><span class="o">;</span>
+        <span class="p">#</span><span class="mi">25</span> <span class="cp">`assert</span><span class="p">(</span><span class="n">outbus</span><span class="o">,</span><span class="mb">8'b10111110</span><span class="p">)</span><span class="o">;</span>
+
+        <span class="p">#</span><span class="mi">25</span> <span class="n">inbus</span><span class="o">&lt;=</span><span class="mb">4'b0111</span><span class="o">;</span>
+        <span class="p">#</span><span class="mi">25</span> <span class="cp">`assert</span><span class="p">(</span><span class="n">outbus</span><span class="o">,</span><span class="mb">8'b11100000</span><span class="p">)</span><span class="o">;</span>
+
+        <span class="p">#</span><span class="mi">25</span> <span class="n">inbus</span><span class="o">&lt;=</span><span class="mb">4'b1000</span><span class="o">;</span>
+        <span class="p">#</span><span class="mi">25</span> <span class="cp">`assert</span><span class="p">(</span><span class="n">outbus</span><span class="o">,</span><span class="mb">8'b11111110</span><span class="p">)</span><span class="o">;</span>
+
+        <span class="p">#</span><span class="mi">25</span> <span class="n">inbus</span><span class="o">&lt;=</span><span class="mb">4'b1001</span><span class="o">;</span>
+        <span class="p">#</span><span class="mi">25</span> <span class="cp">`assert</span><span class="p">(</span><span class="n">outbus</span><span class="o">,</span><span class="mb">8'b11110110</span><span class="p">)</span><span class="o">;</span>
+    <span class="k">end</span> <span class="c1">// initial
+</span>
+    <span class="k">initial</span> <span class="k">begin</span> <span class="o">:</span><span class="n">dump_proc</span>
+            <span class="p">$</span><span class="nb">display</span><span class="p">(</span><span class="s">"</span><span class="se">\t\t</span><span class="s">Time</span><span class="se">\t</span><span class="s">INBUS</span><span class="se">\t</span><span class="s">/LE</span><span class="se">\t</span><span class="s">/LT</span><span class="se">\t</span><span class="s">/BL</span><span class="se">\t</span><span class="s">OUTBUS"</span><span class="p">)</span><span class="o">;</span>
+            <span class="p">$</span><span class="nb">monitor</span><span class="p">(</span><span class="s">"%d</span><span class="se">\t</span><span class="s">%b</span><span class="se">\t</span><span class="s">%b</span><span class="se">\t</span><span class="s">%b</span><span class="se">\t</span><span class="s">%b</span><span class="se">\t</span><span class="s">%b"</span><span class="o">,</span><span class="p">$</span><span class="kt">time</span><span class="o">,</span><span class="n">inbus</span><span class="o">,</span><span class="n">le</span><span class="o">,</span><span class="n">lt</span><span class="o">,</span><span class="n">bl</span><span class="o">,</span><span class="n">outbus</span><span class="p">)</span><span class="o">;</span>
+    <span class="k">end</span> <span class="c1">// dump_proc
+</span><span class="k">endmodule</span> <span class="c1">// segments_driver_tb
+</span></code></pre></div></div>
+
+<hr />
+<h3 id="bibliography">Bibliography</h3>
+
+<ol>
+  <li><a href="http://www.ti.com/lit/ds/symlink/cd74hc4511.pdf">TI HC4511 Datasheet</a></li>
+  <li><a href="https://www.electronicshub.org/bcd-7-segment-led-display-decoder-circuit/">Electronics Hub</a></li>
+  <li><a href="https://www.electronics-tutorials.ws/combination/comb_6.html">Electronics Tutorials</a></li>
+</ol>
+
+
+	
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = '23ars';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+<div class="page-navigation">
+	
+    <a class="next" href="/Monte-Carlo-Integration/" title="NEXT: Monte Carlo Integration">&lt;&lt;</a>
+		<span> &middot; </span>
+  
+		<a class="home" href="/" title="Back to Homepage">Home</a>
+  
+		<span> &middot; </span>
+    <a class="prev" href="/Monte-Carlo-Pi-Estimation/" title="PREV: Monte Carlo Pi Estimation">&gt;&gt;</a>
+  
+</div>
+
+		</article>>
+
+		<div class="footer">
+  <div align="center">
+  <link rel="stylesheet" href="/assets/core.css">
+
+
+
+
+
+<a href="https://github.com/ardeleanasm"><i class="svg-icon github"></i></a>
+
+<a href="https://www.linkedin.com/in/ardelean-sebastian-mihai"><i class="svg-icon linkedin"></i></a>
+
+<a href="/feed.xml"><i class="svg-icon rss"></i></a>
+<a href="https://www.twitter.com/mihaiseba"><i class="svg-icon twitter"></i></a>
+<a href="http://stackoverflow.com/users/1462225/23ars"><i class="svg-icon stackoverflow"></i></a>
+
+  
+  </div>
+  <span class="block">&copy; 2019 Mihai Seba</span>
+</div>
+
+
+	</body>
+
+</html>

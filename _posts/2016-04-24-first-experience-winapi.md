@@ -3,13 +3,11 @@ layout: post
 title: "First experience with WinApi"
 description: ""
 category: windows programming
-tags: programming,c++
+tags: [programming,c++]
 ---
-
 
 I discovered Linux Api, Linux System Programming some time ago and I found it amazing but I always thought "that's not enough!". And it's not! I have a lot of experience 
 on Linux, I wrote device drivers, userspace applications using C and Linux API but I never tried to wrote some applications that use Windows API.
-<!--more-->
 
 This post will be the first about my experience with WinApi, system calls etc. I'm getting really tired to write apps on Windows in C++ CLR or C# and I 
 want to try something more "low level". Note, all my small projects using WinApi will be integrated in Git under [projects/winapi](https://github.com/ardeleanasm/projects/tree/master/winapi/RegistryList).

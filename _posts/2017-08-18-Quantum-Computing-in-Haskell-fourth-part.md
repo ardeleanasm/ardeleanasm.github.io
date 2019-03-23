@@ -3,7 +3,7 @@ layout: post
 title: "Quantum Computing in Haskell - IV part"
 description: "Quantum Computing with Haskell"
 category: quantum computing
-tags:  haskell 
+tags: [ haskell ]
 ---
 
 ## Articles
@@ -20,10 +20,8 @@ tags:  haskell
 ## Introduction
 
 In the previous articles, first three parts, I presented some haskell code to implement basic operators for simulating Quantum Algorithms. The full source code can be downloaded from [Github Repository][1]. The library was also published on [Hackage][2] and also on [Stackage][3] and is available with 2 versions, 1.0.0 and 1.0.1.0. Starting from version 1.0.1.0 the **Utils** module was removed and also, a new module for performing measurements was added. These articles will be also used as documentation/ wiki for the library.
-<!--more-->
 
 In this fourth part we will start to present some Quantum Algorithms and we will start with one of the simplest ones, Deutsch's algorithm. In the next articles from the serie we will talk about Deutsch-Jozsa's algorithm, Grover's and Shor.
-
 
 ## Background
 
@@ -31,13 +29,28 @@ As I said in a previous article when I implemented this algorithm in Java, the p
 
 So, let's suppose that we have a function f with 1-bit input and 1-bit output. There are four possible functions, two of them are constant and two are balanced, as we can see in the table below.
 
-| Function                 | Type     |
-|:-------------------------|:--------:|
-| $f_{1}(0)=0, f_{1}(1)=0$ | constant |
-| $f_{2}(0)=1, f_{2}(1)=1$ | constant |
-| $f_{3}(0)=0, f_{3}(1)=1$ | balanced |
-| $f_{4}(0)=1, f_{4}(1)=0$ | balanced |
-
+<table style="border:1px solid black;">
+  <tr>
+    <th style="border:1px solid black;">Function</th>
+    <th style="border:1px solid black;">Type</th> 
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">f<sub>1</sub>(0)=0<br> f<sub>1</sub>(1)=0</td>
+    <td style="border:1px solid black;">constant</td> 
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">f<sub>2</sub>(0)=1<br> f<sub>2</sub>(1)=1  </td>
+    <td style="border:1px solid black;">constant</td> 
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">f<sub>3</sub>(0)=0<br> f<sub>3</sub>(1)=1</td>
+    <td style="border:1px solid black;">balanced</td> 
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">f<sub>4</sub>(0)=1<br> f<sub>4</sub>(1)=0</td>
+    <td style="border:1px solid black;">balanced</td> 
+  </tr>
+</table>
 
 The goal is to determine whether the function is constant or not. Let's say that we implement such a function on a classic computer:
 
@@ -84,8 +97,8 @@ It can be easily seen that to check if a function is constant or balanced on a c
 The quantum circuit that we will have to implement can be seen in the picture above and basically we will have to:
 
 * Apply **X-Gate** on the second qubit
-* Apply $H^2$ gate, the Kronecker product between two **Hadamard** Gates
-* Apply the gate ( or "oracle") $U_f$
+* Apply $$H^2$$ gate, the Kronecker product between two **Hadamard** Gates
+* Apply the gate ( or "oracle") $$U_f$$
 * Apply Hadamard Gate again on the first qubit
 * Measure the circuit
 
@@ -164,10 +177,10 @@ As we can see in this first example, running an algorithm, even a simple one, on
 
 About the implemented library, as I said, you can download it from the links that I specified before and these articles and examples of code will be used as a "How to use.." for the library. 
 
-[first_article]: 2017-07-26-Quantum-Computing-in-Haskell.html
-[second_article]: 2017-07-28-Quantum-Computing-in-Haskell-second-part.html
-[third_article]: 2017-08-01-Quantum-Computing-in-Haskell-third-part.html
-[fourth_article]: 2017-08-18-Quantum-Computing-in-Haskell-fourth-part.html
+[first_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell/
+[second_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-second-part/
+[third_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-third-part/
+[fourth_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-fourth-part/
 [git_repo]: https://github.com/ardeleanasm/qchas
 [documentation]: https://ardeleanasm.github.io/qchas/
 [package]: https://hackage.haskell.org/package/qchas
@@ -175,4 +188,4 @@ About the implemented library, as I said, you can download it from the links tha
 [1]: https://github.com/ardeleanasm/qchas
 [2]: https://hackage.haskell.org/package/qchas
 [3]: https://www.stackage.org/nightly-2017-08-17/package/qchas-1.0.1.0
-[4]: ../images/deutsch_quantum_circuits.png
+[4]: http://ardeleanasm.github.io/resources/deutsch_quantum_circuits.png

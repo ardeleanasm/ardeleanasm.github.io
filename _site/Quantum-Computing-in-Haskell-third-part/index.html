@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+	<title>Quantum Computing in Haskell - III part · Just Computer Engineering</title>
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@mihaiseba" />
+<meta name="twitter:title" content="Quantum Computing in Haskell - III part" />
+<meta name="twitter:description" content="Articles">
+
+<meta name="description" content="Articles">
+
+
+
+<link rel="icon" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/touch-icon.png">
+<link rel="stylesheet" href="/assets/core.css">
+<link rel="canonical" href="/Quantum-Computing-in-Haskell-third-part/">
+<link rel="alternate" type="application/atom+xml" title="Just Computer Engineering" href="/feed.xml" />
+
+
+
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+		<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-54128414-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+	</head>
+
+	<body>
+
+		<aside class="logo">
+
+	
+
+	<a href="/">
+		<img src="http://www.gravatar.com/avatar/0afb9a47eb6654437c6986283cff151c.png?s=80" class="gravatar">
+	</a>
+</aside>
+<div align="center">
+	<a href="/">Home</a>
+	<a href="/about">About</a>
+	<a href="/articles">Articles</a>
+	<a href="https://github.com/ardeleanasm" target="_blank">Projects</a>
+	<a href="/archive">Archive</a>
+	<a href="/categories">Categories</a>
+	<a href="/tags">Tags</a>
+    
+</div>
+<div align="center">
+	<p><article><font color="blue">
+</font></article></p>
+</div>	
+
+
+		<article>
+			<article>
+
+	<div class="center">
+		<h1>Quantum Computing in Haskell - III part</h1>
+		<time>August 1, 2017</time>
+	</div>
+
+	<div class="divider"></div>
+
+	<h2 id="articles">Articles</h2>
+
+<ul>
+  <li><a href="https://ardeleanasm.github.io/Quantum-Computing-in-Haskell/">Quantum Computing in Haskell - I part</a></li>
+  <li><a href="https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-second-part/">Quantum Computing in Haskell - II part</a></li>
+  <li><a href="https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-third-part/">Quantum Computing in Haskell - III part</a></li>
+  <li><a href="https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-fourth-part/">Quantum Computing in Haskell - IV part</a></li>
+  <li><a href="https://github.com/ardeleanasm/qchas">Github Repository</a></li>
+  <li><a href="https://ardeleanasm.github.io/qchas/">Project’s Haddock Documentation</a></li>
+  <li><a href="https://hackage.haskell.org/package/qchas">QChas Package</a></li>
+</ul>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>In the second part of this series I talked about the Haskell implementation of Qubits. There are two more articles about the library and after that I will start posting about algorithms. In this article we will define some Quantum Gates that we will use in our algorithms, even if in the first article I wrote a little about this topic and I presented some matrices.</p>
+
+<h2 id="background">Background</h2>
+
+<p>As we already know computers are built using logic gates and in a similar way quantum computation also use logic gates that can be designed by considering unitary transformation of the qubits. In conclusion, we can construct infinitely many quantum logic gates with the constraint that they must be reversible.</p>
+
+<p>In the first article from this series I already presented some gates but we didn’t see their symbol or truth table.</p>
+
+<h3 id="1-qubit-gates">1 qubit gates</h3>
+
+<h4 id="pauli-x-gate-or-not-gate">Pauli X-Gate or NOT gate</h4>
+
+<p><em>Symbol:</em></p>
+
+<p><img src="https://ardeleanasm.github.io/resources/quantum_serie/xgate.png" alt="X-Gate Symbol" title="Pauli XGate" /></p>
+
+<p><em>Matrix:</em></p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+X=\begin{pmatrix}0 & 1 \\ 1 & 0 \end{pmatrix} %]]></script>
+
+<p><em>Transformation:</em></p>
+
+<p><script type="math/tex">\newcommand{\ket}[1]{\left|{#1}\right\rangle}</script>
+<script type="math/tex">\newcommand{\bra}[1]{\left\langle{#1}\right|}</script>
+<script type="math/tex">X\ket{0}=\ket{1}, X\ket{1}=\ket{0}</script></p>
+
+<h4 id="pauli-y-gate">Pauli Y-Gate</h4>
+
+<p><em>Symbol:</em></p>
+
+<p><img src="https://ardeleanasm.github.io/resources/quantum_serie/ygate.png" alt="Y-Gate Symbol" title="Pauli YGate" /></p>
+
+<p><em>Matrix:</em></p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+Y=\begin{pmatrix}0 & -i \\ i & 0 \end{pmatrix} %]]></script>
+
+<p><em>Transformation:</em></p>
+
+<script type="math/tex; mode=display">Y\ket{0}=i\ket{1}, Y\ket{1}=-i\ket{0}</script>
+
+<h4 id="pauli-z-gate">Pauli Z-Gate</h4>
+
+<p><em>Symbol:</em></p>
+
+<p><img src="https://ardeleanasm.github.io/resources/quantum_serie/zgate.png" alt="Z-Gate Symbol" title="Pauli ZGate" /></p>
+
+<p><em>Matrix:</em></p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+Z=\begin{pmatrix}1 & 0 \\ 0 & -1 \end{pmatrix} %]]></script>
+
+<p><em>Transformation:</em></p>
+
+<script type="math/tex; mode=display">Z\ket{0}=\ket{0} and Z\ket{1}=-\ket{1}</script>
+
+<h4 id="hadamard-gate">Hadamard Gate:</h4>
+
+<p><em>Symbol:</em></p>
+
+<p><img src="https://ardeleanasm.github.io/resources/quantum_serie/hgate.png" alt="H-Gate Symbol" title="Hadamard Gate" /></p>
+
+<p><em>Matrix:</em></p>
+
+<script type="math/tex; mode=display">% <![CDATA[
+H=\frac{1}{\sqrt{2}}\begin{pmatrix}1 & 1 \\ 1 & -1 \end{pmatrix} %]]></script>
+
+<p><em>Transformation:</em></p>
+
+<script type="math/tex; mode=display">H\ket{0}=\frac{1}{\sqrt{2}}(\ket{0}+\ket{1}), H\ket{1}=\frac{1}{\sqrt{2}}(\ket{0}-\ket{1})</script>
+
+<h3 id="controlled-quantum-gates">Controlled Quantum Gates</h3>
+
+<p>Controlled Quantum Gates are useful for implementing <strong>IF-THEN-ELSE</strong> type operations. In this article we will only present <strong>CNOT</strong>.</p>
+
+<h4 id="controlled-not-cnot">Controlled-NOT (CNOT)</h4>
+
+<p><em>Symbol:</em></p>
+
+<p><img src="https://ardeleanasm.github.io/resources/quantum_serie/cnotgate.png" alt="CNOT-Gate Symbol" title="Controlled-NOT" /></p>
+
+<p><em>Truth Table:</em></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">x</th>
+      <th style="text-align: center">y</th>
+      <th style="text-align: center">x <script type="math/tex">(x\oplus y)</script></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">0 0</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0 1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">1 1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">1 0</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="implementation">Implementation</h2>
+
+<p>Having the background now, let’s start implementing those gates in Haskell. First, let’s define a new data named <strong>Gate</strong>.</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kr">data</span> <span class="kt">Gate</span><span class="o">=</span>
+  <span class="kt">Gate</span> <span class="p">{</span>
+          <span class="n">gateMatrix</span><span class="o">::</span><span class="p">(</span><span class="kt">Matrix</span> <span class="kt">C</span><span class="p">)</span> 
+        <span class="p">}</span> <span class="kr">deriving</span> <span class="p">(</span><span class="kt">Eq</span><span class="p">,</span><span class="kt">Show</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Our data <strong>Gate</strong> has a constructor <strong>Gate</strong> with one parameter, <strong>gateMatrix</strong>, of type ** complex matrx<strong>, <code class="highlighter-rouge">Matrix C</code>. Let’s see the code in **GHCI</strong>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ghci&gt;:t Gate
+Gate :: Matrix C -&gt; Gate
+ghci&gt;let g= Gate ((2&gt;&lt;2) [1,0,0,-1]::Matrix C)
+ghci&gt;g
+Gate {gateMatrix = (2&gt;&lt;2)
+ [ 1.0 :+ 0.0,       0.0 :+ 0.0
+ , 0.0 :+ 0.0, (-1.0) :+ (-0.0) ]}
+ghci&gt;&gt;gateMatrix g
+(2&gt;&lt;2)
+ [ 1.0 :+ 0.0,       0.0 :+ 0.0
+ , 0.0 :+ 0.0, (-1.0) :+ (-0.0) ]
+</code></pre></div></div>
+
+<p>In the above example we created a Pauli Z-Gate. We will proceed like for Qubit and we will define some functions that will return a Gate. We will implement the Pauli X-Gate, Y-Gate, Z-Gate, Hadamard Gate, CNOT-Gate, and Controlled Phase Shift Gate ( we will need in Grover’s Algorithm).</p>
+
+<div class="language-haskell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">xGate</span><span class="o">::</span><span class="kt">Gate</span>
+<span class="n">xGate</span><span class="o">=</span><span class="kt">Gate</span> <span class="p">((</span><span class="mi">2</span><span class="o">&gt;&lt;</span><span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">::</span><span class="kt">Matrix</span> <span class="kt">C</span><span class="p">)</span>
+
+<span class="n">yGate</span><span class="o">::</span><span class="kt">Gate</span>
+<span class="n">yGate</span><span class="o">=</span><span class="kt">Gate</span> <span class="p">((</span><span class="mi">2</span><span class="o">&gt;&lt;</span><span class="mi">2</span><span class="p">)</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="o">:+</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="p">),</span><span class="mf">0.0</span><span class="o">:+</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">]</span><span class="o">::</span><span class="kt">Matrix</span> <span class="kt">C</span><span class="p">)</span>
+
+<span class="n">zGate</span><span class="o">::</span><span class="kt">Gate</span>
+<span class="n">zGate</span><span class="o">=</span><span class="kt">Gate</span> <span class="p">((</span><span class="mi">2</span><span class="o">&gt;&lt;</span><span class="mi">2</span><span class="p">)</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">::</span><span class="kt">Matrix</span> <span class="kt">C</span><span class="p">)</span>
+
+<span class="n">hGate</span><span class="o">::</span><span class="kt">Gate</span>
+<span class="n">hGate</span><span class="o">=</span><span class="kt">Gate</span> <span class="p">((</span><span class="mi">2</span><span class="o">&gt;&lt;</span><span class="mi">2</span><span class="p">)</span> <span class="p">[</span><span class="mi">1</span><span class="o">/</span><span class="n">sqrt</span> <span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="n">sqrt</span> <span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="n">sqrt</span> <span class="mi">2</span><span class="p">,(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">sqrt</span> <span class="mi">2</span><span class="p">]</span><span class="o">::</span><span class="kt">Matrix</span> <span class="kt">C</span><span class="p">)</span>
+
+<span class="n">cNotGate</span><span class="o">::</span><span class="kt">Gate</span>
+<span class="n">cNotGate</span><span class="o">=</span><span class="kt">Gate</span> <span class="p">((</span><span class="mi">4</span><span class="o">&gt;&lt;</span><span class="mi">4</span><span class="p">)[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">::</span><span class="kt">Matrix</span> <span class="kt">C</span><span class="p">)</span>
+
+<span class="n">cPhaseShifGate</span><span class="o">::</span><span class="kt">Gate</span>
+<span class="n">cPhaseShifGate</span><span class="o">=</span><span class="kt">Gate</span> <span class="p">((</span><span class="mi">4</span><span class="o">&gt;&lt;</span><span class="mi">4</span><span class="p">)[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">::</span><span class="kt">Matrix</span> <span class="kt">C</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Now, in GHCI, if we call, for example <code class="highlighter-rouge">zGate</code> we will see that the output is the same with the one from the previous example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ghci&gt;zGate
+Gate {gateMatrix = (2&gt;&lt;2)
+ [ 1.0 :+ 0.0,       0.0 :+ 0.0
+ , 0.0 :+ 0.0, (-1.0) :+ (-0.0) ]}
+ghci&gt;:t zGate
+zGate :: Gate
+</code></pre></div></div>
+
+<h2 id="conclusions">Conclusions</h2>
+
+<p>In this article we implemented some 1-qubit Gates and some Controlled-Gate. In next articles we will define some functions to apply those gate on qubits and also to create gates, starting from 1-qubit ones, that apply on multiple qubits. New ideas, features, issues are welcomed and I encourage every reader to submit them on Github or ask questions using Disquss.</p>
+
+
+
+	
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = '23ars';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+<div class="page-navigation">
+	
+    <a class="next" href="/Quantum-Computing-in-Haskell-fourth-part/" title="NEXT: Quantum Computing in Haskell - IV part">&lt;&lt;</a>
+		<span> &middot; </span>
+  
+		<a class="home" href="/" title="Back to Homepage">Home</a>
+  
+		<span> &middot; </span>
+    <a class="prev" href="/Quantum-Computing-in-Haskell-second-part/" title="PREV: Quantum Computing in Haskell - II part">&gt;&gt;</a>
+  
+</div>
+
+		</article>>
+
+		<div class="footer">
+  <div align="center">
+  <link rel="stylesheet" href="/assets/core.css">
+
+
+
+
+
+<a href="https://github.com/ardeleanasm"><i class="svg-icon github"></i></a>
+
+<a href="https://www.linkedin.com/in/ardelean-sebastian-mihai"><i class="svg-icon linkedin"></i></a>
+
+<a href="/feed.xml"><i class="svg-icon rss"></i></a>
+<a href="https://www.twitter.com/mihaiseba"><i class="svg-icon twitter"></i></a>
+<a href="http://stackoverflow.com/users/1462225/23ars"><i class="svg-icon stackoverflow"></i></a>
+
+  
+  </div>
+  <span class="block">&copy; 2019 Mihai Seba</span>
+</div>
+
+
+	</body>
+
+</html>
