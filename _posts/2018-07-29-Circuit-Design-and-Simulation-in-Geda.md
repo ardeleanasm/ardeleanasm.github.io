@@ -36,6 +36,6 @@ For the above circuit, the plotted signals are presented in Img 2.
 ![Img 2:Diode clipping circuit plotted signals][plots]
 
 
-[circuit_scheme]: ../images/Circuit-Design-and-Simulation-in-Geda-pic1.png "Img 1:Diode clipping circuit on both half cycles"
+[circuit_scheme]: ../resources/Circuit-Design-and-Simulation-in-Geda-pic1.png "Img 1:Diode clipping circuit on both half cycles"
 
-[plots]: ../images/Circuit-Design-and-Simulation-in-Geda-pic2.png "Img 2:Diode clipping circuit plotted signals"
+[plots]: ../resources/Circuit-Design-and-Simulation-in-Geda-pic2.png "Img 2:Diode clipping circuit plotted signals"
