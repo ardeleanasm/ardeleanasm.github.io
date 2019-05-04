@@ -14,20 +14,13 @@ github_username:    ardeleanasm # Your GitHub username here
 stackoverflow_username: users/1462225/23ars
 
 # Includes an icon in the footer for each username you enter
-footer-links:
-  dribbble:
-  email:
-  facebook:
-  flickr:
-  github: ardeleanasm
-  instagram:
-  linkedin: ardelean-sebastian-mihai
-  pinterest:
-  rss: feedburner
-  twitter: mihaiseba
-  stackoverflow: users/1462225/23ars
-  youtube: # channel/<your_long_string> or user/<user-name>
-  googleplus: # anything in your profile username that comes after plus.google.com/
+social:
+  - title: twitter
+    url: https://twitter.com/mihaiseba
+  - title: github
+    url: https://github.com/ardeleanasm
+  - title: linkedin
+    url: https://linkedin.com/in/ardelean-sebastian-mihai
 
 disqus: 23ars
 # Site Settings
