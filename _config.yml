@@ -26,7 +26,7 @@ disqus: 23ars
 # Site Settings
 url: http://ardeleanasm.github.io
 paginate: 3
-paginate_path: "/page:num/"
+paginate_path: "blog/page:num/"
 pages: ./_static_pages
 # If you're hosting your site at a Project repository on GitHub pages
 # (http://yourusername.github.io/repository-name)
