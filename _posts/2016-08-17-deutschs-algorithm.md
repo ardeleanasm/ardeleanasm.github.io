@@ -55,7 +55,7 @@ the type of the function can be determined by evaluating it once.
 ### Implementation
 
 
-![The quantum circuit of Deutsch’s algorithm[1]](http://ardeleanasm.github.io/resources/deutsch_quantum_circuits.png)
+![The quantum circuit of Deutsch’s algorithm[1]](../blog/resources/deutsch_quantum_circuits.png)
 
 
 ```java
