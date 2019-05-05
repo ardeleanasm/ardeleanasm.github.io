@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
 
-	<head>
-		{% include blog/head.html %}
-		{% include blog/analytics.html %}
+  {%- include blog/head.html -%}
 
-	</head>
+  <body>
 
-	<body>
-		{% include blog/header.html %}
-		<article>
-			{{ content | replace: '&#8617;', '&#8617;&#xfe0e;' }}
-		</article>
+    {%- include blog/header.html -%}
 
-		{% include blog/footer.html %}
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        {{ content }}
+      </div>
+    </main>
 
-	</body>
+    {%- include blog/footer.html -%}
+
+  </body>
 
 </html>
