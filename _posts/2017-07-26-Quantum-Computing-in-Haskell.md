@@ -150,10 +150,10 @@ In the next article we will write some code that implements some basic operation
 [3]: https://www.codeproject.com/Articles/1131573/Grovers-Search-Algorithm-explained
 
 
-[first_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell/
-[second_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-second-part/
-[third_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-third-part/
-[fourth_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-fourth-part/
+[first_article]: ../Quantum-Computing-in-Haskell/
+[second_article]: ../Quantum-Computing-in-Haskell-second-part/
+[third_article]: ../Quantum-Computing-in-Haskell-third-part/
+[fourth_article]: ../Quantum-Computing-in-Haskell-fourth-part/
 [git_repo]: https://github.com/ardeleanasm/qchas
 [documentation]: https://ardeleanasm.github.io/qchas/
 [package]: https://hackage.haskell.org/package/qchas

@@ -177,10 +177,10 @@ As we can see in this first example, running an algorithm, even a simple one, on
 
 About the implemented library, as I said, you can download it from the links that I specified before and these articles and examples of code will be used as a "How to use.." for the library. 
 
-[first_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell/
-[second_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-second-part/
-[third_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-third-part/
-[fourth_article]: https://ardeleanasm.github.io/Quantum-Computing-in-Haskell-fourth-part/
+[first_article]: ../Quantum-Computing-in-Haskell/
+[second_article]: ../Quantum-Computing-in-Haskell-second-part/
+[third_article]: ../Quantum-Computing-in-Haskell-third-part/
+[fourth_article]: ../Quantum-Computing-in-Haskell-fourth-part/
 [git_repo]: https://github.com/ardeleanasm/qchas
 [documentation]: https://ardeleanasm.github.io/qchas/
 [package]: https://hackage.haskell.org/package/qchas
@@ -188,4 +188,4 @@ About the implemented library, as I said, you can download it from the links tha
 [1]: https://github.com/ardeleanasm/qchas
 [2]: https://hackage.haskell.org/package/qchas
 [3]: https://www.stackage.org/nightly-2017-08-17/package/qchas-1.0.1.0
-[4]: http://ardeleanasm.github.io/resources/deutsch_quantum_circuits.png
+[4]: ../blog/resources/deutsch_quantum_circuits.png
