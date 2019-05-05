@@ -15,7 +15,7 @@ import System.IO.Unsafe
 import Control.Monad ( replicateM)
 ```
 
-The first thing that should be done is to write some helper-functions for generating pseudorandom numbers. To do that, I'll start by defining **seed** for random generators and a function that will generate a finite length list of values in range, `getRandomValuesInRange::Int->Int->Int->IO [Int]`. For exercise purpose only, I'll define second function that will return a finite length list of doubles, uniformly distributed on $[0,1)$, `getRandomValues::Int->[Double]`.
+The first thing that should be done is to write some helper-functions for generating pseudorandom numbers. To do that, I'll start by defining **seed** for random generators and a function that will generate a finite length list of values in range, `getRandomValuesInRange::Int->Int->Int->IO [Int]`. For exercise purpose only, I'll define second function that will return a finite length list of doubles, uniformly distributed on $$[0,1)$$, `getRandomValues::Int->[Double]`.
 
 
 ```haskell
@@ -59,7 +59,7 @@ newtype Solution = Solution { rawSolution::([Int],Int)} deriving (Show,Eq)
 
 Normally, the next step should be to define a fitness function but that would make the implementation tightly coupled with the problem that solves. For example, if the implementation is needed to solve the knapsack problem, one of the parameters needed to be passed to the fitness function should be the dataset. Instead, a new type for dataset will be defined. 
 
-For knapsack problem, dataset can be a list of tuples `(g,v)` where $g$ is the weight of the $n^{th}$ object and $v$ is the value of the object.
+For knapsack problem, dataset can be a list of tuples `(g,v)` where $$g$$ is the weight of the $$n^{th}$$ object and $$v$$ is the value of the object.
 
 
 ```haskell
@@ -97,7 +97,7 @@ Ok, it's not a complicated function but there are a lot of operations that are p
 
 Before implementing the function that will calculate the best neighbor in neighborhood, I will need some "helper functions".
 
-1. `replaceNth` is used to replace the value of $n^{th}$ element in a list with a new value.
+1. `replaceNth` is used to replace the value of $$n^{th}$$ element in a list with a new value.
 2. `maximum'` is a function that will get the maximum element from a list of tuples.
 3. `calculateNeighborhood` is used to calculate the neighborhood of a solution.
 
@@ -160,10 +160,10 @@ kn dataset solution numberOfItems
 ### Example
 
 Let's consider a backpack with a maximum capacity of 10 kilograms. There are 4 items with the following characteristics:
-1. Item $I_1$ having 6 kg and a value of 50 $\$$
-2. Item $I_2$ having 5 kg and a value of 90 $\$$
-3. Item $I_3$ having 2 kg and a value of 20 $\$$
-4. Item $I_4$ having 4 kg and a value of 30 $\$$
+1. Item $$I_1$$ having 6 kg and a value of 50 $$\$$$
+2. Item $$I_2$$ having 5 kg and a value of 90 $$\$$$
+3. Item $$I_3$$ having 2 kg and a value of 20 $$\$$$
+4. Item $$I_4$$ having 4 kg and a value of 30 $$\$$$
 
 
 
