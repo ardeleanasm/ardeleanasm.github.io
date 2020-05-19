@@ -71,4 +71,5 @@ No words, only pictures!
 [img_ship]:/blog/resources/ship.png "Burning Ship fractal"
 
 [1]: https://gregheartsfield.com/fractal-hs/
+
 [2]: https://github.com/ardeleanasm/project-fractals
