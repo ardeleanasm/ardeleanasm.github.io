@@ -62,10 +62,10 @@ No words, only pictures!
 
 ### Bibliography
 
-[img_julia]:/blog/resources/julia.png =300x300 "Julia fractal"
-[img_julia2]:/blog/resources/julia2.png =300x300 "Julia fractal"
-[img_mandelbrot]:/blog/resources/mandelbrot.png =300x300 "Mandelbrot fractal"
-[img_ship]:/blog/resources/ship.png =300x300 "Burning Ship fractal"
+[img_julia]:/blog/resources/julia.png "Julia fractal"
+[img_julia2]:/blog/resources/julia2.png "Julia fractal"
+[img_mandelbrot]:/blog/resources/mandelbrot.png "Mandelbrot fractal"
+[img_ship]:/blog/resources/ship.png "Burning Ship fractal"
 
 [1]: https://gregheartsfield.com/fractal-hs/
 [2]: https://github.com/ardeleanasm/project-fractals
