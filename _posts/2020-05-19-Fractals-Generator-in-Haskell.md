@@ -1,6 +1,6 @@
 ---
 layout: blog/post
-title: "Fractals in Haskell"
+title: "Fractals Generator in Haskell"
 description: "Fractal generation in Haskell"
 category: functional programming
 tags: haskell, functional programming, fractals
@@ -60,7 +60,10 @@ No words, only pictures!
 
 ![Burning Ship Fractal][img_ship]
 
-### Bibliography
+### Links
+
+[Fractals in Haskell][1]
+[Source Code Repository][2]
 
 [img_julia]:/blog/resources/julia.png "Julia fractal"
 [img_julia2]:/blog/resources/julia2.png "Julia fractal"
