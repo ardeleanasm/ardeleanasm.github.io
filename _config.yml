@@ -63,7 +63,7 @@ plugins:
   - jekyll-paginate #used for pagination
   - jekyll-sitemap # Create a sitemap using the official Jekyll sitemap gem
   - jekyll-feed # Create an Atom feed using the official Jekyll feed gem
-  - jekyll-git_metadata
+  - jekyll-github-metadata
 
 
 defaults:
