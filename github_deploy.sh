@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -euo pipefail
+#set -euo pipefail
 
 SRC_BRANCH=source
 TGT_BRANCH=master
