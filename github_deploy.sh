@@ -16,6 +16,7 @@ git checkout -b master --track origin/master
 sh ./build.sh
 
 #overwrite
+rm -r posts/
 cp -a output/. .
 rm -r output
 
