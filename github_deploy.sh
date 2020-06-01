@@ -13,10 +13,11 @@ git checkout source
 git fetch --all
 git checkout -b master --track origin/master
 
+#clear posts
+rm posts/*.html
 sh ./build.sh
 
 #overwrite
-rm -r posts/
 cp -a output/. .
 rm -r output
 
