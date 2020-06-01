@@ -13,8 +13,6 @@ fi
 
 git checkout $SRC_BRANCH
 MSG=$(git log -n 1 --format="format:%h %f")
-RESULT=$(nix-build)
-echo $RESULT
 git checkout $TGT_BRANCH
 rm -rf *
 cp -r $RESULT/* .
