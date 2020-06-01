@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Quantum Computing in Haskell - I part</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="../css/blogstyle.css" />
+</head>
+<body>
+<div class="header"> <a href="../blog.html">&larr; Posts</a> </div>
+<header>
+<h1 class="title">Quantum Computing in Haskell - I part</h1>
+</header>
+<div class="header">
+<a href="../blog.html">← Posts</a>
+</div>
+<div class="header">
+<a href="../blog.html">← Posts</a>
+</div>
+<h2 id="articles">Articles</h2>
+<ul>
+<li><a href="./2017-07-26-Quantum-Computing-in-Haskell.html">Quantum Computing in Haskell - I part</a></li>
+<li><a href="./2017-07-28-Quantum-Computing-in-Haskell-second-part.html">Quantum Computing in Haskell - II part</a></li>
+<li><a href="./2017-08-01-Quantum-Computing-in-Haskell-third-part.html">Quantum Computing in Haskell - III part</a></li>
+<li><a href="./2017-08-18-Quantum-Computing-in-Haskell-fourth-part.html">Quantum Computing in Haskell - IV part</a></li>
+<li><a href="https://github.com/ardeleanasm/qchas">Github Repository</a></li>
+<li><a href="https://ardeleanasm.github.io/qchas/">Project’s Haddock Documentation</a></li>
+<li><a href="https://hackage.haskell.org/package/qchas">QChas Package</a></li>
+</ul>
+<h2 id="long-story-made-short">Long story made short</h2>
+<p>1 year ago I started studying the topics of Quantum Computing and Quantum Algorithms and I was fascinated. Is interresting and, like Niels Bohr said, “Anyone who is not shocked by quantum theory has not understood it.”</p>
+<p>As doing my research I found quite interesting to post some small articles on these topics, some articles on CodeProject (<a href="https://www.codeproject.com/Articles/1130092/Java-based-Quantum-Computing-library">Java based Quantum Computing Library</a> and <a href="https://www.codeproject.com/Articles/1131573/Grovers-Search-Algorithm-explained">Grover’s Search Algorithm Explained</a>) and one on my website about <a href="2016-08-17-deutschs-algorithm.html">Deutsch’s algorithm</a>. For those articles I used a Java library that I created myself with the help of some of my colleagues. Now, after a year and after playing a little with Haskell, I found quite interesting to review the topic and to start posting a series of small articles about Quantum Computing.</p>
+<h2 id="introduction">Introduction</h2>
+<p>I’ll start by talking a little about the difference between a quantum computer and a traditional one. A lot of information about how a quantum computer works can be found in online courses, research papers and books. It’s not the scope of this post to explain in details how it works, just to present some basic differences.</p>
+<p>As someone can expect, a quantum computer use the quantum mechanical effects, such as superposition, to carry out computations. We already know that in a traditional computer, the <strong>bit</strong> is the basic unit and it can be 0 or 1. The value is defined by a voltage level, in TTL technology, ideally, a 1 value is represented by 5.00 volts while a 0 value is represented by 0.00 volts. For a quantum computer, there are some differences. For example, the basic unit is the <strong>qubit</strong> (quantum bit) and can, at one time, represent value 0 and 1, by exploiting superposition. A qubit is defined by the equation presented below:</p>
+<p><br />
+<span class="math display"></span><br />
+<br />
+<span class="math display"></span><br />
+<br />
+<span class="math display">$$\ket{v}=\alpha\ket{0}+\beta\ket{1}$$</span><br />
+</p>
+<p>Before diving deeper into the subject, we will firstly review some mathematical aspects of the topic.</p>
+<h2 id="complex-numbers">Complex Numbers</h2>
+<p>Since probability amplitudes of a qubit are complex numbers I prefer to start with a very short introduction in the mathematics of complex numbers.</p>
+<p>A complex number q is defined as</p>
+<p><br />
+<span class="math display"><em>q</em> = <em>a</em> + <em>bi</em></span><br />
+where a and b<br />
+<span class="math display"> ∈ ℛ</span><br />
+and<br />
+<span class="math display">$$i=\sqrt{-1}$$</span><br />
+is the imaginary basis unit.</p>
+<p>We can see that <strong>a</strong> is the real component of a complex number and <strong>bi</strong> is the imaginary one. We can obtain the complex conjugate by simply negating the sign of the imaginary component<br />
+<span class="math display">$$\overline{q}=a-bi$$</span><br />
+.</p>
+<p>Some basic formulas that we will use during this series of articles will be addition, multiplication, and modulus.</p>
+<p>Let’s consider 2 complex numbers x and y defined like:</p>
+<p><br />
+<span class="math display"><em>x</em> = <em>a</em> + <em>bi</em></span><br />
+</p>
+<p>and</p>
+<p><br />
+<span class="math display"><em>y</em> = <em>c</em> + <em>di</em></span><br />
+</p>
+<p>The addition of these 2 complex numbers is defined by:</p>
+<p><br />
+<span class="math display"><em>z</em> = <em>x</em> + <em>y</em> = <em>a</em> + <em>bi</em> + <em>c</em> + <em>di</em> = <em>a</em> + <em>c</em> + <em>i</em>(<em>b</em> + <em>d</em>)</span><br />
+</p>
+<p>while multiplication is defined by:</p>
+<p><br />
+<span class="math display"><em>z</em> = <em>x</em> * <em>y</em> = (<em>a</em> + <em>bi</em>)(<em>c</em> + <em>di</em>) = <em>ac</em> − <em>bd</em> + <em>i</em>(<em>ad</em> + <em>cb</em>)</span><br />
+</p>
+<p>The third operation, the modulus of the complex number x is defined by:</p>
+<p><br />
+<span class="math display">$$|x|=\sqrt{a^2+b^2}$$</span><br />
+</p>
+<h2 id="vectors">Vectors</h2>
+<p>While Complex Numbers are used to represent the probability amplitudes of a qubit, vectors and linear algebra helps us to represent qubits, so I decided that it’ll be usefull to present some notations and operations before starting to write code.</p>
+<p>Basically, the state of a qubit is a unit vector in a 2-dimensional complex vector space<br />
+<span class="math display">𝒞<sup>2</sup></span><br />
+.</p>
+<p>The vector<br />
+<span class="math display">$$\begin{bmatrix}\alpha\\ \beta\end{bmatrix}$$</span><br />
+can be written as</p>
+<p><br />
+<span class="math display">$$\alpha\ket{0}+\beta\ket{1}$$</span><br />
+</p>
+<p>where</p>
+<p><br />
+<span class="math display">$$\ket{0}=\begin{bmatrix}1\\0\end{bmatrix}$$</span><br />
+</p>
+<p>and</p>
+<p><br />
+<span class="math display">$$\ket{1}=\begin{bmatrix}0\\1\end{bmatrix}$$</span><br />
+</p>
+<p>In the above example I used the <strong>bra-ket</strong> notation, the notation of a column vector is called <strong>ket</strong> while the notation of a row vector is called <strong>bra</strong>. Next, I will define 3 basic operations that will be used heavily in the examples from the next articles on this topic, the inner product, outer product and tensor product.</p>
+<p>The inner product,<br />
+<span class="math display">$$\bra{v}\ket{v}$$</span><br />
+is the product between the bra and the ket vectors:</p>
+<p><br />
+<span class="math display">$$\bra{v}\ket{v}=\begin{pmatrix}{c_1}^* &amp; {c_2}^* \end{pmatrix}\begin{pmatrix}{c_1} \\ {c_2} \end{pmatrix}={c_1}^*{c_1}+{c_2}^*{c_2}={|c_1|}^2+{|c_2|}^2$$</span><br />
+</p>
+<p>Outer product is <strong>ket-bra</strong> and is given by:</p>
+<p><br />
+<span class="math display">$$\ket{v}\bra{v}=\begin{pmatrix}c_1 \\ c_2 \end{pmatrix}\begin{pmatrix}{c_1}^* &amp; {c_2}^*\end{pmatrix}=\begin{pmatrix} c_1{c_1}^* &amp; c_1{c_2}^* \\ c_2{c_1}^* &amp; c_2{c_2}^* \end{pmatrix}$$</span><br />
+</p>
+<p>Lastly, if we consider<br />
+<span class="math display">$$\ket{v}=\begin{pmatrix}{c_1} \\ {c_2} \end{pmatrix}$$</span><br />
+and<br />
+<span class="math display">$$\ket{x}=\begin{pmatrix}{c_3} \\ {c_4} \end{pmatrix}$$</span><br />
+we can define the tensor product as:</p>
+<p><br />
+<span class="math display">$$\ket{v}\otimes\ket{x}=\ket{vx}=\begin{pmatrix}{c_1}{c_3} \\ {c_2}{c_3} \\ {c_1}{c_4} \\ {c_2}{c_4} \end{pmatrix}$$</span><br />
+</p>
+<h2 id="qubits-and-gates">Qubits and Gates</h2>
+<p>Quantum mechanics tells that any such system can exist in a superposition of states and as we saw in the second chapter, the state of a qubit is described by</p>
+<p><br />
+<span class="math display">$$\ket{v}=\alpha\ket{0}+\beta\ket{1}$$</span><br />
+</p>
+<p>where<br />
+<span class="math display"><em>α</em></span><br />
+and<br />
+<span class="math display"><em>β</em></span><br />
+are complex number that satisfy the relation</p>
+<p><br />
+<span class="math display">|<em>α</em>|<sup>2</sup> + |<em>β</em>|<sup>2</sup> = 1</span><br />
+</p>
+<p>We know that on a classic computer gate operations such as <strong>AND</strong>, <strong>OR</strong>,<strong>XOR</strong> constitute the core of data manipulation. On a quantum computer similar operations are possible on qubits by using quantum gates. The gate operations are exactly all unitary linear operations.</p>
+<p>For example, the Hadamard transformation is defined as:</p>
+<p><br />
+<span class="math display">$$\alpha\ket{0}+\beta\ket{1}\rightarrow\frac{\alpha+\beta}{\sqrt{2}}\ket{0}+\frac{\alpha-\beta}{\sqrt{2}}\ket{1}$$</span><br />
+</p>
+<p>Knowing that<br />
+<span class="math display">$$\ket{0}=\begin{bmatrix}{1} \\ {0} \end{bmatrix}$$</span><br />
+and<br />
+<span class="math display">$$\ket{1}=\begin{bmatrix}{0} \\ {1} \end{bmatrix}$$</span><br />
+then we can represent the transformation as the matrix:</p>
+<p><br />
+<span class="math display">$$\frac{1}{\sqrt{2}}\begin{pmatrix}1 &amp; 1 \\ 1 &amp; -1 \end{pmatrix}$$</span><br />
+</p>
+<p>A Hadamard gate creates a superposition state, often beginning and ending a quantum computation to initiate data processing and to collect data, respectively.</p>
+<p>A set of useful 1-qubit gates are the Pauli Gates, the X gate, Y gate and Z gate.</p>
+<p><br />
+<span class="math display">$$X\ket{0}=\ket{1} and X\ket{1}=\ket{1}; X=\begin{pmatrix}0 &amp; 1 \\ 1 &amp; 0 \end{pmatrix}$$</span><br />
+</p>
+<p><br />
+<span class="math display">$$Y\ket{0}=i\ket{1} and Y\ket{1}=-i\ket{0}; Y=\begin{pmatrix}0 &amp; -i \\ i &amp; 0 \end{pmatrix}$$</span><br />
+</p>
+<p><br />
+<span class="math display">$$Z\ket{0}=\ket{0} and Z\ket{1}=-\ket{1}; Z=\begin{pmatrix}1 &amp; 0 \\ 0 &amp; -1 \end{pmatrix}$$</span><br />
+</p>
+<p>Two more gates that we will use in our examples are the Controlled-Not and Controlled Phase Shift and they are defined by the following matrices:</p>
+<p><br />
+<span class="math display">$$Controlled Phase Shift=\begin{pmatrix} 1 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; -1\end{pmatrix}$$</span><br />
+</p>
+<p><br />
+<span class="math display">$$Controlled Not=\begin{pmatrix} 1 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 1 \\ 0 &amp; 0 &amp; 1 &amp; 0 \end{pmatrix}$$</span><br />
+</p>
+<p>In the next article we will write some code that implements some basic operations.</p>
+<div class="header">
+<a href="../blog.html">← Posts</a>
+</div>
+<div class="header">
+<a href="../blog.html">← Posts</a>
+</div>
+<div class="header"> <a href="../blog.html">&larr; Posts</a> </div>
+</body>
+</html>
