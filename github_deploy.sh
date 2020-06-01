@@ -13,7 +13,7 @@ git checkout source
 git fetch --all
 git checkout -b master --track origin/master
 
-source ./build.sh
+sh ./build.sh
 
 #overwrite
 cp -a output/. .

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+
 
 OUTDIR=${out:-output}
 mkdir -p "$OUTDIR/posts"
