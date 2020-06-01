@@ -81,4 +81,4 @@ let () =
 
 
 
-[1]: /blog/resources/integration-sinx-curve.png
+[1]: ../img/blog/integration-sinx-curve.png

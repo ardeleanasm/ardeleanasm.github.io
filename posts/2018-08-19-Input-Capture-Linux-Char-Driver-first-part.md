@@ -54,4 +54,4 @@ Finally, the second requirement is somehow problematic. The simple solution is t
 
 The implementation of the driver was quite easy after deciding what features should be implemented and after experimenting a few with *rw locks*, *tasklets* and so on. The most challenging part was debugging since for this driver I used only **printk-technique**, basically I printed logs for where I considered to be the problem. A step-by-step debugger, even on assembly code, would be much more appreciated.
 
-[signal_plot]: /blog/resources/pwm_signal.jpg "Rectangular Signal"
+[signal_plot]: ../img/blog/pwm_signal.jpg "Rectangular Signal"

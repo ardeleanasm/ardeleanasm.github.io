@@ -65,10 +65,10 @@ No words, only pictures!
 [Fractals in Haskell][1]
 [Source Code Repository][2]
 
-[img_julia]:/blog/resources/julia.png "Julia fractal"
-[img_julia2]:/blog/resources/julia2.png "Julia fractal"
-[img_mandelbrot]:/blog/resources/mandelbrot.png "Mandelbrot fractal"
-[img_ship]:/blog/resources/ship.png "Burning Ship fractal"
+[img_julia]:../img/blog/julia.png "Julia fractal"
+[img_julia2]:../img/blog/julia2.png "Julia fractal"
+[img_mandelbrot]:../img/blog/mandelbrot.png "Mandelbrot fractal"
+[img_ship]:../img/blog/ship.png "Burning Ship fractal"
 
 [1]: https://gregheartsfield.com/fractal-hs/
 

@@ -130,10 +130,10 @@ For now, we have defined a Qubit type and we can create any qubit. We also defin
 
 Based on my experience that I have on this topic after doing some research and implementing from scratch a library in Java I was surprised when I saw how fast I can implement this code in Haskell. It was quite simple and it took less time.
 
-[first_article]: ../Quantum-Computing-in-Haskell/
-[second_article]: ../Quantum-Computing-in-Haskell-second-part/
-[third_article]: ../Quantum-Computing-in-Haskell-third-part/
-[fourth_article]: ../Quantum-Computing-in-Haskell-fourth-part/
+[first_article]: ./2017-07-26-Quantum-Computing-in-Haskell.html
+[second_article]: ./2017-07-28-Quantum-Computing-in-Haskell-second-part.html
+[third_article]: ./2017-08-01-Quantum-Computing-in-Haskell-third-part.html
+[fourth_article]: ./2017-08-18-Quantum-Computing-in-Haskell-fourth-part.html
 [git_repo]: https://github.com/ardeleanasm/qchas
 [documentation]: https://ardeleanasm.github.io/qchas/
 [package]: https://hackage.haskell.org/package/qchas

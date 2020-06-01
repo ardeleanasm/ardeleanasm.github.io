@@ -169,10 +169,10 @@ zGate :: Gate
 
 In this article we implemented some 1-qubit Gates and some Controlled-Gate. In next articles we will define some functions to apply those gate on qubits and also to create gates, starting from 1-qubit ones, that apply on multiple qubits. New ideas, features, issues are welcomed and I encourage every reader to submit them on Github or ask questions using Disquss.
 
-[first_article]: ../Quantum-Computing-in-Haskell/
-[second_article]: ../Quantum-Computing-in-Haskell-second-part/
-[third_article]: ../Quantum-Computing-in-Haskell-third-part/
-[fourth_article]: ../Quantum-Computing-in-Haskell-fourth-part/
+[first_article]: ./2017-07-26-Quantum-Computing-in-Haskell.html
+[second_article]: ./2017-07-28-Quantum-Computing-in-Haskell-second-part.html
+[third_article]: ./2017-08-01-Quantum-Computing-in-Haskell-third-part.html
+[fourth_article]: ./2017-08-18-Quantum-Computing-in-Haskell-fourth-part.html
 [git_repo]: https://github.com/ardeleanasm/qchas
 [documentation]: https://ardeleanasm.github.io/qchas/
 [package]: https://hackage.haskell.org/package/qchas
@@ -181,8 +181,8 @@ In this article we implemented some 1-qubit Gates and some Controlled-Gate. In n
 [2]: https://github.com/ardeleanasm/quantum_computing
 
 
-[xgate_img]: ../blog/resources/quantum_serie/xgate.png "Pauli XGate"
-[ygate_img]: ../blog/resources/quantum_serie/ygate.png "Pauli YGate"
-[zgate_img]: ../blog/resources/quantum_serie/zgate.png "Pauli ZGate"
-[hgate_img]: ../blog/resources/quantum_serie/hgate.png "Hadamard Gate"
-[cnotgate_img]: ../blog/resources/quantum_serie/cnotgate.png "Controlled-NOT"
+[xgate_img]: ../img/blog/quantum_serie/xgate.png "Pauli XGate"
+[ygate_img]: ../img/blog/quantum_serie/ygate.png "Pauli YGate"
+[zgate_img]: ../img/blog/quantum_serie/zgate.png "Pauli ZGate"
+[hgate_img]: ../img/blog/quantum_serie/hgate.png "Hadamard Gate"
+[cnotgate_img]: ../img/blog/quantum_serie/cnotgate.png "Controlled-NOT"

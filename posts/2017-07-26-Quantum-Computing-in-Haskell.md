@@ -145,15 +145,15 @@ $$Controlled Not=\begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 1
 
 In the next article we will write some code that implements some basic operations. 
 
-[1]: https://ardeleanasm.github.io/deutschs-algorithm/
+[1]: 2016-08-17-deutschs-algorithm.html
 [2]: https://www.codeproject.com/Articles/1130092/Java-based-Quantum-Computing-library
 [3]: https://www.codeproject.com/Articles/1131573/Grovers-Search-Algorithm-explained
 
 
-[first_article]: ../Quantum-Computing-in-Haskell/
-[second_article]: ../Quantum-Computing-in-Haskell-second-part/
-[third_article]: ../Quantum-Computing-in-Haskell-third-part/
-[fourth_article]: ../Quantum-Computing-in-Haskell-fourth-part/
+[first_article]: ./2017-07-26-Quantum-Computing-in-Haskell.html
+[second_article]: ./2017-07-28-Quantum-Computing-in-Haskell-second-part.html
+[third_article]: ./2017-08-01-Quantum-Computing-in-Haskell-third-part.html
+[fourth_article]: ./2017-08-18-Quantum-Computing-in-Haskell-fourth-part.html
 [git_repo]: https://github.com/ardeleanasm/qchas
 [documentation]: https://ardeleanasm.github.io/qchas/
 [package]: https://hackage.haskell.org/package/qchas
