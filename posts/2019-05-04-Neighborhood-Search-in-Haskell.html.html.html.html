@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Neighborhood Search</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../css/blogstyle.css" />
+</head>
+<body>
+<div class="header"> <a href="../blog.html">&larr; Posts</a> </div>
+<header>
+<h1 class="title">Neighborhood Search</h1>
+</header>
+<div class="header">
+<a href="../blog.html">← Posts</a>
+</div>
+<div class="header">
+<a href="../blog.html">← Posts</a>
+</div>
+<div class="header">
+<a href="../blog.html">← Posts</a>
+</div>
+<h3 id="implementation">Implementation</h3>
+<div id="cb1" class="sourceCode">
+<div id="cb1" class="sourceCode">
+<div id="cb1" class="sourceCode">
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">import</span> <span class="dt">System.Random</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">import</span> <span class="dt">System.IO.Unsafe</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">import</span> <span class="dt">Control.Monad</span> ( replicateM)</a></code></pre></div>
+</div>
+</div>
+</div>
+<p>The first thing that should be done is to write some helper-functions for generating pseudorandom numbers. To do that, I’ll start by defining <strong>seed</strong> for random generators and a function that will generate a finite length list of values in range, <code>getRandomValuesInRange::Int-&gt;Int-&gt;Int-&gt;IO [Int]</code>. For exercise purpose only, I’ll define second function that will return a finite length list of doubles, uniformly distributed on<br />
+<span class="math display">[0, 1)</span><br />
+, <code>getRandomValues::Int-&gt;[Double]</code>.</p>
+<div id="cb2" class="sourceCode">
+<div id="cb2" class="sourceCode">
+<div id="cb2" class="sourceCode">
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb2-1" title="1"><span class="ot">seed::</span><span class="dt">Int</span></a>
+<a class="sourceLine" id="cb2-2" title="2">seed<span class="fu">=</span>(<span class="fu">-</span><span class="dv">958036805781772734</span>)</a></code></pre></div>
+</div>
+</div>
+</div>
+<div id="cb3" class="sourceCode">
+<div id="cb3" class="sourceCode">
+<div id="cb3" class="sourceCode">
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb3-1" title="1"><span class="ot">getRandomValues ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Double</span>]</a>
+<a class="sourceLine" id="cb3-2" title="2">getRandomValues len<span class="fu">=take</span> len <span class="fu">$</span> randoms (mkStdGen seed)<span class="ot">::</span>[<span class="dt">Double</span>]</a></code></pre></div>
+</div>
+</div>
+</div>
+<div id="cb4" class="sourceCode">
+<div id="cb4" class="sourceCode">
+<div id="cb4" class="sourceCode">
+<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb4-1" title="1"><span class="ot">getRandomValuesInRange::</span><span class="dt">Int</span><span class="ot">-&gt;</span><span class="dt">Int</span><span class="ot">-&gt;</span><span class="dt">Int</span><span class="ot">-&gt;</span><span class="dt">IO</span> [<span class="dt">Int</span>]</a>
+<a class="sourceLine" id="cb4-2" title="2">getRandomValuesInRange len a b <span class="fu">=</span> replicateM len (getStdRandom <span class="fu">$</span> randomR (a,b))</a></code></pre></div>
+</div>
+</div>
+</div>
+<p>Since <code>getRandomValuesInRange</code> returns a <code>IO</code> list of integers, I’ll define a wrapper that will return a list of integers. The wrapper will abuse of <code>unsafe IO</code>. In a future implementation this wrapper will be removed and all operations will be performed safe.</p>
+<div id="cb5" class="sourceCode">
+<div id="cb5" class="sourceCode">
+<div id="cb5" class="sourceCode">
+<div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb5-1" title="1"><span class="ot">getRandomValueUnsafe::</span><span class="dt">Int</span><span class="ot">-&gt;</span><span class="dt">Int</span><span class="ot">-&gt;</span><span class="dt">Int</span><span class="ot">-&gt;</span>[<span class="dt">Int</span>]</a>
+<a class="sourceLine" id="cb5-2" title="2">getRandomValueUnsafe len a b <span class="fu">=</span>unsafePerformIO <span class="fu">$</span> getRandomValuesInRange len a b</a></code></pre></div>
+</div>
+</div>
+</div>
+<p>Now, I need to define the characteristics of an item. In case of knapsack problem, each item has a <strong>weight</strong> and a <strong>value</strong>. Considering this, I’ll define a new type <strong>Item</strong> which will be a tuple of weight and value. To be mentioned that instead of using <code>newtype</code> I could use <code>type</code>. The reason behind not choosing <code>type</code> is that I don’t want to tightly couple the implementation with the problem.</p>
+<div id="cb6" class="sourceCode">
+<div id="cb6" class="sourceCode">
+<div id="cb6" class="sourceCode">
+<div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">newtype</span> <span class="dt">Item</span> <span class="fu">=</span> <span class="dt">Item</span> {<span class="ot"> rawItem::</span>(<span class="dt">Int</span>,<span class="dt">Int</span>) } <span class="kw">deriving</span> (<span class="dt">Show</span>,<span class="dt">Eq</span>)</a></code></pre></div>
+</div>
+</div>
+</div>
+<p>Next step is to define a generic datatype for the possible solutions. For a simple problem like knapsack the solution can be a list of binary values.</p>
+<div id="cb7" class="sourceCode">
+<div id="cb7" class="sourceCode">
+<div id="cb7" class="sourceCode">
+<div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">newtype</span> <span class="dt">Solution</span> <span class="fu">=</span> <span class="dt">Solution</span> {<span class="ot"> rawSolution::</span>([<span class="dt">Int</span>],<span class="dt">Int</span>)} <span class="kw">deriving</span> (<span class="dt">Show</span>,<span class="dt">Eq</span>)</a></code></pre></div>
+</div>
+</div>
+</div>
+<p>Normally, the next step should be to define a fitness function but that would make the implementation tightly coupled with the problem that solves. For example, if the implementation is needed to solve the knapsack problem, one of the parameters needed to be passed to the fitness function should be the dataset. Instead, a new type for dataset will be defined.</p>
+<p>For knapsack problem, dataset can be a list of tuples <code>(g,v)</code> where<br />
+<span class="math display"><em>g</em></span><br />
+is the weight of the<br />
+<span class="math display"><em>n</em><sup><em>th</em></sup></span><br />
+object and<br />
+<span class="math display"><em>v</em></span><br />
+is the value of the object.</p>
+<div id="cb8" class="sourceCode">
+<div id="cb8" class="sourceCode">
+<div id="cb8" class="sourceCode">
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">newtype</span> <span class="dt">Dataset</span> <span class="fu">=</span> <span class="dt">Dataset</span> {<span class="ot"> rawDataset::</span>(<span class="dt">Int</span>,[<span class="dt">Item</span>])} <span class="kw">deriving</span> (<span class="dt">Show</span>,<span class="dt">Eq</span>)</a></code></pre></div>
+</div>
+</div>
+</div>
+<p>Now a generic fitness function can be defined:</p>
+<div id="cb9" class="sourceCode">
+<div id="cb9" class="sourceCode">
+<div id="cb9" class="sourceCode">
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb9-1" title="1"><span class="ot">fitness::</span><span class="dt">Dataset</span> <span class="ot">-&gt;</span> <span class="dt">Solution</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></a>
+<a class="sourceLine" id="cb9-2" title="2">fitness dataset solution <span class="fu">=</span> fitnessValue</a>
+<a class="sourceLine" id="cb9-3" title="3">    <span class="kw">where</span></a>
+<a class="sourceLine" id="cb9-4" title="4">        datasetRaw <span class="fu">=</span> rawDataset dataset</a>
+<a class="sourceLine" id="cb9-5" title="5">        maxWeight <span class="fu">=</span> <span class="fu">fst</span> datasetRaw</a>
+<a class="sourceLine" id="cb9-6" title="6">        items <span class="fu">=</span> <span class="fu">map</span> rawItem (<span class="fu">snd</span> datasetRaw)</a>
+<a class="sourceLine" id="cb9-7" title="7">        individual <span class="fu">=</span> <span class="fu">fst</span> <span class="fu">$</span> rawSolution solution</a>
+<a class="sourceLine" id="cb9-8" title="8">        pairs <span class="fu">=</span> <span class="fu">zip</span> individual items</a>
+<a class="sourceLine" id="cb9-9" title="9">        weight <span class="fu">=</span> <span class="fu">foldl</span> (\acc x<span class="ot">-&gt;</span> <span class="kw">if</span> <span class="fu">fst</span> x<span class="fu">==</span><span class="dv">1</span> <span class="kw">then</span> acc<span class="fu">+fst</span> (<span class="fu">snd</span> x) <span class="kw">else</span> acc<span class="fu">+</span><span class="dv">0</span>) <span class="dv">0</span> pairs</a>
+<a class="sourceLine" id="cb9-10" title="10">        value <span class="fu">=</span> <span class="fu">foldl</span> (\acc x<span class="ot">-&gt;</span> <span class="kw">if</span> <span class="fu">fst</span> x<span class="fu">==</span><span class="dv">1</span> <span class="kw">then</span> acc<span class="fu">+snd</span> (<span class="fu">snd</span> x) <span class="kw">else</span> acc<span class="fu">+</span><span class="dv">0</span>) <span class="dv">0</span> pairs</a>
+<a class="sourceLine" id="cb9-11" title="11">        fitnessValue <span class="fu">=</span> <span class="kw">if</span> weight <span class="fu">&lt;=</span> maxWeight <span class="kw">then</span> value <span class="kw">else</span> <span class="dv">0</span></a></code></pre></div>
+</div>
+</div>
+</div>
+<p>Ok, it’s not a complicated function but there are a lot of operations that are performed on lists for calculating the fitness value. Step by step is:</p>
+<ol type="1">
+<li>It accepts 2 parameters of types Dataset and Solution, respectively</li>
+<li><code>datasetRaw = rawDataset dataset</code> -&gt; get the tuple (G,[(g,v)]), where G is Maximum Weight, g is item’s weight and v is item’s value.</li>
+<li><code>maxWeight = fst datasetRaw</code> -&gt; get the maximum weight from the tuple</li>
+<li><code>items = map rawItem (snd datasetRaw)</code> -&gt; get the list [(g,v)]</li>
+<li><code>individual = fst $ rawSolution solution</code> -&gt; extract the individual configuration from solution</li>
+<li><code>pairs = zip individual items</code> -&gt; create pairs of type [(is_item,(g,v))]</li>
+<li><code>weight = foldl (\acc x-&gt; if fst x==1 then acc+fst (snd x) else acc+0) 0 pairs</code> -&gt; extract total weight for solution</li>
+<li><code>value = foldl (\acc x-&gt; if fst x==1 then acc+snd (snd x) else acc+0) 0 pairs</code> -&gt; extract total value for solution</li>
+<li><code>fitnessValue = if weight &lt;= maxWeight then value else 0</code></li>
+</ol>
+<p>Before implementing the function that will calculate the best neighbor in neighborhood, I will need some “helper functions”.</p>
+<ol type="1">
+<li><code>replaceNth</code> is used to replace the value of<br />
+<span class="math display"><em>n</em><sup><em>th</em></sup></span><br />
+element in a list with a new value.</li>
+<li><code>maximum'</code> is a function that will get the maximum element from a list of tuples.</li>
+<li><code>calculateNeighborhood</code> is used to calculate the neighborhood of a solution.</li>
+</ol>
+<div id="cb10" class="sourceCode">
+<div id="cb10" class="sourceCode">
+<div id="cb10" class="sourceCode">
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb10-1" title="1"><span class="ot">replaceNth::</span><span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span><span class="ot">-&gt;</span>[<span class="dt">Int</span>]<span class="ot">-&gt;</span>[<span class="dt">Int</span>]</a>
+<a class="sourceLine" id="cb10-2" title="2">replaceNth _ _ [] <span class="fu">=</span> []</a>
+<a class="sourceLine" id="cb10-3" title="3">replaceNth <span class="fu">index</span> newVal (x<span class="fu">:</span>xs)</a>
+<a class="sourceLine" id="cb10-4" title="4">    <span class="fu">|</span> <span class="fu">index==</span><span class="dv">0</span> <span class="fu">=</span> newVal<span class="fu">:</span>xs</a>
+<a class="sourceLine" id="cb10-5" title="5">    <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> x<span class="fu">:</span>replaceNth (<span class="fu">index-</span><span class="dv">1</span>) newVal xs</a></code></pre></div>
+</div>
+</div>
+</div>
+<div id="cb11" class="sourceCode">
+<div id="cb11" class="sourceCode">
+<div id="cb11" class="sourceCode">
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb11-1" title="1"><span class="ot">maximum&#39;::</span>[([<span class="dt">Int</span>],<span class="dt">Int</span>)]<span class="ot">-&gt;</span>([<span class="dt">Int</span>],<span class="dt">Int</span>)</a>
+<a class="sourceLine" id="cb11-2" title="2">maximum&#39; [] <span class="fu">=</span> <span class="fu">error</span> <span class="st">&quot;empty list&quot;</span></a>
+<a class="sourceLine" id="cb11-3" title="3">maximum&#39; (x<span class="fu">:</span>xs) <span class="fu">=</span> maxTail x xs</a>
+<a class="sourceLine" id="cb11-4" title="4">    <span class="kw">where</span> maxTail currentMax [] <span class="fu">=</span> currentMax</a>
+<a class="sourceLine" id="cb11-5" title="5">          maxTail (m,n) (p<span class="fu">:</span>ps)</a>
+<a class="sourceLine" id="cb11-6" title="6">              <span class="fu">|</span> n<span class="fu">&lt;</span>(<span class="fu">snd</span> p) <span class="fu">=</span> maxTail p ps</a>
+<a class="sourceLine" id="cb11-7" title="7">              <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> maxTail (m,n) ps</a></code></pre></div>
+</div>
+</div>
+</div>
+<div id="cb12" class="sourceCode">
+<div id="cb12" class="sourceCode">
+<div id="cb12" class="sourceCode">
+<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb12-1" title="1"><span class="ot">calculateNeighborhood::</span>(<span class="dt">Dataset</span><span class="ot">-&gt;</span><span class="dt">Solution</span><span class="ot">-&gt;</span><span class="dt">Int</span>)<span class="ot">-&gt;</span><span class="dt">Dataset</span><span class="ot">-&gt;</span><span class="dt">Solution</span><span class="ot">-&gt;</span><span class="dt">Int</span><span class="ot">-&gt;</span>[([<span class="dt">Int</span>],<span class="dt">Int</span>)]<span class="ot">-&gt;</span>[([<span class="dt">Int</span>],<span class="dt">Int</span>)]</a>
+<a class="sourceLine" id="cb12-2" title="2">calculateNeighborhood _ _ _ <span class="dv">0</span> neighbors <span class="fu">=</span> neighbors</a>
+<a class="sourceLine" id="cb12-3" title="3">calculateNeighborhood f dataset solution len neighbors <span class="fu">=</span> calculateNeighborhood f dataset solution (len<span class="fu">-</span><span class="dv">1</span>) (neighbor<span class="fu">:</span>neighbors)</a>
+<a class="sourceLine" id="cb12-4" title="4">    <span class="kw">where</span></a>
+<a class="sourceLine" id="cb12-5" title="5">        raw <span class="fu">=</span> <span class="fu">fst</span> <span class="fu">$</span> rawSolution solution</a>
+<a class="sourceLine" id="cb12-6" title="6">        newNeighbor <span class="fu">=</span> <span class="kw">if</span> raw <span class="fu">!!</span> (len<span class="fu">-</span><span class="dv">1</span>) <span class="fu">==</span> <span class="dv">1</span> <span class="kw">then</span> replaceNth (len<span class="fu">-</span><span class="dv">1</span>) <span class="dv">0</span> raw <span class="kw">else</span> replaceNth (len<span class="fu">-</span><span class="dv">1</span>) <span class="dv">1</span> raw</a>
+<a class="sourceLine" id="cb12-7" title="7">        fitnessValue <span class="fu">=</span> f dataset (<span class="dt">Solution</span> (newNeighbor,<span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb12-8" title="8">        neighbor <span class="fu">=</span> (newNeighbor,fitnessValue)</a></code></pre></div>
+</div>
+</div>
+</div>
+<p>Now the implementation of the function that will calculate the neighborhood can be done. The function will receive as parameters a fitness function, the dataset, current solution and will return a new solution. In other words, the function’s type will be <code>getNewNeighbor::(Dataset-&gt;Solution-&gt;Int)-&gt;Dataset-&gt;Solution-&gt;Solution</code></p>
+<div id="cb13" class="sourceCode">
+<div id="cb13" class="sourceCode">
+<div id="cb13" class="sourceCode">
+<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb13-1" title="1"><span class="ot">getNewNeighbor::</span>(<span class="dt">Dataset</span><span class="ot">-&gt;</span><span class="dt">Solution</span><span class="ot">-&gt;</span><span class="dt">Int</span>)<span class="ot">-&gt;</span><span class="dt">Dataset</span><span class="ot">-&gt;</span><span class="dt">Solution</span><span class="ot">-&gt;</span><span class="dt">Solution</span></a>
+<a class="sourceLine" id="cb13-2" title="2">getNewNeighbor f dataset solution <span class="fu">=</span> result </a>
+<a class="sourceLine" id="cb13-3" title="3">    <span class="kw">where</span></a>
+<a class="sourceLine" id="cb13-4" title="4">        rawList <span class="fu">=</span> <span class="fu">fst</span> <span class="fu">$</span> rawSolution solution</a>
+<a class="sourceLine" id="cb13-5" title="5">        neighbors <span class="fu">=</span> calculateNeighborhood f dataset solution (<span class="fu">length</span> rawList) []</a>
+<a class="sourceLine" id="cb13-6" title="6">        result <span class="fu">=</span> <span class="dt">Solution</span> (maximum&#39; neighbors)</a>
+<a class="sourceLine" id="cb13-7" title="7">        </a></code></pre></div>
+</div>
+</div>
+</div>
+<p>Now, since the the <code>getNewNeighbor</code> and <code>fitness</code> functions are implemented, I can define the neighborhood search function.</p>
+<div id="cb14" class="sourceCode">
+<div id="cb14" class="sourceCode">
+<div id="cb14" class="sourceCode">
+<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb14-1" title="1"><span class="ot">kn::</span><span class="dt">Dataset</span><span class="ot">-&gt;</span><span class="dt">Solution</span><span class="ot">-&gt;</span><span class="dt">Int</span><span class="ot">-&gt;</span><span class="dt">Solution</span></a>
+<a class="sourceLine" id="cb14-2" title="2">kn dataset solution numberOfItems</a>
+<a class="sourceLine" id="cb14-3" title="3">        <span class="fu">|</span> <span class="fu">snd</span> (rawSolution newSolution) <span class="fu">&gt;</span> <span class="fu">snd</span> (rawSolution solution) <span class="fu">=</span> kn dataset newSolution numberOfItems</a>
+<a class="sourceLine" id="cb14-4" title="4">        <span class="fu">|</span> <span class="fu">otherwise</span> <span class="fu">=</span> solution</a>
+<a class="sourceLine" id="cb14-5" title="5">        <span class="kw">where</span> newSolution <span class="fu">=</span> getNewNeighbor fitness dataset solution</a></code></pre></div>
+</div>
+</div>
+</div>
+<h3 id="example">Example</h3>
+<p>Let’s consider a backpack with a maximum capacity of 10 kilograms. There are 4 items with the following characteristics: 1. Item<br />
+<span class="math display"><em>I</em><sub>1</sub></span><br />
+having 6 kg and a value of 50<br />
+<span class="math display">$$\$$</span><br />
+$ 2. Item<br />
+<span class="math display"><em>I</em><sub>2</sub></span><br />
+having 5 kg and a value of 90<br />
+<span class="math display">$$\$$</span><br />
+$ 3. Item<br />
+<span class="math display"><em>I</em><sub>3</sub></span><br />
+having 2 kg and a value of 20<br />
+<span class="math display">$$\$$</span><br />
+$ 4. Item<br />
+<span class="math display"><em>I</em><sub>4</sub></span><br />
+having 4 kg and a value of 30<br />
+<span class="math display">$$\$$</span><br />
+$</p>
+<div id="cb15" class="sourceCode">
+<div id="cb15" class="sourceCode">
+<div id="cb15" class="sourceCode">
+<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb15-1" title="1">dataset<span class="fu">=</span><span class="dt">Dataset</span> (<span class="dv">10</span>,[<span class="dt">Item</span> (<span class="dv">6</span>,<span class="dv">50</span>), <span class="dt">Item</span> (<span class="dv">5</span>,<span class="dv">90</span>),<span class="dt">Item</span> (<span class="dv">2</span>,<span class="dv">20</span>),<span class="dt">Item</span> (<span class="dv">4</span>,<span class="dv">30</span>)])</a></code></pre></div>
+</div>
+</div>
+</div>
+<div id="cb16" class="sourceCode">
+<div id="cb16" class="sourceCode">
+<div id="cb16" class="sourceCode">
+<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb16-1" title="1">randomValues <span class="fu">=</span> <span class="dt">Solution</span> (getRandomValueUnsafe <span class="dv">4</span> <span class="dv">0</span> <span class="dv">1</span>,<span class="dv">0</span>)</a></code></pre></div>
+</div>
+</div>
+</div>
+<div id="cb17" class="sourceCode">
+<div id="cb17" class="sourceCode">
+<div id="cb17" class="sourceCode">
+<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb17-1" title="1">randomValues</a></code></pre></div>
+</div>
+</div>
+</div>
+<pre><code>Solution {rawSolution = ([0,1,0,0],0)}</code></pre>
+<div id="cb19" class="sourceCode">
+<div id="cb19" class="sourceCode">
+<div id="cb19" class="sourceCode">
+<div class="sourceCode" id="cb19"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb19-1" title="1">fitnessInitial <span class="fu">=</span> fitness dataset randomValues</a>
+<a class="sourceLine" id="cb19-2" title="2">initialSolution <span class="fu">=</span> <span class="dt">Solution</span> (<span class="fu">fst</span> <span class="fu">$</span> rawSolution randomValues,fitnessInitial)</a></code></pre></div>
+</div>
+</div>
+</div>
+<div id="cb20" class="sourceCode">
+<div id="cb20" class="sourceCode">
+<div id="cb20" class="sourceCode">
+<div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb20-1" title="1">initialSolution</a></code></pre></div>
+</div>
+</div>
+</div>
+<pre><code>Solution {rawSolution = ([0,1,0,0],90)}</code></pre>
+<div id="cb22" class="sourceCode">
+<div id="cb22" class="sourceCode">
+<div id="cb22" class="sourceCode">
+<div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb22-1" title="1">kn dataset initialSolution <span class="dv">4</span></a></code></pre></div>
+</div>
+</div>
+</div>
+<pre><code>Solution {rawSolution = ([0,1,0,1],120)}</code></pre>
+<div class="header">
+<a href="../blog.html">← Posts</a>
+</div>
+<div class="header">
+<a href="../blog.html">← Posts</a>
+</div>
+<div class="header">
+<a href="../blog.html">← Posts</a>
+</div>
+<div class="header"> <a href="../blog.html">&larr; Posts</a> </div>
+</body>
+</html>
