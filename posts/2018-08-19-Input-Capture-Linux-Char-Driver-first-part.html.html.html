@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Input Capture Linux Char Driver - I part</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="../css/blogstyle.css" />
+</head>
+<body>
+<div class="header"> <a href="../blog.html">&larr; Posts</a> </div>
+<header>
+<h1 class="title">Input Capture Linux Char Driver - I part</h1>
+</header>
+<div class="header">
+<a href="../blog.html">← Posts</a>
+</div>
+<div class="header">
+<a href="../blog.html">← Posts</a>
+</div>
+<h2 id="introduction">Introduction</h2>
+<p>To the best of my knowledge, on Linux there is no way to configure a hardware timer in input capture mode although, since it can be used on embedded systems, this feature can be needed. For example, if one needs to measure the period of a signal on a development board running a Linux distro he has no other way than sampling the GPIOs in userspace with the cost of a resolution of milliseconds.</p>
+<h2 id="input-capture">Input Capture</h2>
+<p>Considering a rectangular signal like in Figure 1 and one want to measure the period of the signal or the pulse width. Basically, to measure the period of the signal two successive edges of the same polarity are captured and to measure the pulse width, two alternate polarity edges are captured.</p>
+<figure>
+<img src="../img/blog/pwm_signal.jpg" title="Rectangular Signal" alt="Figure 1:Rectangular Signal" /><figcaption>Figure 1:Rectangular Signal</figcaption>
+</figure>
+<p>For example, if one wants to measure the high time of a pulse it is enough to subtract the time captured when the rissing edge occurs from the time captured for the subsequent falling edge. This scenario can be easily implemented on a microcontroller using a hardware timer in input capture mode and I won’t get into details.</p>
+<p>But if one only have a development board with a Linux based OS it’s hard to implement this task. The only option I can imagine is to use the GPIOs with rising and falling edges events enabled and to poll them. Of course, the obtained samples will be horrible and the resolution in milliseconds range. Or it’ll be almost impossible.</p>
+<p>The options to “hack” the timers are excluded. Personally, I wanted to do that and I didn’t found a proof that worked for someone. And also I didn’t found any APIs, libraries to select a timer and put it into input capture mode. Of course, I didn’t allocate much time for that task but the idea is that I couldn’t found and maybe there isn’t something like that.</p>
+<p>One can say that another option is to use a microcontroller and program it to perform the task of measuring the signal and to communicate with the development board via I2C, for example. Yes, it is possible but sometimes you don’t have a microcontroller to use only for this small task.</p>
+<h2 id="linux-char-driver">Linux Char Driver</h2>
+<p>The solution described in this post: implementing a char driver.</p>
+<p><strong>Requirements</strong>:</p>
+<ol type="1">
+<li><p>Service the interrupt thrown when rising, falling or both are detected on a GPIO.</p></li>
+<li><p>Sample a timer to get the timestamp.</p></li>
+<li><p>Detection of rising, falling or both must be configurable.</p></li>
+<li><p>GPIO pin used must be configurable.</p></li>
+<li><p>Notify userspace that a new value was read.</p></li>
+</ol>
+<p>In this article I won’t describe how to create a character driver for Linux, there are a lot of articles, quite nice described but somehow incomplete, on Web and also some very good books. In a future post I will shortly describe how the driver was implemented and also the needed device tree file to test it on a Beaglebone Black device.</p>
+<p>Basically the third, fourth and fifth requirements are the easiest to implement. Basically, we need to define a variable of type <strong>file_operations</strong> structure and to implement some basic functions like: open, release, read, ioctl and poll. It will be discussed in future article the implementation and the need for those functions.</p>
+<p>To implement the first requirement a interrupt will be required and registered for the GPIO pin. The registers will be configured such that the interrupt will be thrown when the event will be detected.</p>
+<p>Finally, the second requirement is somehow problematic. The simple solution is to use <strong>get_cycles()</strong> function which will return the number of clock cycles but on ARM microprocessors this function returns 0. So, guards should be used to call <strong>get_cycles()</strong> when the driver is not running on ARM microprocessor and to call another function for getting a timestamp when running on ARM.</p>
+<h2 id="conclusions">Conclusions</h2>
+<p>The implementation of the driver was quite easy after deciding what features should be implemented and after experimenting a few with <em>rw locks</em>, <em>tasklets</em> and so on. The most challenging part was debugging since for this driver I used only <strong>printk-technique</strong>, basically I printed logs for where I considered to be the problem. A step-by-step debugger, even on assembly code, would be much more appreciated.</p>
+<div class="header">
+<a href="../blog.html">← Posts</a>
+</div>
+<div class="header">
+<a href="../blog.html">← Posts</a>
+</div>
+<div class="header"> <a href="../blog.html">&larr; Posts</a> </div>
+</body>
+</html>
