@@ -6,6 +6,7 @@ category: c++
 tags: c++, Design Patterns
 ---
 
+```C++
 #include <iostream>
 #include <string>
 #include <memory>
@@ -79,3 +80,4 @@ int main() {
 
   return 0;
 }
+```
