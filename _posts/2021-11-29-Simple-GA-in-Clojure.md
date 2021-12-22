@@ -18,7 +18,7 @@ The task of the Genetic Algorithm is to evolve, starting from random generated i
 
 ```
 
-The genome for each individual is generated using new-individual function and is represented by a vector of genome-length random bits. Such, the population can be generated using (repeatedly population-size #(new-individual genome-length))
+The genome for each individual is generated using **new-individual** function and is represented by a vector of **genome-length** random bits. Such, the population can be generated using `(repeatedly population-size #(new-individual genome-length))`
 
 We will define a fitness function that is used to calculate the fitness for a specific individual as:
 
@@ -29,7 +29,7 @@ We will define a fitness function that is used to calculate the fitness for a sp
 )
 ```
 
-The fitness function of an individual is represented by the difference between the targeted number and the sum of the bits. The parameters of the fitness-function are the genome (the vector of bits) and the target number. In order to apply it on the entire population we will need to define a new function such as:
+The fitness function of an individual is represented by the difference between the targeted number and the sum of the bits. The parameters of the **fitness-function** are the **genome** (the vector of bits) and the **target** number. In order to apply it on the entire population we will need to define a new function such as:
 
 ```clojure
 (defn calculate-fitness
@@ -56,7 +56,7 @@ that takes the population and the targeted number as parameters and maps the fit
 )
 ```
 
-The helper function get-best-individual is used to extract the best individual from the population.
+The helper function **get-best-individual** is used to extract the best individual from the population.
 
 Finally, we define the crossover operator as:
 
@@ -106,7 +106,7 @@ The crossover operator maps an anonymous function that takes the genomes of two 
 )
 ```
 
-The mate-individuals function perform selection using tournament-selection and apply crossover operator on the entire population.
+The **mate-individuals** function perform selection using **tournament-selection** and apply crossover operator on the entire population.
 
 ```clojure
 (defn mutate-population [population, population-size, genome-length, target]
@@ -130,9 +130,9 @@ The mate-individuals function perform selection using tournament-selection and a
 )
 ```
 
-The mutate-population performs the mutation of each individual from the population.
+The **mutate-populatio**n performs the mutation of each individual from the population.
 
-Finally, we define the evolve function such as:
+Finally, we define the **evolve** function such as:
 
 ```clojure
 (defn evolve [population-size, genome-length, target, number-of-generations, crossover-rate, tournament-size]
