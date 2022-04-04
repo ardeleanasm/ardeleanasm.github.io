@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Bending bits...: Neighborhood Search</title>
+    
+<meta name="keywords" content="scripts,haskell,functional programming,linux,drivers,electronics,quantum computing,java">
+
+<meta name="description" content="Implementation">
+
+<meta property="og:description" content="Implementation">
+
+<meta property="og:url" content="http://ardeleanasm.github.io/blog/posts-output/2019-05-04-Neighborhood-Search-in-Haskell/" />
+<meta property="og:title" content="Neighborhood Search" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="http://ardeleanasm.github.io/blog/posts-output/2019-05-04-Neighborhood-Search-in-Haskell/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/blog/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/blog/">Bending bits...</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/blog/">Home</a></li>
+                <li
+                ><a href="/blog/archives/">Archives</a></li>
+                
+                <li
+                >
+                <a href="/blog/pages-output/about/">About</a>
+                </li>
+                
+                <li><a href="/blog/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">May 4, 2019</div>
+        
+    </div>
+    <h2>Neighborhood Search</h2>
+</div>
+<div>
+    <ol class="toc"><li><a href="#implementation">Implementation</a></li><li><a href="#example">Example</a></li></ol>
+    <h3 id="implementation">Implementation</h3><pre><code class="haskell">import System.Random
+import System.IO.Unsafe
+import Control.Monad ( replicateM)
+</code></pre><p>The first thing that should be done is to write some helper-functions for generating pseudorandom numbers. To do that, I'll start by defining <strong>seed</strong> for random generators and a function that will generate a finite length list of values in range, <code>getRandomValuesInRange::Int-&gt;Int-&gt;Int-&gt;IO [Int]</code>. For exercise purpose only, I'll define second function that will return a finite length list of doubles, uniformly distributed on $$[0,1)$$, <code>getRandomValues::Int-&gt;[Double]</code>.</p><pre><code class="haskell">seed::Int
+seed=(-958036805781772734)
+</code></pre><pre><code class="haskell">getRandomValues :: Int -&gt; [Double]
+getRandomValues len=take len $ randoms (mkStdGen seed)::[Double]
+</code></pre><pre><code class="haskell">getRandomValuesInRange::Int-&gt;Int-&gt;Int-&gt;IO [Int]
+getRandomValuesInRange len a b = replicateM len (getStdRandom $ randomR (a,b))
+</code></pre><p>Since <code>getRandomValuesInRange</code> returns a <code>IO</code> list of integers, I'll define a wrapper that will return a list of integers. The wrapper will abuse of <code>unsafe IO</code>. In a future implementation this wrapper will be removed and all operations will be performed safe.</p><pre><code class="haskell">getRandomValueUnsafe::Int-&gt;Int-&gt;Int-&gt;[Int]
+getRandomValueUnsafe len a b =unsafePerformIO $ getRandomValuesInRange len a b
+</code></pre><p>Now, I need to define the characteristics of an item. In case of knapsack problem, each item has a <strong>weight</strong> and a <strong>value</strong>. Considering this, I'll define a new type <strong>Item</strong> which will be a tuple of weight and value. To be mentioned that instead of using <code>newtype</code> I could use <code>type</code>. The reason behind not choosing <code>type</code> is that I don't want to tightly couple the implementation with the problem.</p><pre><code class="haskell">newtype Item = Item { rawItem::(Int,Int) } deriving (Show,Eq)
+</code></pre><p>Next step is to define a generic datatype for the possible solutions. For a simple problem like knapsack the solution can be a list of binary values.</p><pre><code class="haskell">newtype Solution = Solution { rawSolution::([Int],Int)} deriving (Show,Eq)
+</code></pre><p>Normally, the next step should be to define a fitness function but that would make the implementation tightly coupled with the problem that solves. For example, if the implementation is needed to solve the knapsack problem, one of the parameters needed to be passed to the fitness function should be the dataset. Instead, a new type for dataset will be defined.</p><p>For knapsack problem, dataset can be a list of tuples <code>(g,v)</code> where $$g$$ is the weight of the $$n^{th}$$ object and $$v$$ is the value of the object.</p><pre><code class="haskell">newtype Dataset = Dataset { rawDataset::(Int,[Item])} deriving (Show,Eq)
+</code></pre><p>Now a generic fitness function can be defined:</p><pre><code class="haskell">fitness::Dataset -&gt; Solution -&gt; Int
+fitness dataset solution = fitnessValue
+    where
+        datasetRaw = rawDataset dataset
+        maxWeight = fst datasetRaw
+        items = map rawItem (snd datasetRaw)
+        individual = fst $ rawSolution solution
+        pairs = zip individual items
+        weight = foldl (\acc x-&gt; if fst x==1 then acc+fst (snd x) else acc+0) 0 pairs
+        value = foldl (\acc x-&gt; if fst x==1 then acc+snd (snd x) else acc+0) 0 pairs
+        fitnessValue = if weight &lt;= maxWeight then value else 0
+</code></pre><p>Ok, it's not a complicated function but there are a lot of operations that are performed on lists for calculating the fitness value. Step by step is:</p><ol><li>It accepts 2 parameters of types Dataset and Solution, respectively</li><li><code>datasetRaw = rawDataset dataset</code> -&gt; get the tuple (G,[(g,v)]), where G is Maximum Weight, g is item's weight and v is item's value.</li><li><code>maxWeight = fst datasetRaw</code> -&gt; get the maximum weight from the tuple</li><li><code>items = map rawItem (snd datasetRaw)</code> -&gt; get the list [(g,v)]</li><li><code>individual = fst $ rawSolution solution</code> -&gt; extract the individual configuration from solution</li><li><code>pairs = zip individual items</code> -&gt; create pairs of type [(is_item,(g,v))]</li><li><code>weight = foldl (\acc x-&gt; if fst x==1 then acc+fst (snd x) else acc+0) 0 pairs</code> -&gt; extract total weight for solution</li><li><code>value = foldl (\acc x-&gt; if fst x==1 then acc+snd (snd x) else acc+0) 0 pairs</code> -&gt; extract total value for solution</li><li><code>fitnessValue = if weight &lt;= maxWeight then value else 0</code></li></ol><p>Before implementing the function that will calculate the best neighbor in neighborhood, I will need some "helper functions".</p><ol><li><code>replaceNth</code> is used to replace the value of $$n^{th}$$ element in a list with a new value.</li><li><code>maximum'</code> is a function that will get the maximum element from a list of tuples.</li><li><code>calculateNeighborhood</code> is used to calculate the neighborhood of a solution.</li></ol><pre><code class="haskell">replaceNth::Int -&gt; Int-&gt;[Int]-&gt;[Int]
+replaceNth _ _ [] = []
+replaceNth index newVal (x:xs)
+    | index==0 = newVal:xs
+    | otherwise = x:replaceNth (index-1) newVal xs
+</code></pre><pre><code class="haskell">maximum'::[([Int],Int)]-&gt;([Int],Int)
+maximum' [] = error "empty list"
+maximum' (x:xs) = maxTail x xs
+    where maxTail currentMax [] = currentMax
+          maxTail (m,n) (p:ps)
+              | n&lt;(snd p) = maxTail p ps
+              | otherwise = maxTail (m,n) ps
+</code></pre><pre><code class="haskell">calculateNeighborhood::(Dataset-&gt;Solution-&gt;Int)-&gt;Dataset-&gt;Solution-&gt;Int-&gt;[([Int],Int)]-&gt;[([Int],Int)]
+calculateNeighborhood _ _ _ 0 neighbors = neighbors
+calculateNeighborhood f dataset solution len neighbors = calculateNeighborhood f dataset solution (len-1) (neighbor:neighbors)
+    where
+        raw = fst $ rawSolution solution
+        newNeighbor = if raw !! (len-1) == 1 then replaceNth (len-1) 0 raw else replaceNth (len-1) 1 raw
+        fitnessValue = f dataset (Solution (newNeighbor,0))
+        neighbor = (newNeighbor,fitnessValue)
+</code></pre><p>Now the implementation of the function that will calculate the neighborhood can be done. The function will receive as parameters a fitness function, the dataset, current solution and will return a new solution. In other words, the function's type will be <code>getNewNeighbor::(Dataset-&gt;Solution-&gt;Int)-&gt;Dataset-&gt;Solution-&gt;Solution</code></p><pre><code class="haskell">getNewNeighbor::(Dataset-&gt;Solution-&gt;Int)-&gt;Dataset-&gt;Solution-&gt;Solution
+getNewNeighbor f dataset solution = result 
+    where
+        rawList = fst $ rawSolution solution
+        neighbors = calculateNeighborhood f dataset solution (length rawList) []
+        result = Solution (maximum' neighbors)
+        
+</code></pre><p>Now, since the the <code>getNewNeighbor</code> and <code>fitness</code> functions are implemented, I can define the neighborhood search function.</p><pre><code class="haskell">kn::Dataset-&gt;Solution-&gt;Int-&gt;Solution
+kn dataset solution numberOfItems
+        | snd (rawSolution newSolution) &gt; snd (rawSolution solution) = kn dataset newSolution numberOfItems
+        | otherwise = solution
+        where newSolution = getNewNeighbor fitness dataset solution
+</code></pre><h3 id="example">Example</h3><p>Let's consider a backpack with a maximum capacity of 10 kilograms. There are 4 items with the following characteristics:</p><ol><li>Item $$I_1$$ having 6 kg and a value of 50 $$$$$</li><li>Item $$I_2$$ having 5 kg and a value of 90 $$$$$</li><li>Item $$I_3$$ having 2 kg and a value of 20 $$$$$</li><li>Item $$I_4$$ having 4 kg and a value of 30 $$$$$</li></ol><pre><code class="haskell">dataset=Dataset (10,[Item (6,50), Item (5,90),Item (2,20),Item (4,30)])
+</code></pre><pre><code class="haskell">randomValues = Solution (getRandomValueUnsafe 4 0 1,0)
+</code></pre><pre><code class="haskell">randomValues
+</code></pre><pre><code>Solution {rawSolution = ([0,1,0,0],0)}
+</code></pre><pre><code class="haskell">fitnessInitial = fitness dataset randomValues
+initialSolution = Solution (fst $ rawSolution randomValues,fitnessInitial)
+</code></pre><pre><code class="haskell">initialSolution
+</code></pre><pre><code>Solution {rawSolution = ([0,1,0,0],90)}
+</code></pre><pre><code class="haskell">kn dataset initialSolution 4
+</code></pre><pre><code>Solution {rawSolution = ([0,1,0,1],120)}
+</code></pre>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/blog/tags-output/functional%20programming/">functional programming</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        <a href="/blog/posts-output/2020-05-19-Fractals-Generator-in-Haskell/">&laquo; Fractals Generator in Haskell</a>
+        
+        
+        <a class="right" href="/blog/posts-output/2018-08-19-Input-Capture-Linux-Char-Driver-first-part/">Input Capture Linux Char Driver - I part &raquo;</a>
+        
+    </div>
+
+    
+
+
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    <li><a href="http://sebastianardelean.github.io">Personal Website</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/blog/posts-output/2020-06-03-Keep-Processes-Running-after-SSH-session-ended/">Keep processes running after SSH session ended</a></li>
+                        
+                        <li><a href="/blog/posts-output/2020-05-19-Fractals-Generator-in-Haskell/">Fractals Generator in Haskell</a></li>
+                        
+                        <li><a href="/blog/posts-output/2019-05-04-Neighborhood-Search-in-Haskell/">Neighborhood Search</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+                <div id="tags">
+                    <h3>Tags</h3>
+                    <ul>
+                        
+                        <li><a href="/blog/tags-output/scripts/">scripts</a></li>
+                        
+                        <li><a href="/blog/tags-output/haskell/">haskell</a></li>
+                        
+                        <li><a href="/blog/tags-output/functional%20programming/">functional programming</a></li>
+                        
+                        <li><a href="/blog/tags-output/linux/">linux</a></li>
+                        
+                        <li><a href="/blog/tags-output/drivers/">drivers</a></li>
+                        
+                        <li><a href="/blog/tags-output/electronics/">electronics</a></li>
+                        
+                        <li><a href="/blog/tags-output/quantum%20computing/">quantum computing</a></li>
+                        
+                        <li><a href="/blog/tags-output/java/">java</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2022 ardeleanasm
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/blog/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

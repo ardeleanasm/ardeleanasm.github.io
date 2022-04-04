@@ -2,12 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Bending bits...</title>
+    <title>Bending bits...: Polynomial Value in Haskell</title>
     
-    <meta name="description" content="Bytes and words...">
-    <meta name="keywords" content="">
-    
-    <link rel="canonical" href="http://ardeleanasm.github.io">
+<meta name="keywords" content="scripts,haskell,functional programming,linux,drivers,electronics,quantum computing,java">
+
+<meta name="description" content="While working on a project that analyze some signals in Haskell I found that I need a simple function polyVal that evaluates a polynomial at specific values.After a failed search for this function ( I thought that I can find a library or an implementation) I decided to write it on my own, anyway, it&#39;s a simple function.">
+
+<meta property="og:description" content="While working on a project that analyze some signals in Haskell I found that I need a simple function polyVal that evaluates a polynomial at specific values.After a failed search for this function ( I thought that I can find a library or an implementation) I decided to write it on my own, anyway, it&#39;s a simple function.">
+
+<meta property="og:url" content="http://ardeleanasm.github.io/blog/posts-output/2017-11-30-Polynomial-Value-in-Haskell/" />
+<meta property="og:title" content="Polynomial Value in Haskell" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="http://ardeleanasm.github.io/blog/posts-output/2017-11-30-Polynomial-Value-in-Haskell/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -32,7 +39,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li  class="active" ><a href="/blog/">Home</a></li>
+                <li ><a href="/blog/">Home</a></li>
                 <li
                 ><a href="/blog/archives/">Archives</a></li>
                 
@@ -56,73 +63,46 @@
             <div id="content">
                 
 <div id="post">
-    
     <div class="post-header">
-        <h2>Keep processes running after SSH session ended</h2>
-        <div id="post-meta">
-            
-            <div class="date">June 3, 2020</div>
-        </div>
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">November 30, 2017</div>
+        
     </div>
-    <p>Ssh into remote OS, type <code>screen</code> and start the process you want. Use <strong>CTRL-A</strong> then <strong>CTRL-D</strong> to detach the screen session and log out. Use <code>screen -r</code> to resume the detached screen session.</p>
-    <a href="/blog/posts-output/2020-06-03-Keep-Processes-Running-after-SSH-session-ended/">Continue reading &#8594;</a>
-    <hr>
+    <h2>Polynomial Value in Haskell</h2>
+</div>
+<div>
     
-    <div class="post-header">
-        <h2>Fractals Generator in Haskell</h2>
-        <div id="post-meta">
-            
-            <div class="date">May 19, 2020</div>
-        </div>
-    </div>
-    <h3 id="introduction">Introduction</h3><p>In this post I'll shortly describe some functions from a fractals generator that I wrote in Haskell. Some parts of the application are from the repository mentioned in this <a href="https://gregheartsfield.com/fractal-hs/">post</a>. Some modules, like <code>Plots</code>, are reused from that module since I don't have experience with working with images in Haskell.
-Currently there are not so much differences between the original repository and what I pushed into <a href="https://github.com/ardeleanasm/project-fractals">my repository</a> but I hope that, in future, after I implement my ideas, the code will look more different.</p>
-    <a href="/blog/posts-output/2020-05-19-Fractals-Generator-in-Haskell/">Continue reading &#8594;</a>
-    <hr>
-    
-    <div class="post-header">
-        <h2>Neighborhood Search</h2>
-        <div id="post-meta">
-            
-            <div class="date">May 4, 2019</div>
-        </div>
-    </div>
-    <h3 id="implementation">Implementation</h3><pre><code class="haskell">import System.Random
-import System.IO.Unsafe
-import Control.Monad ( replicateM)
+    <p>While working on a project that analyze some signals in Haskell I found that I need a simple function <code>polyVal</code> that evaluates a polynomial at specific values.</p><p>After a failed search for this function ( I thought that I can find a library or an implementation) I decided to write it on my own, anyway, it's a simple function.</p><p>So, let's suppose we have a polynomial <em>p</em> of degree <em>N</em>, this function returns the value:</p><p>$$p_{0}*x<sup>{N-1}+p_{1}*x</sup>{N-2}+...+p_{N-2}*x+p_{N-1}$$</p><p>The Haskell implementation of this function is:</p><pre><code class="haskell">evalPoly::Double-&gt;[Double]-&gt;Double
+evalPoly n xs=sum $ map (\e-&gt;e*n**fromIntegral ((length xs)-1-(fromJust $ elemIndex e xs))) xs
+</code></pre><p>Example of ussage:</p><pre><code>&gt;evalPoly 3 [-19,7,-4,6]
+-456.0
+&gt;evalPoly 5 [3,0,1]
+76.0
 </code></pre>
-    <a href="/blog/posts-output/2019-05-04-Neighborhood-Search-in-Haskell/">Continue reading &#8594;</a>
-    <hr>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
     
-    <div class="post-header">
-        <h2>Input Capture Linux Char Driver - I part</h2>
-        <div id="post-meta">
-            
-            <div class="date">August 19, 2018</div>
-        </div>
-    </div>
-    <h2 id="introduction">Introduction</h2><p>To the best of my knowledge, on Linux there is no way to configure a hardware timer in input capture mode although, since it can be used on embedded systems, this feature can be needed. For example, if one needs to measure the period of a signal on a development board running a Linux distro he has no other way than sampling the GPIOs in userspace with the cost of a resolution of milliseconds.</p>
-    <a href="/blog/posts-output/2018-08-19-Input-Capture-Linux-Char-Driver-first-part/">Continue reading &#8594;</a>
-    <hr>
+    <a href="/blog/tags-output/haskell/">haskell</a>
     
-    <div class="post-header">
-        <h2>Circuit Design and Simulation in Geda</h2>
-        <div id="post-meta">
-            
-            <div class="date">July 29, 2018</div>
-        </div>
-    </div>
-    <p>This post won't be a tutorial on electronic circuits but will present a free method to desing and simulate electronic circuits on Linux using <strong>Geda</strong> and <strong>ngspice</strong>.</p>
-    <a href="/blog/posts-output/2018-07-29-Circuit-Design-and-Simulation-in-Geda/">Continue reading &#8594;</a>
-    <hr>
+    <a href="/blog/tags-output/functional%20programming/">functional programming</a>
     
+</div>
+
 
     <div id="prev-next">
         
+        <a href="/blog/posts-output/2018-02-15-Monte-Carlo-Pi-Estimation/">&laquo; Monte Carlo Pi Estimation</a>
         
-        <a class="right" href="/blog/p/2/">Next &raquo;</a>
+        
+        <a class="right" href="/blog/posts-output/2017-08-18-Quantum-Computing-in-Haskell-fourth-part/">Quantum Computing in Haskell - IV part &raquo;</a>
         
     </div>
+
+    
+
+
 </div>
 
             </div>

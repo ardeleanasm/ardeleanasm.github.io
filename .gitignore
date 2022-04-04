@@ -1,5 +1,0 @@
-_site
-_site/*.*
-.git-metadata/*.*
-.jekyll-cache/Jekyll
-Gemfile.lock
