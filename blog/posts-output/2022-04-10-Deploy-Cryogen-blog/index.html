@@ -2,12 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Bending bits...: Posts Tagged &quot;drivers&quot;</title>
+    <title>Bending bits...: Deploy Cryogen blog on Github</title>
     
-    <meta name="description" content="Bytes and words...">
-    <meta name="keywords" content="">
-    
-    <link rel="canonical" href="http://ardeleanasm.github.io/blog/tags-output/drivers/">
+<meta name="keywords" content="latex,heuristics,clojure,gdb,shell script,linux,electronics,java,haskell,c++,quantum computing,drivers,functional programming,algorithms,design patterns,scripts">
+
+<meta property="og:url" content="http://ardeleanasm.github.io/blog/posts-output/2022-04-10-Deploy-Cryogen-blog/" />
+<meta property="og:title" content="Deploy Cryogen blog on Github" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="http://ardeleanasm.github.io/blog/posts-output/2022-04-10-Deploy-Cryogen-blog/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -55,17 +58,44 @@
         <div class="col-lg-9">
             <div id="content">
                 
-<div id="posts-by-tag">
-    <div id="page-header">
-        <h2>Posts Tagged &quot;drivers&quot;</h2>
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">April 10, 2022</div>
+        
     </div>
-    <ul>
+    <h2>Deploy Cryogen blog on Github</h2>
+</div>
+<div>
     
-        <li>
-            <a href="/blog/posts-output/2018-08-19-Input-Capture-Linux-Char-Driver-first-part/">Input Capture Linux Char Driver - I part</a>
-        </li>
+    <hr /><pre><code class="clojure">(defn convert-to-binary [value bits]
+  (letfn [(to-binary [value bits] 
+            (-&gt; value (Integer/toString 2)
+                (Integer/parseInt) (-&gt;&gt; (format (str "%0" bits "d")))))]
+    (let [binary-value (to-binary value bits) result-size (count binary-value)
+          default-value (apply str (repeat bits 1))]
+      (if (not= result-size bits) default-value  binary-value))))
+</code></pre>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
     
-    </ul>
+    <a href="/blog/tags-output/shell%20script/">shell script</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        
+        <a class="right" href="/blog/posts-output/2022-03-07-Decimal-to-binary-in-clojure/">Decimal to binary conversion in Clojure &raquo;</a>
+        
+    </div>
+
+    
+
+
 </div>
 
             </div>

@@ -58,6 +58,18 @@
 <div id="post">
     
     <div class="post-header">
+        <h2>Latexdiff – sometimes is just a pain</h2>
+        <div id="post-meta">
+            
+            <div class="date">November 11, 2021</div>
+        </div>
+    </div>
+    <p>Just posting a command for <strong>latexdiff</strong> that saved me from trying to solve a lot of errors:</p><pre><code>latexdiff --append-safecmd=subfile --config="PICTUREENV=(?:picture|DIFnomarkup|align|tabular)[\w\d*@]*" draft.tex revision.tex --flatten &gt; diff_new.tex
+</code></pre>
+    <a href="/blog/posts-output/2021-11-11-Latexdiff-sometimes-is-just-a-pain/">Continue reading &#8594;</a>
+    <hr>
+    
+    <div class="post-header">
         <h2>Thread-safe Singleton Design Pattern in C++</h2>
         <div id="post-meta">
             
@@ -236,17 +248,6 @@ int main() {
     <a href="/blog/posts-output/2021-09-23-Decorator-Design-Pattern-in-C++/">Continue reading &#8594;</a>
     <hr>
     
-    <div class="post-header">
-        <h2>Keep processes running after SSH session ended</h2>
-        <div id="post-meta">
-            
-            <div class="date">June 3, 2020</div>
-        </div>
-    </div>
-    <p>Ssh into remote OS, type <code>screen</code> and start the process you want. Use <strong>CTRL-A</strong> then <strong>CTRL-D</strong> to detach the screen session and log out. Use <code>screen -r</code> to resume the detached screen session.</p>
-    <a href="/blog/posts-output/2020-06-03-Keep-Processes-Running-after-SSH-session-ended/">Continue reading &#8594;</a>
-    <hr>
-    
 
     <div id="prev-next">
         
@@ -273,11 +274,11 @@ int main() {
                     <h3>Recent Posts</h3>
                     <ul>
                         
+                        <li><a href="/blog/posts-output/2022-04-10-Deploy-Cryogen-blog/">Deploy Cryogen blog on Github</a></li>
+                        
                         <li><a href="/blog/posts-output/2022-03-07-Decimal-to-binary-in-clojure/">Decimal to binary conversion in Clojure</a></li>
                         
                         <li><a href="/blog/posts-output/2021-11-29-Simple-GA-in-Clojure/">Simple GA in Clojure</a></li>
-                        
-                        <li><a href="/blog/posts-output/2021-11-26-Clojure-Some-recursive-functions/">Clojure -&gt; Some recursive functions</a></li>
                         
                     </ul>
                 </div>
@@ -294,6 +295,8 @@ int main() {
                         <li><a href="/blog/tags-output/clojure/">clojure</a></li>
                         
                         <li><a href="/blog/tags-output/gdb/">gdb</a></li>
+                        
+                        <li><a href="/blog/tags-output/shell%20script/">shell script</a></li>
                         
                         <li><a href="/blog/tags-output/linux/">linux</a></li>
                         
