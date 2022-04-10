@@ -1,12 +1,3 @@
-{
- :title "Deploy Cryogen blog on Github"
- :layout :post
- :tags  ["shell script"]
- :toc true}
-
----
-
-```
 SOURCE_BRANCH = "dev"
 MASTER_BRANCH = "master"
 
@@ -17,7 +8,7 @@ git checkout $SOURCE_BRANCH
 # build
 lein run
 
-# stash
+# stash 
 git stash
 
 # checkout master branch
@@ -33,4 +24,4 @@ cp -r public/blog/sitemap.xml .
 
 git commit -m "Publish"
 git push
-```
+
