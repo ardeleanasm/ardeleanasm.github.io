@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Bending bits...: Quantum Computing in Haskell - IV part</title>
+    
+<meta name="keywords" content="latex,heuristics,clojure,gdb,shell script,linux,electronics,java,haskell,c++,quantum computing,drivers,functional programming,algorithms,design patterns,scripts">
+
+<meta name="description" content="Articles">
+
+<meta property="og:description" content="Articles">
+
+<meta property="og:url" content="http://ardeleanasm.github.io/blog/posts-output/2017-08-18-Quantum-Computing-in-Haskell-fourth-part/" />
+<meta property="og:title" content="Quantum Computing in Haskell - IV part" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="http://ardeleanasm.github.io/blog/posts-output/2017-08-18-Quantum-Computing-in-Haskell-fourth-part/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/blog/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/blog/">Bending bits...</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/blog/">Home</a></li>
+                <li
+                ><a href="/blog/archives/">Archives</a></li>
+                
+                <li
+                >
+                <a href="/blog/pages-output/about/">About</a>
+                </li>
+                
+                <li><a href="/blog/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">August 18, 2017</div>
+        
+    </div>
+    <h2>Quantum Computing in Haskell - IV part</h2>
+</div>
+<div>
+    <ol class="toc"><li><a href="#articles">Articles</a></li><li><a href="#introduction">Introduction</a></li><li><a href="#background">Background</a></li><li><a href="#implementation">Implementation</a></li><li><a href="#conclusions">Conclusions</a></li></ol>
+    <h2 id="articles">Articles</h2><ul><li><a href="../Quantum-Computing-in-Haskell/">Quantum Computing in Haskell - I part</a></li><li><a href="../Quantum-Computing-in-Haskell-second-part/">Quantum Computing in Haskell - II part</a></li><li><a href="../Quantum-Computing-in-Haskell-third-part/">Quantum Computing in Haskell - III part</a></li><li><a href="../Quantum-Computing-in-Haskell-fourth-part/">Quantum Computing in Haskell - IV part</a></li><li><a href="https://github.com/ardeleanasm/qchas">Github Repository</a></li><li><a href="https://ardeleanasm.github.io/qchas/">Project's Haddock Documentation</a></li><li><a href="https://hackage.haskell.org/package/qchas">QChas Package</a></li></ul><h2 id="introduction">Introduction</h2><p>In the previous articles, first three parts, I presented some haskell code to implement basic operators for simulating Quantum Algorithms. The full source code can be downloaded from <a href="https://github.com/ardeleanasm/qchas">Github Repository</a>. The library was also published on <a href="https://hackage.haskell.org/package/qchas">Hackage</a> and also on <a href="https://www.stackage.org/nightly-2017-08-17/package/qchas-1.0.1.0">Stackage</a> and is available with 2 versions, 1.0.0 and 1.0.1.0. Starting from version 1.0.1.0 the <strong>Utils</strong> module was removed and also, a new module for performing measurements was added. These articles will be also used as documentation/ wiki for the library.</p><p>In this fourth part we will start to present some Quantum Algorithms and we will start with one of the simplest ones, Deutsch's algorithm. In the next articles from the serie we will talk about Deutsch-Jozsa's algorithm, Grover's and Shor.</p><h2 id="background">Background</h2><p>As I said in a previous article when I implemented this algorithm in Java, the problem that Deutsch's algorithm solves is not an important one in Computer Science but it's a good example to see the power of quantum computers, being solved by a quantum computer faster than by a traditional one, although not exponentially faster.</p><p>So, let's suppose that we have a function f with 1-bit input and 1-bit output. There are four possible functions, two of them are constant and two are balanced, as we can see in the table below.</p><table style="border:1px solid black;"><tr><th style="border:1px solid black;">Function</th><th style="border:1px solid black;">Type</th> 
+  </tr><tr><td style="border:1px solid black;">f<sub>1</sub>(0)=0<br /> f<sub>1</sub>(1)=0</td><td style="border:1px solid black;">constant</td> 
+  </tr><tr><td style="border:1px solid black;">f<sub>2</sub>(0)=1<br /> f<sub>2</sub>(1)=1  </td><td style="border:1px solid black;">constant</td> 
+  </tr><tr><td style="border:1px solid black;">f<sub>3</sub>(0)=0<br /> f<sub>3</sub>(1)=1</td><td style="border:1px solid black;">balanced</td> 
+  </tr><tr><td style="border:1px solid black;">f<sub>4</sub>(0)=1<br /> f<sub>4</sub>(1)=0</td><td style="border:1px solid black;">balanced</td> 
+  </tr></table><p>The goal is to determine whether the function is constant or not. Let's say that we implement such a function on a classic computer:</p><pre><code class="haskell">main::IO ()
+main=do
+  print $ testFunction f1
+  print $ testFunction f2
+  print $ testFunction f3
+  print $ testFunction f4
+
+f1::Int-&gt;Int
+f1 val=0
+
+f2::Int-&gt;Int
+f2 val=1
+
+f3::Int-&gt;Int
+f3 val=val
+
+f4::Int-&gt;Int
+f4 val
+  | val==0 = 1
+  | val==1 = 0
+
+testFunction::(Int-&gt;Int)-&gt;String
+testFunction f
+  |f 0 == f 1= "Constant"
+  |otherwise= "Balanced"
+</code></pre><p>and the output will be:</p><pre><code>"Constant"
+"Constant"
+"Balanced"
+"Balanced"
+</code></pre><p>It can be easily seen that to check if a function is constant or balanced on a classical computer we need two calls to that function, basically we evaluate the function twice. We will see next that by using Deutsch's algorithm the problem can be solved by evaluating the function only once.</p><p>![The quantum circuit of Deutsch’s algorithm<a href="https://github.com/ardeleanasm/qchas">1</a>]<a href="/blog/img/deutsch_quantum_circuits.png">4</a></p><p>The quantum circuit that we will have to implement can be seen in the picture above and basically we will have to:</p><ul><li>Apply <strong>X-Gate</strong> on the second qubit</li><li>Apply $$H^2$$ gate, the Kronecker product between two <strong>Hadamard</strong> Gates</li><li>Apply the gate ( or "oracle") $$U_f$$</li><li>Apply Hadamard Gate again on the first qubit</li><li>Measure the circuit</li></ul><h2 id="implementation">Implementation</h2><p>First of all, let's define the unitary transformations for all four functions:</p><pre><code class="haskell">--f(0)=0 and f(1)=0
+f1::Gate
+f1=Gate ((4&gt;&lt;4) [1,0,0,0
+                ,0,1,0,0
+                ,0,0,1,0
+                ,0,0,0,1]::Matrix C)
+--f(0)=1 and f(1)=1
+f2::Gate
+f2=Gate ((4&gt;&lt;4) [0,1,0,0
+                ,1,0,0,0
+                ,0,0,0,1
+                ,0,0,1,0]::Matrix C)
+--f(0)=0 and f(1)=1
+f3::Gate
+f3=Gate ((4&gt;&lt;4) [1,0,0,0
+                ,0,1,0,0
+                ,0,0,0,1
+                ,0,0,1,0]::Matrix C)
+--f(0)=1 and f(1)=0
+f4::Gate
+f4=Gate ((4&gt;&lt;4) [0,1,0,0
+                ,1,0,0,0
+                ,0,0,1,0
+                ,0,0,0,1]::Matrix C)                
+</code></pre><p>The next step is to define a function that will test all the four functions:</p><pre><code class="haskell">testDeutschsAlgorithm::IO()
+testDeutschsAlgorithm=mapM_ deutsch [f1,f2,f3,f4]
+</code></pre><p>Now, let's implement the algorithm:</p><pre><code class="haskell">
+deutsch::Gate-&gt;IO()
+deutsch oracle=do let (result:_)=measure circuit
+                  case result of
+                    '0' -&gt; putStrLn "Function is constant"
+                    '1' -&gt; putStrLn "Function is balanced"
+                    _   -&gt; return()
+    where
+        gateHadamardOnTwoQubits=(hGate &lt;+&gt; hGate)
+        circuit=entangle qZero (qZero |&gt; xGate) |&gt; gateHadamardOnTwoQubits |&gt; oracle |&gt; gateHadamardOnTwoQubits
+        measure q=let result=map(\c-&gt;round (realPart (c * conjugate c))) (toList . flatten $ qubitState q)        
+                  in case result of
+                    [0,1,0,0]-&gt;"01"
+                    [0,0,0,1]-&gt;"11"
+                    _        -&gt;"??"
+</code></pre><p>If we run the code we will have:</p><pre><code>ghci&gt;testDeutschsAlgorithm
+Function is constant
+Function is constant
+Function is balanced
+Function is balanced
+
+</code></pre><h2 id="conclusions">Conclusions</h2><p>As we can see in this first example, running an algorithm, even a simple one, on a quantum computer can be faster than running it on a classical computer.</p><p>About the implemented library, as I said, you can download it from the links that I specified before and these articles and examples of code will be used as a "How to use.." for the library.</p>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/blog/tags-output/haskell/">haskell</a>
+    
+    <a href="/blog/tags-output/quantum%20computing/">quantum computing</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        <a href="/blog/posts-output/2017-11-30-Polynomial-Value-in-Haskell/">&laquo; Polynomial Value in Haskell</a>
+        
+        
+        <a class="right" href="/blog/posts-output/2017-08-01-Quantum-Computing-in-Haskell-third-part/">Quantum Computing in Haskell - III part &raquo;</a>
+        
+    </div>
+
+    
+
+
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    <li><a href="http://sebastianardelean.github.io">Personal Website</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/blog/posts-output/2022-04-10-Deploy-Cryogen-blog/">Deploy Cryogen blog on Github</a></li>
+                        
+                        <li><a href="/blog/posts-output/2022-03-07-Decimal-to-binary-in-clojure/">Decimal to binary conversion in Clojure</a></li>
+                        
+                        <li><a href="/blog/posts-output/2021-11-29-Simple-GA-in-Clojure/">Simple GA in Clojure</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+                <div id="tags">
+                    <h3>Tags</h3>
+                    <ul>
+                        
+                        <li><a href="/blog/tags-output/latex/">latex</a></li>
+                        
+                        <li><a href="/blog/tags-output/heuristics/">heuristics</a></li>
+                        
+                        <li><a href="/blog/tags-output/clojure/">clojure</a></li>
+                        
+                        <li><a href="/blog/tags-output/gdb/">gdb</a></li>
+                        
+                        <li><a href="/blog/tags-output/shell%20script/">shell script</a></li>
+                        
+                        <li><a href="/blog/tags-output/linux/">linux</a></li>
+                        
+                        <li><a href="/blog/tags-output/electronics/">electronics</a></li>
+                        
+                        <li><a href="/blog/tags-output/java/">java</a></li>
+                        
+                        <li><a href="/blog/tags-output/haskell/">haskell</a></li>
+                        
+                        <li><a href="/blog/tags-output/c%2B%2B/">c++</a></li>
+                        
+                        <li><a href="/blog/tags-output/quantum%20computing/">quantum computing</a></li>
+                        
+                        <li><a href="/blog/tags-output/drivers/">drivers</a></li>
+                        
+                        <li><a href="/blog/tags-output/functional%20programming/">functional programming</a></li>
+                        
+                        <li><a href="/blog/tags-output/algorithms/">algorithms</a></li>
+                        
+                        <li><a href="/blog/tags-output/design%20patterns/">design patterns</a></li>
+                        
+                        <li><a href="/blog/tags-output/scripts/">scripts</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2022 ardeleanasm
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/blog/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>
