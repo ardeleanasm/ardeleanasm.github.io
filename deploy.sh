@@ -1,8 +1,8 @@
-SOURCE_BRANCH = "dev"
-MASTER_BRANCH = "master"
+SOURCE_BRANCH = dev
+MASTER_BRANCH = master
 
 # checkout correct branch
-git checkout $SOURCE_BRANCH
+git checkout dev 
 
 
 # build
@@ -12,7 +12,7 @@ lein run
 git stash
 
 # checkout master branch
-git checkout $MASTER_BRANCH
+git checkout master
 git fetch --all
 git stash pop
 cp -r public/blog/* blog/
@@ -22,6 +22,7 @@ cp -r public/blog/feed.xml .
 cp -r public/blog/index.html .
 cp -r public/blog/sitemap.xml .
 rm -r target/
+git add -A
 git commit -m "Publish"
 git push
 
