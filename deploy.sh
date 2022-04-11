@@ -21,7 +21,7 @@ cp -r public/blog/cryogen.xml .
 cp -r public/blog/feed.xml .
 cp -r public/blog/index.html .
 cp -r public/blog/sitemap.xml .
-rm -r target
+rm -r target/
 git commit -m "Publish"
 git push
 
