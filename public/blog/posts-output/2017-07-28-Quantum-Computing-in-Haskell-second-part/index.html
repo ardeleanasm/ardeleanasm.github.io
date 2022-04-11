@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Bending bits...: Quantum Computing in Haskell - II part</title>
+    
+<meta name="keywords" content="latex,heuristics,clojure,gdb,shell script,linux,electronics,java,haskell,c++,quantum computing,drivers,functional programming,algorithms,design patterns,scripts">
+
+<meta name="description" content="Articles">
+
+<meta property="og:description" content="Articles">
+
+<meta property="og:url" content="http://ardeleanasm.github.io/blog/posts-output/2017-07-28-Quantum-Computing-in-Haskell-second-part/" />
+<meta property="og:title" content="Quantum Computing in Haskell - II part" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="http://ardeleanasm.github.io/blog/posts-output/2017-07-28-Quantum-Computing-in-Haskell-second-part/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/blog/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/blog/">Bending bits...</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/blog/">Home</a></li>
+                <li
+                ><a href="/blog/archives/">Archives</a></li>
+                
+                <li
+                >
+                <a href="/blog/pages-output/about/">About</a>
+                </li>
+                
+                <li><a href="/blog/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">July 28, 2017</div>
+        
+    </div>
+    <h2>Quantum Computing in Haskell - II part</h2>
+</div>
+<div>
+    <ol class="toc"><li><a href="#articles">Articles</a></li><li><a href="#introduction">Introduction</a></li><li><a href="#background">Background</a></li><li><a href="#implementation">Implementation</a></li><li><a href="#conclusions">Conclusions</a></li></ol>
+    <h2 id="articles">Articles</h2><ul><li><a href="../Quantum-Computing-in-Haskell/">Quantum Computing in Haskell - I part</a></li><li><a href="../Quantum-Computing-in-Haskell-second-part/">Quantum Computing in Haskell - II part</a></li><li><a href="../Quantum-Computing-in-Haskell-third-part/">Quantum Computing in Haskell - III part</a></li><li><a href="../Quantum-Computing-in-Haskell-fourth-part/">Quantum Computing in Haskell - IV part</a></li><li><a href="https://github.com/ardeleanasm/qchas">Github Repository</a></li><li><a href="https://ardeleanasm.github.io/qchas/">Project's Haddock Documentation</a></li><li><a href="https://hackage.haskell.org/package/qchas">QChas Package</a></li></ul><h2 id="introduction">Introduction</h2><p>In the first article from this series I presented some basic math and I suggest reading that article first if someone is not familiar with the topic of Quantum Computing. In this article, the second from the series I will present the implementation in Haskell. The plan is that after a few articles in which I will present the data types, modules, functions, we will implement some Quantum algorithms like Deutsch's Algorithm, Grover's Algorithm, Deutsch-Josza's Algorithm and maybe Shor's algorithm.</p><h2 id="background">Background</h2><p>We saw in the previous article that the state of a qubit can be described by</p><p>$$\newcommand{\ket}<a href="https://hackage.haskell.org/package/hmatrix">1</a>{\left|{#1}\right\rangle}$$
+$$\newcommand{\bra}<a href="https://hackage.haskell.org/package/hmatrix">1</a>{\left\langle{#1}\right|}$$
+$$\ket{v}=\alpha\ket{0}+\beta\ket{1}$$</p><p>where</p><p>$${|\alpha|}<sup>2+{|\beta|}</sup>2=1$$</p><p>and</p><p>$$\ket{0}=\begin{bmatrix} 1 \ 0\end{bmatrix}$$
+$$\ket{1}=\begin{bmatrix} 0 \ 1\end{bmatrix}$$</p><p>It's clearly, from the above equations, that we have to implement a Qubit type and the qubits $$\ket{0}$$ and $$\ket{1}$$.</p><h2 id="implementation">Implementation</h2><p>For the implementation in Haskell I chose to use <a href="https://hackage.haskell.org/package/hmatrix">hmatrix</a> library because we will have to work with matrices and vectors and by using this library we won't have to implement new types and functions that performs the needed operations.</p><p>Anyway, a simple solution that don't use hmatrix is to define our own <strong>matrix</strong> and <strong>vector</strong> types like</p><pre><code class="haskell">type Vector a=[a]
+type Matrix a=[Vector a]
+</code></pre><p>and also some functions that will create our complex vectors and matrices</p><pre><code class="haskell">complexVector::Real a=&gt;Vector a-&gt;Vector(Complex Double)
+complexVector=map(\i-&gt;realToFrac i:+0.0)
+
+complexMatrix::Real a=&gt;Matrix a-&gt;Matrix(Complex Double)
+complexMatrix=map complexVector
+</code></pre><p>Since I don't think that is a feasible approach I won't discuss the above code. Is nice to know that we can implement it without using hmatrix, is another approach, even the first version of code from repository was implemented this way but it's a lot of work. I won't reinvent the wheel, at least for now! :)</p><p>Ok, first of all let's define a new data named <strong>Qubit</strong>.</p><pre><code class="haskell">data Qubit=
+    Qubit {
+            qubitState::(Matrix C) 
+          } deriving (Eq,Show)
+</code></pre><p>Our data type has a constructor <strong>Qubit</strong> with one parameter, <strong>qubitState</strong>, of type <strong>complex matrix</strong>, <code>Matrix C</code>. If we load the above code in <strong>GHCI</strong> we can check the new type that we defined:</p><pre><code>ghci&gt; :t Qubit
+Qubit :: Matrix C -&gt; Qubit
+
+</code></pre><p>We can see that Qubit is the data type and the constructors accepts an argument of type <em>Matrix C</em> and returns a <em>Qubit</em>. Ok, now let's try to create a Qubit.</p><pre><code>ghci&gt;let q=Qubit ((2&gt;&lt;1)[1,0]::Matrix C)
+ghci&gt;q
+Qubit {qubitState = (2&gt;&lt;1)
+ [ 1.0 :+ 0.0
+ , 0.0 :+ 0.0 ]}
+ghci&gt;qubitState q
+(2&gt;&lt;1)
+ [ 1.0 :+ 0.0
+ , 0.0 :+ 0.0 ]
+</code></pre><p>Basically, in the above example we created the $$\ket{0}$$. Since in our future examples we will use it a lot alongside $$\ket{1}$$ we should define some functions that will return them.</p><pre><code class="haskell">qZero::Qubit
+qZero=Qubit ((2&gt;&lt;1)[1,0]::Matrix C)
+
+qOne::Qubit
+qOne=Qubit ((2&gt;&lt;1) [0,1]::Matrix C)
+</code></pre><p>One question that might arise after seeing the code is "Ok, why is Matrix type used instead of Vector?" The answer is quite simple, because we will have to implement, in the next articles, some operations with qubits and gates and is more simple to have the same type for both. Now, if we fire up GHCI and type:</p><pre><code>ghci&gt;&gt;qZero
+Qubit {qubitState = (2&gt;&lt;1)
+ [ 1.0 :+ 0.0
+ , 0.0 :+ 0.0 ]}
+ghci&gt;&gt;qOne
+Qubit {qubitState = (2&gt;&lt;1)
+ [ 0.0 :+ 0.0
+ , 1.0 :+ 0.0 ]}
+</code></pre><p>we see that we have two functions that returns our needed qubits.</p><p>After the experience that I have with <a href="https://github.com/ardeleanasm/quantum_computing">Java Library for Quantum Computing</a> I think that is useful to also define two more qubits, $$\ket{+}$$ and $$\ket{-}$$. Those qubits can be simply obtained by simply applying the Hadamard Gate on $$\ket{0}$$ and on $$\ket{1}$$ respectively.</p><pre><code class="haskell">qPlus::Qubit
+qPlus=Qubit ((2&gt;&lt;1) [1/sqrt 2, 1/sqrt 2]::Matrix C)
+
+qMinus::Qubit 
+qMinus=Qubit ((2&gt;&lt;1) [1/sqrt 2, -1/sqrt 2]::Matrix C)
+</code></pre><h2 id="conclusions">Conclusions</h2><p>For now, we have defined a Qubit type and we can create any qubit. We also define some functions that will create the most used qubits. In future articles we will define a Gate type and we will also implement some operations.</p><p>Based on my experience that I have on this topic after doing some research and implementing from scratch a library in Java I was surprised when I saw how fast I can implement this code in Haskell. It was quite simple and it took less time.</p>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/blog/tags-output/haskell/">haskell</a>
+    
+    <a href="/blog/tags-output/quantum%20computing/">quantum computing</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        <a href="/blog/posts-output/2017-08-01-Quantum-Computing-in-Haskell-third-part/">&laquo; Quantum Computing in Haskell - III part</a>
+        
+        
+        <a class="right" href="/blog/posts-output/2017-07-26-Quantum-Computing-in-Haskell/">Quantum Computing in Haskell - I part &raquo;</a>
+        
+    </div>
+
+    
+
+
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    <li><a href="http://sebastianardelean.github.io">Personal Website</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/blog/posts-output/2022-04-10-Deploy-Cryogen-blog/">Deploy Cryogen blog on Github</a></li>
+                        
+                        <li><a href="/blog/posts-output/2022-03-07-Decimal-to-binary-in-clojure/">Decimal to binary conversion in Clojure</a></li>
+                        
+                        <li><a href="/blog/posts-output/2021-11-29-Simple-GA-in-Clojure/">Simple GA in Clojure</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+                <div id="tags">
+                    <h3>Tags</h3>
+                    <ul>
+                        
+                        <li><a href="/blog/tags-output/latex/">latex</a></li>
+                        
+                        <li><a href="/blog/tags-output/heuristics/">heuristics</a></li>
+                        
+                        <li><a href="/blog/tags-output/clojure/">clojure</a></li>
+                        
+                        <li><a href="/blog/tags-output/gdb/">gdb</a></li>
+                        
+                        <li><a href="/blog/tags-output/shell%20script/">shell script</a></li>
+                        
+                        <li><a href="/blog/tags-output/linux/">linux</a></li>
+                        
+                        <li><a href="/blog/tags-output/electronics/">electronics</a></li>
+                        
+                        <li><a href="/blog/tags-output/java/">java</a></li>
+                        
+                        <li><a href="/blog/tags-output/haskell/">haskell</a></li>
+                        
+                        <li><a href="/blog/tags-output/c%2B%2B/">c++</a></li>
+                        
+                        <li><a href="/blog/tags-output/quantum%20computing/">quantum computing</a></li>
+                        
+                        <li><a href="/blog/tags-output/drivers/">drivers</a></li>
+                        
+                        <li><a href="/blog/tags-output/functional%20programming/">functional programming</a></li>
+                        
+                        <li><a href="/blog/tags-output/algorithms/">algorithms</a></li>
+                        
+                        <li><a href="/blog/tags-output/design%20patterns/">design patterns</a></li>
+                        
+                        <li><a href="/blog/tags-output/scripts/">scripts</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2022 ardeleanasm
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/blog/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>
