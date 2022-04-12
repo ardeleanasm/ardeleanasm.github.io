@@ -32,7 +32,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li  class="active" ><a href="/">Home</a></li>
+                <li ><a href="/">Home</a></li>
                 <li
                 ><a href="/archives/">Archives</a></li>
                 
@@ -58,146 +58,59 @@
 <div id="post">
     
     <div class="post-header">
-        <h2>Deploy Cryogen blog on Github</h2>
+        <h2>Quantum Computing in Haskell - III part</h2>
         <div id="post-meta">
             
-            <div class="date">April 10, 2022</div>
+            <div class="date">August 1, 2017</div>
         </div>
     </div>
-    <hr /><pre><code>SOURCE_BRANCH = "dev"
-MASTER_BRANCH = "master"
-
-# checkout correct branch
-git checkout $SOURCE_BRANCH
-
-
-# build
-lein run
-
-# stash
-git stash
-
-# checkout master branch
-git checkout $MASTER_BRANCH
-git fetch --all
-git stash pop
-cp -r public/blog/* blog/
-cp -r public/blog/404.html .
-cp -r public/blog/cryogen.xml .
-cp -r public/blog/feed.xml .
-cp -r public/blog/index.html .
-cp -r public/blog/sitemap.xml .
-
-git commit -m "Publish"
-git push
-</code></pre>
-    <a href="/posts-output/2022-04-10-Deploy-Cryogen-blog/">Continue reading &#8594;</a>
+    <h2 id="articles">Articles</h2><ul><li><a href="../Quantum-Computing-in-Haskell/">Quantum Computing in Haskell - I part</a></li><li><a href="../Quantum-Computing-in-Haskell-second-part/">Quantum Computing in Haskell - II part</a></li><li><a href="../Quantum-Computing-in-Haskell-third-part/">Quantum Computing in Haskell - III part</a></li><li><a href="../Quantum-Computing-in-Haskell-fourth-part/">Quantum Computing in Haskell - IV part</a></li><li><a href="https://github.com/ardeleanasm/qchas">Github Repository</a></li><li><a href="https://ardeleanasm.github.io/qchas/">Project's Haddock Documentation</a></li><li><a href="https://hackage.haskell.org/package/qchas">QChas Package</a></li></ul>
+    <a href="/posts-output/2017-08-01-Quantum-Computing-in-Haskell-third-part/">Continue reading &#8594;</a>
     <hr>
     
     <div class="post-header">
-        <h2>Decimal to binary conversion in Clojure</h2>
+        <h2>Quantum Computing in Haskell - II part</h2>
         <div id="post-meta">
             
-            <div class="date">March 7, 2022</div>
+            <div class="date">July 28, 2017</div>
         </div>
     </div>
-    <hr /><pre><code class="clojure">(defn convert-to-binary [value bits]
-  (letfn [(to-binary [value bits] 
-            (-&gt; value (Integer/toString 2)
-                (Integer/parseInt) (-&gt;&gt; (format (str "%0" bits "d")))))]
-    (let [binary-value (to-binary value bits) result-size (count binary-value)
-          default-value (apply str (repeat bits 1))]
-      (if (not= result-size bits) default-value  binary-value))))
-</code></pre>
-    <a href="/posts-output/2022-03-07-Decimal-to-binary-in-clojure/">Continue reading &#8594;</a>
+    <h2 id="articles">Articles</h2><ul><li><a href="../Quantum-Computing-in-Haskell/">Quantum Computing in Haskell - I part</a></li><li><a href="../Quantum-Computing-in-Haskell-second-part/">Quantum Computing in Haskell - II part</a></li><li><a href="../Quantum-Computing-in-Haskell-third-part/">Quantum Computing in Haskell - III part</a></li><li><a href="../Quantum-Computing-in-Haskell-fourth-part/">Quantum Computing in Haskell - IV part</a></li><li><a href="https://github.com/ardeleanasm/qchas">Github Repository</a></li><li><a href="https://ardeleanasm.github.io/qchas/">Project's Haddock Documentation</a></li><li><a href="https://hackage.haskell.org/package/qchas">QChas Package</a></li></ul>
+    <a href="/posts-output/2017-07-28-Quantum-Computing-in-Haskell-second-part/">Continue reading &#8594;</a>
     <hr>
     
     <div class="post-header">
-        <h2>Simple GA in Clojure</h2>
+        <h2>Quantum Computing in Haskell - I part</h2>
         <div id="post-meta">
             
-            <div class="date">November 29, 2021</div>
+            <div class="date">July 26, 2017</div>
         </div>
     </div>
-    <p>In this blog post I’ll present a simple Genetic Algorithm implementation made in Clojure. The application is based on the one presented by Lee Spector in <a href="https://gist.github.com/lspector/1291789?fbclid=IwAR3NHmrqQVDgmPrtKg6L_nPCc70KCK2xsZ2h98k5-Cw7bN-2R96a0t6S6kc">HERE</a>.
-The task of the Genetic Algorithm is to evolve, starting from random generated individuals, to a sequence of bits that sums to a particular number.</p><pre><code class="clojure">(defn new-individual
-    "Function used for creating a new individual"
-    [genome-length]
-    {:genome (vec (repeatedly genome-length #(rand-int 2))) :fitness 0}
-    )
-
-</code></pre>
-    <a href="/posts-output/2021-11-29-Simple-GA-in-Clojure/">Continue reading &#8594;</a>
+    <h2 id="articles">Articles</h2><ul><li><a href="../Quantum-Computing-in-Haskell/">Quantum Computing in Haskell - I part</a></li><li><a href="../Quantum-Computing-in-Haskell-second-part/">Quantum Computing in Haskell - II part</a></li><li><a href="../Quantum-Computing-in-Haskell-third-part/">Quantum Computing in Haskell - III part</a></li><li><a href="../Quantum-Computing-in-Haskell-fourth-part/">Quantum Computing in Haskell - IV part</a></li><li><a href="https://github.com/ardeleanasm/qchas">Github Repository</a></li><li><a href="https://ardeleanasm.github.io/qchas/">Project's Haddock Documentation</a></li><li><a href="https://hackage.haskell.org/package/qchas">QChas Package</a></li></ul>
+    <a href="/posts-output/2017-07-26-Quantum-Computing-in-Haskell/">Continue reading &#8594;</a>
     <hr>
     
     <div class="post-header">
-        <h2>Clojure -&gt; Some recursive functions</h2>
+        <h2>Deutsch&#39;s Algorithm</h2>
         <div id="post-meta">
             
-            <div class="date">November 26, 2021</div>
+            <div class="date">August 17, 2016</div>
         </div>
     </div>
-    <pre><code class="clojure">(defn fibonacci
-  ([n]
-    (fibonacci [0 1] n))
-  ([x,n]
-    (if (&lt; (count x) n)
-      (fibonacci (conj x (+ (last x) (nth x (- (count x) 2)))) n)
-    x))
-)
-
-(defn factorial [n]
-  (cond 
-    (= n 0)  1
-    (&gt; n 0) (* n (factorial (- n 1)))
-    )
-)
-
-(defn collatz [n,s]
-  (if (not= n 1)
-    (cond 
-      (even? n) (collatz (/ n 2) (+ 1 s) )
-      (odd? n) (collatz (+ (* 3 n) 1) (+ 1 s))
-    )
-    s )
-)
-
-(defn collatz-sequence [n s]
-  (do (println n) 
-    (if (not= n 1)
-      (cond 
-        (even? n) (collatz-sequence (/ n 2) (+ 1 s) )
-        (odd? n) (collatz-sequence (+ (* 3 n) 1) (+ 1 s))
-      )
-    )
-
-  )
-)
-
-(println (collatz 141151 0))
-(collatz-sequence 1441151 0)
-</code></pre>
-    <a href="/posts-output/2021-11-26-Clojure-Some-recursive-functions/">Continue reading &#8594;</a>
-    <hr>
-    
-    <div class="post-header">
-        <h2>Some recursive algorithms using C++ template metaprogramming</h2>
-        <div id="post-meta">
-            
-            <div class="date">November 25, 2021</div>
-        </div>
-    </div>
-    <pre><code class="C++">#include &lt;iostream&gt;
-#include &lt;cstdint&gt;
-</code></pre><h2 id="fibonacci">Fibonacci</h2>
-    <a href="/posts-output/2021-11-25-Some-recursive-algorithms-using-C++-template-metaprogramming/">Continue reading &#8594;</a>
+    <p>In this post I'll present a quantum implementation of the Deutsch's algorithm using a library <strong>QuantumComputingLib</strong> that I wrote this week.</p><p>First, I should write a little about the library. It's version <em>1.0-SNAPSHOT</em> only and it doesn't have an official release version.
+For now, it only has a basic Javadoc and only provides methods for well-known operations on qubits and matrices.
+I hope that I will able to offer support for it and that this project will be active for a long time, I hope that at least 2 years.
+If someone want to use and test the library, it can be found at the next <a href="https://github.com/ardeleanasm/quantum_computing/tree/master/quantum">link</a>.
+Also, for using this algorithm, you'll need the <strong>ComplexNumber</strong> library.
+This library can be found at the next <a href="https://github.com/ardeleanasm/projects/tree/master/complexnumbers">link</a>.</p>
+    <a href="/posts-output/2016-08-17-deutschs-algorithm/">Continue reading &#8594;</a>
     <hr>
     
 
     <div id="prev-next">
         
+        <a class="left" href="/p/4/">&laquo; Prev</a>
         
-        <a class="right" href="/p/2/">Next &raquo;</a>
         
     </div>
 </div>

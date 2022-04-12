@@ -2,7 +2,7 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/index.html
+http://ardeleanasm.github.io/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -10,7 +10,7 @@ http://ardeleanasm.github.io/blog/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2021-09-28-C++-map-of-member-functions/index.html
+http://ardeleanasm.github.io/posts-output/2021-09-28-C++-map-of-member-functions/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -18,7 +18,7 @@ http://ardeleanasm.github.io/blog/posts-output/2021-09-28-C++-map-of-member-func
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2016-08-17-deutschs-algorithm/index.html
+http://ardeleanasm.github.io/posts-output/2016-08-17-deutschs-algorithm/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -26,7 +26,7 @@ http://ardeleanasm.github.io/blog/posts-output/2016-08-17-deutschs-algorithm/ind
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2018-06-22-checksum-generator-haskell/index.html
+http://ardeleanasm.github.io/posts-output/2018-06-22-checksum-generator-haskell/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -34,7 +34,7 @@ http://ardeleanasm.github.io/blog/posts-output/2018-06-22-checksum-generator-has
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2021-11-26-Clojure-Some-recursive-functions/index.html
+http://ardeleanasm.github.io/posts-output/2021-11-26-Clojure-Some-recursive-functions/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -42,7 +42,7 @@ http://ardeleanasm.github.io/blog/posts-output/2021-11-26-Clojure-Some-recursive
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2022-04-10-Deploy-Cryogen-blog/index.html
+http://ardeleanasm.github.io/posts-output/2022-04-10-Deploy-Cryogen-blog/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -50,7 +50,7 @@ http://ardeleanasm.github.io/blog/posts-output/2022-04-10-Deploy-Cryogen-blog/in
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2021-11-29-Simple-GA-in-Clojure/index.html
+http://ardeleanasm.github.io/posts-output/2021-11-29-Simple-GA-in-Clojure/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -58,7 +58,7 @@ http://ardeleanasm.github.io/blog/posts-output/2021-11-29-Simple-GA-in-Clojure/i
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2017-08-01-Quantum-Computing-in-Haskell-third-part/index.html
+http://ardeleanasm.github.io/posts-output/2017-08-01-Quantum-Computing-in-Haskell-third-part/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -66,7 +66,7 @@ http://ardeleanasm.github.io/blog/posts-output/2017-08-01-Quantum-Computing-in-H
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2017-07-26-Quantum-Computing-in-Haskell/index.html
+http://ardeleanasm.github.io/posts-output/2017-07-26-Quantum-Computing-in-Haskell/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -74,7 +74,7 @@ http://ardeleanasm.github.io/blog/posts-output/2017-07-26-Quantum-Computing-in-H
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2017-07-28-Quantum-Computing-in-Haskell-second-part/index.html
+http://ardeleanasm.github.io/posts-output/2017-07-28-Quantum-Computing-in-Haskell-second-part/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -82,7 +82,7 @@ http://ardeleanasm.github.io/blog/posts-output/2017-07-28-Quantum-Computing-in-H
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2021-09-23-Decorator-Design-Pattern-in-C++/index.html
+http://ardeleanasm.github.io/posts-output/2021-09-23-Decorator-Design-Pattern-in-C++/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -90,7 +90,7 @@ http://ardeleanasm.github.io/blog/posts-output/2021-09-23-Decorator-Design-Patte
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2021-11-25-Some-recursive-algorithms-using-C++-template-metaprogramming/index.html
+http://ardeleanasm.github.io/posts-output/2021-11-25-Some-recursive-algorithms-using-C++-template-metaprogramming/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -98,7 +98,7 @@ http://ardeleanasm.github.io/blog/posts-output/2021-11-25-Some-recursive-algorit
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2021-11-11-Latexdiff-sometimes-is-just-a-pain/index.html
+http://ardeleanasm.github.io/posts-output/2021-11-11-Latexdiff-sometimes-is-just-a-pain/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -106,7 +106,7 @@ http://ardeleanasm.github.io/blog/posts-output/2021-11-11-Latexdiff-sometimes-is
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2017-11-30-Polynomial-Value-in-Haskell/index.html
+http://ardeleanasm.github.io/posts-output/2017-11-30-Polynomial-Value-in-Haskell/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -114,7 +114,7 @@ http://ardeleanasm.github.io/blog/posts-output/2017-11-30-Polynomial-Value-in-Ha
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2021-09-23-Debugging-with-GDB/index.html
+http://ardeleanasm.github.io/posts-output/2021-09-23-Debugging-with-GDB/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -122,7 +122,7 @@ http://ardeleanasm.github.io/blog/posts-output/2021-09-23-Debugging-with-GDB/ind
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2018-02-15-Monte-Carlo-Pi-Estimation/index.html
+http://ardeleanasm.github.io/posts-output/2018-02-15-Monte-Carlo-Pi-Estimation/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -130,7 +130,7 @@ http://ardeleanasm.github.io/blog/posts-output/2018-02-15-Monte-Carlo-Pi-Estimat
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2020-05-19-Fractals-Generator-in-Haskell/index.html
+http://ardeleanasm.github.io/posts-output/2020-05-19-Fractals-Generator-in-Haskell/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -138,7 +138,7 @@ http://ardeleanasm.github.io/blog/posts-output/2020-05-19-Fractals-Generator-in-
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2018-07-29-Circuit-Design-and-Simulation-in-Geda/index.html
+http://ardeleanasm.github.io/posts-output/2018-07-29-Circuit-Design-and-Simulation-in-Geda/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -146,7 +146,7 @@ http://ardeleanasm.github.io/blog/posts-output/2018-07-29-Circuit-Design-and-Sim
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2019-05-04-Neighborhood-Search-in-Haskell/index.html
+http://ardeleanasm.github.io/posts-output/2019-05-04-Neighborhood-Search-in-Haskell/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -154,7 +154,7 @@ http://ardeleanasm.github.io/blog/posts-output/2019-05-04-Neighborhood-Search-in
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2017-08-18-Quantum-Computing-in-Haskell-fourth-part/index.html
+http://ardeleanasm.github.io/posts-output/2017-08-18-Quantum-Computing-in-Haskell-fourth-part/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -162,7 +162,7 @@ http://ardeleanasm.github.io/blog/posts-output/2017-08-18-Quantum-Computing-in-H
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2022-03-07-Decimal-to-binary-in-clojure/index.html
+http://ardeleanasm.github.io/posts-output/2022-03-07-Decimal-to-binary-in-clojure/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -170,7 +170,7 @@ http://ardeleanasm.github.io/blog/posts-output/2022-03-07-Decimal-to-binary-in-c
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2020-06-03-Keep-Processes-Running-after-SSH-session-ended/index.html
+http://ardeleanasm.github.io/posts-output/2020-06-03-Keep-Processes-Running-after-SSH-session-ended/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -178,7 +178,7 @@ http://ardeleanasm.github.io/blog/posts-output/2020-06-03-Keep-Processes-Running
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2021-10-06-Thread-safe-Singleton-Design-Pattern-in-C++/index.html
+http://ardeleanasm.github.io/posts-output/2021-10-06-Thread-safe-Singleton-Design-Pattern-in-C++/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -186,7 +186,7 @@ http://ardeleanasm.github.io/blog/posts-output/2021-10-06-Thread-safe-Singleton-
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2018-08-19-Input-Capture-Linux-Char-Driver-first-part/index.html
+http://ardeleanasm.github.io/posts-output/2018-08-19-Input-Capture-Linux-Char-Driver-first-part/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -194,7 +194,7 @@ http://ardeleanasm.github.io/blog/posts-output/2018-08-19-Input-Capture-Linux-Ch
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/posts-output/2018-06-15-Monte-Carlo-Integration/index.html
+http://ardeleanasm.github.io/posts-output/2018-06-15-Monte-Carlo-Integration/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -202,7 +202,7 @@ http://ardeleanasm.github.io/blog/posts-output/2018-06-15-Monte-Carlo-Integratio
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/404.html
+http://ardeleanasm.github.io/404.html
 </loc>
 <lastmod>
 2022-04-12
@@ -210,7 +210,7 @@ http://ardeleanasm.github.io/blog/404.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/pages-output/about/index.html
+http://ardeleanasm.github.io/pages-output/about/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -218,7 +218,7 @@ http://ardeleanasm.github.io/blog/pages-output/about/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/p/4/index.html
+http://ardeleanasm.github.io/p/4/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -226,7 +226,7 @@ http://ardeleanasm.github.io/blog/p/4/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/p/3/index.html
+http://ardeleanasm.github.io/p/3/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -234,7 +234,7 @@ http://ardeleanasm.github.io/blog/p/3/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/p/5/index.html
+http://ardeleanasm.github.io/p/5/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -242,7 +242,7 @@ http://ardeleanasm.github.io/blog/p/5/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/p/2/index.html
+http://ardeleanasm.github.io/p/2/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -250,7 +250,7 @@ http://ardeleanasm.github.io/blog/p/2/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags/index.html
+http://ardeleanasm.github.io/tags/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -258,7 +258,7 @@ http://ardeleanasm.github.io/blog/tags/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/authors-output/ardeleanasm/index.html
+http://ardeleanasm.github.io/authors-output/ardeleanasm/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -266,7 +266,7 @@ http://ardeleanasm.github.io/blog/authors-output/ardeleanasm/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags-output/shell script/index.html
+http://ardeleanasm.github.io/tags-output/shell script/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -274,7 +274,7 @@ http://ardeleanasm.github.io/blog/tags-output/shell script/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags-output/linux/index.html
+http://ardeleanasm.github.io/tags-output/linux/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -282,7 +282,7 @@ http://ardeleanasm.github.io/blog/tags-output/linux/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags-output/heuristics/index.html
+http://ardeleanasm.github.io/tags-output/heuristics/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -290,7 +290,7 @@ http://ardeleanasm.github.io/blog/tags-output/heuristics/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags-output/haskell/index.html
+http://ardeleanasm.github.io/tags-output/haskell/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -298,7 +298,7 @@ http://ardeleanasm.github.io/blog/tags-output/haskell/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags-output/drivers/index.html
+http://ardeleanasm.github.io/tags-output/drivers/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -306,7 +306,7 @@ http://ardeleanasm.github.io/blog/tags-output/drivers/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags-output/c++/index.html
+http://ardeleanasm.github.io/tags-output/c++/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -314,7 +314,7 @@ http://ardeleanasm.github.io/blog/tags-output/c++/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags-output/gdb/index.html
+http://ardeleanasm.github.io/tags-output/gdb/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -322,7 +322,7 @@ http://ardeleanasm.github.io/blog/tags-output/gdb/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags-output/java/index.html
+http://ardeleanasm.github.io/tags-output/java/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -330,7 +330,7 @@ http://ardeleanasm.github.io/blog/tags-output/java/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags-output/latex/index.html
+http://ardeleanasm.github.io/tags-output/latex/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -338,7 +338,7 @@ http://ardeleanasm.github.io/blog/tags-output/latex/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags-output/functional programming/index.html
+http://ardeleanasm.github.io/tags-output/functional programming/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -346,7 +346,7 @@ http://ardeleanasm.github.io/blog/tags-output/functional programming/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags-output/electronics/index.html
+http://ardeleanasm.github.io/tags-output/electronics/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -354,7 +354,7 @@ http://ardeleanasm.github.io/blog/tags-output/electronics/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags-output/scripts/index.html
+http://ardeleanasm.github.io/tags-output/scripts/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -362,7 +362,7 @@ http://ardeleanasm.github.io/blog/tags-output/scripts/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags-output/quantum computing/index.html
+http://ardeleanasm.github.io/tags-output/quantum computing/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -370,7 +370,7 @@ http://ardeleanasm.github.io/blog/tags-output/quantum computing/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags-output/algorithms/index.html
+http://ardeleanasm.github.io/tags-output/algorithms/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -378,7 +378,7 @@ http://ardeleanasm.github.io/blog/tags-output/algorithms/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags-output/clojure/index.html
+http://ardeleanasm.github.io/tags-output/clojure/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -386,7 +386,7 @@ http://ardeleanasm.github.io/blog/tags-output/clojure/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/tags-output/design patterns/index.html
+http://ardeleanasm.github.io/tags-output/design patterns/index.html
 </loc>
 <lastmod>
 2022-04-12
@@ -394,7 +394,7 @@ http://ardeleanasm.github.io/blog/tags-output/design patterns/index.html
 </url>
 <url>
 <loc>
-http://ardeleanasm.github.io/blog/archives/index.html
+http://ardeleanasm.github.io/archives/index.html
 </loc>
 <lastmod>
 2022-04-12
