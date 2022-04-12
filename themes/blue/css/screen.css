@@ -43,12 +43,12 @@ body {
 
 .navbar-default .navbar-nav li a:hover {
     color: #fff;
-    background-color: #3d80ba;
+    background-color:#9b9b9b;  /*  #3d80ba; */
 }
 
 .navbar-default .navbar-nav .active a {
     color: #fff;
-    background-color: #3d80ba;
+    background-color: #9b9b9b;   /*  #3d80ba; */
 }
 
 .navbar-default .navbar-toggle:hover{
