@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Bending bits...: Input Capture Linux Char Driver - I part</title>
+    
+<meta name="keywords" content="latex,heuristics,clojure,gdb,shell script,linux,electronics,java,haskell,c++,quantum computing,drivers,functional programming,algorithms,design patterns,scripts">
+
+<meta name="description" content="IntroductionTo the best of my knowledge, on Linux there is no way to configure a hardware timer in input capture mode although, since it can be used on embedded systems, this feature can be needed. For example, if one needs to measure the period of a signal on a development board running a Linux distro he has no other way than sampling the GPIOs in userspace with the cost of a resolution of milliseconds.">
+
+<meta property="og:description" content="IntroductionTo the best of my knowledge, on Linux there is no way to configure a hardware timer in input capture mode although, since it can be used on embedded systems, this feature can be needed. For example, if one needs to measure the period of a signal on a development board running a Linux distro he has no other way than sampling the GPIOs in userspace with the cost of a resolution of milliseconds.">
+
+<meta property="og:url" content="http://ardeleanasm.github.io/posts-output/2018-08-19-Input-Capture-Linux-Char-Driver-first-part/" />
+<meta property="og:title" content="Input Capture Linux Char Driver - I part" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="http://ardeleanasm.github.io/posts-output/2018-08-19-Input-Capture-Linux-Char-Driver-first-part/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Bending bits...</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/">Home</a></li>
+                <li
+                ><a href="/archives/">Archives</a></li>
+                
+                <li
+                >
+                <a href="/pages-output/about/">About</a>
+                </li>
+                
+                <li><a href="/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">August 19, 2018</div>
+        
+    </div>
+    <h2>Input Capture Linux Char Driver - I part</h2>
+</div>
+<div>
+    <ol class="toc"><li><a href="#introduction">Introduction</a></li><li><a href="#input-capture">Input Capture</a></li><li><a href="#linux-char-driver">Linux Char Driver</a></li><li><a href="#conclusions">Conclusions</a></li></ol>
+    <h2 id="introduction">Introduction</h2><p>To the best of my knowledge, on Linux there is no way to configure a hardware timer in input capture mode although, since it can be used on embedded systems, this feature can be needed. For example, if one needs to measure the period of a signal on a development board running a Linux distro he has no other way than sampling the GPIOs in userspace with the cost of a resolution of milliseconds.</p><!--more--><h2 id="input-capture">Input Capture</h2><p>Considering a rectangular signal like in Figure 1 and one want to measure the period of the signal or the pulse width. Basically, to measure the period of the signal two successive edges of the same polarity are captured and to measure the pulse width, two alternate polarity edges are captured.</p><p><img src="//img/pwm_signal.jpg" alt="Figure 1:Rectangular Signal" title="Rectangular Signal" /></p><p>For example, if one wants to measure the high time of a pulse it is enough to subtract the time captured when the rissing edge occurs from the time captured for the subsequent falling edge. This scenario can be easily implemented on a microcontroller using a hardware timer in input capture mode and I won't get into details.</p><p>But if one only have a development board with a Linux based OS it's hard to implement this task. The only option I can imagine is to use the GPIOs with rising and falling edges events enabled and to poll them. Of course, the obtained samples will be horrible and the resolution in milliseconds range. Or it'll be almost impossible.</p><p>The options to "hack" the timers are excluded. Personally, I wanted to do that and I didn't found a proof that worked for someone. And also I didn't found any APIs, libraries to select a timer and put it into input capture mode. Of course, I didn't allocate much time for that task but the idea is that I couldn't found and maybe there isn't something like that.</p><p>One can say that another option is to use a microcontroller and program it to perform the task of measuring the signal and to communicate with the development board via I2C, for example. Yes, it is possible but sometimes you don't have a microcontroller to use only for this small task.</p><h2 id="linux-char-driver">Linux Char Driver</h2><p>The solution described in this post: implementing a char driver.</p><p><strong>Requirements</strong>:</p><ol><li><p>Service the interrupt thrown when rising, falling or both are detected on a GPIO.</p></li><li><p>Sample a timer to get the timestamp.</p></li><li><p>Detection of rising, falling or both must be configurable.</p></li><li><p>GPIO pin used must be configurable.</p></li><li><p>Notify userspace that a new value was read.</p></li></ol><p>In this article I won't describe how to create a character driver for Linux, there are a lot of articles, quite nice described but somehow incomplete, on Web and also some very good books. In a future post I will shortly describe how the driver was implemented and also the needed device tree file to test it on a Beaglebone Black device.</p><p>Basically the third, fourth and fifth requirements are the easiest to implement. Basically, we need to define a variable of type <strong>file_operations</strong> structure and to implement some basic functions like: open, release, read, ioctl and poll. It will be discussed in future article the implementation and the need for those functions.</p><p>To implement the first requirement a interrupt will be required and registered for the GPIO pin. The registers will be configured such that the interrupt will be thrown when the event will be detected.</p><p>Finally, the second requirement is somehow problematic. The simple solution is to use <strong>get_cycles()</strong> function which will return the number of clock cycles but on ARM microprocessors this function returns 0. So, guards should be used to call <strong>get_cycles()</strong> when the driver is not running on ARM microprocessor and to call another function for getting a timestamp when running on ARM.</p><h2 id="conclusions">Conclusions</h2><p>The implementation of the driver was quite easy after deciding what features should be implemented and after experimenting a few with <em>rw locks</em>, <em>tasklets</em> and so on. The most challenging part was debugging since for this driver I used only <strong>printk-technique</strong>, basically I printed logs for where I considered to be the problem. A step-by-step debugger, even on assembly code, would be much more appreciated.</p>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/tags-output/linux/">linux</a>
+    
+    <a href="/tags-output/drivers/">drivers</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        <a href="/posts-output/2019-05-04-Neighborhood-Search-in-Haskell/">&laquo; Neighborhood Search</a>
+        
+        
+        <a class="right" href="/posts-output/2018-07-29-Circuit-Design-and-Simulation-in-Geda/">Circuit Design and Simulation in Geda &raquo;</a>
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = "http://ardeleanasm.github.io/posts-output/2018-08-19-Input-Capture-Linux-Char-Driver-first-part/";
+            this.page.identifier = "Input Capture Linux Char Driver - I part";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//23ars.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    <li><a href="http://sebastianardelean.github.io">Personal Website</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/posts-output/2022-04-10-Deploy-Cryogen-blog/">Deploy Cryogen blog on Github</a></li>
+                        
+                        <li><a href="/posts-output/2022-03-07-Decimal-to-binary-in-clojure/">Decimal to binary conversion in Clojure</a></li>
+                        
+                        <li><a href="/posts-output/2021-11-29-Simple-GA-in-Clojure/">Simple GA in Clojure</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+                <div id="tags">
+                    <h3>Tags</h3>
+                    <ul>
+                        
+                        <li><a href="/tags-output/latex/">latex</a></li>
+                        
+                        <li><a href="/tags-output/heuristics/">heuristics</a></li>
+                        
+                        <li><a href="/tags-output/clojure/">clojure</a></li>
+                        
+                        <li><a href="/tags-output/gdb/">gdb</a></li>
+                        
+                        <li><a href="/tags-output/shell%20script/">shell script</a></li>
+                        
+                        <li><a href="/tags-output/linux/">linux</a></li>
+                        
+                        <li><a href="/tags-output/electronics/">electronics</a></li>
+                        
+                        <li><a href="/tags-output/java/">java</a></li>
+                        
+                        <li><a href="/tags-output/haskell/">haskell</a></li>
+                        
+                        <li><a href="/tags-output/c%2B%2B/">c++</a></li>
+                        
+                        <li><a href="/tags-output/quantum%20computing/">quantum computing</a></li>
+                        
+                        <li><a href="/tags-output/drivers/">drivers</a></li>
+                        
+                        <li><a href="/tags-output/functional%20programming/">functional programming</a></li>
+                        
+                        <li><a href="/tags-output/algorithms/">algorithms</a></li>
+                        
+                        <li><a href="/tags-output/design%20patterns/">design patterns</a></li>
+                        
+                        <li><a href="/tags-output/scripts/">scripts</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2022 ardeleanasm
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

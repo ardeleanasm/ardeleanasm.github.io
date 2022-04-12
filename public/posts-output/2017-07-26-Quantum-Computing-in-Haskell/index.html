@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Bending bits...: Quantum Computing in Haskell - I part</title>
+    
+<meta name="keywords" content="latex,heuristics,clojure,gdb,shell script,linux,electronics,java,haskell,c++,quantum computing,drivers,functional programming,algorithms,design patterns,scripts">
+
+<meta name="description" content="Articles">
+
+<meta property="og:description" content="Articles">
+
+<meta property="og:url" content="http://ardeleanasm.github.io/posts-output/2017-07-26-Quantum-Computing-in-Haskell/" />
+<meta property="og:title" content="Quantum Computing in Haskell - I part" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="http://ardeleanasm.github.io/posts-output/2017-07-26-Quantum-Computing-in-Haskell/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Bending bits...</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/">Home</a></li>
+                <li
+                ><a href="/archives/">Archives</a></li>
+                
+                <li
+                >
+                <a href="/pages-output/about/">About</a>
+                </li>
+                
+                <li><a href="/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">July 26, 2017</div>
+        
+    </div>
+    <h2>Quantum Computing in Haskell - I part</h2>
+</div>
+<div>
+    <ol class="toc"><li><a href="#articles">Articles</a></li><li><a href="#long-story-made-short">Long story made short</a></li><li><a href="#introduction">Introduction</a></li><li><a href="#complex-numbers">Complex Numbers</a></li><li><a href="#vectors">Vectors</a></li><li><a href="#qubits-and-gates">Qubits and Gates</a></li></ol>
+    <h2 id="articles">Articles</h2><ul><li><a href="../Quantum-Computing-in-Haskell/">Quantum Computing in Haskell - I part</a></li><li><a href="../Quantum-Computing-in-Haskell-second-part/">Quantum Computing in Haskell - II part</a></li><li><a href="../Quantum-Computing-in-Haskell-third-part/">Quantum Computing in Haskell - III part</a></li><li><a href="../Quantum-Computing-in-Haskell-fourth-part/">Quantum Computing in Haskell - IV part</a></li><li><a href="https://github.com/ardeleanasm/qchas">Github Repository</a></li><li><a href="https://ardeleanasm.github.io/qchas/">Project's Haddock Documentation</a></li><li><a href="https://hackage.haskell.org/package/qchas">QChas Package</a></li></ul><h2 id="long-story-made-short">Long story made short</h2><p>1 year ago I started studying the topics of Quantum Computing and Quantum Algorithms and I was fascinated. Is interresting and, like Niels Bohr said, "Anyone who is not shocked by quantum theory has not understood it."</p><p>As doing my research I found quite interesting to post some small articles on these topics, some articles on CodeProject (<a href="https://www.codeproject.com/Articles/1130092/Java-based-Quantum-Computing-library">Java based Quantum Computing Library</a> and <a href="https://www.codeproject.com/Articles/1131573/Grovers-Search-Algorithm-explained">Grover's Search Algorithm Explained</a>) and one on my website about <a href="https://ardeleanasm.github.io/deutschs-algorithm/">Deutsch's algorithm</a>. For those articles I used a Java library that I created myself with the help of some of my colleagues. Now, after a year and after playing a little with Haskell, I found quite interesting to review the topic and to start posting a series of small articles about Quantum Computing.</p><h2 id="introduction">Introduction</h2><p>I'll start by talking a little about the difference between a quantum computer and a traditional one. A lot of information about how a quantum computer works can be found in online courses, research papers and books. It's not the scope of this post to explain in details how it works, just to present some basic differences.</p><p>As someone can expect, a quantum computer use the quantum mechanical effects, such as superposition, to carry out computations. We already know that in a traditional computer, the <strong>bit</strong> is the basic unit and it can be 0 or 1. The value is defined by a voltage level, in TTL technology, ideally, a 1 value is represented by 5.00 volts while a 0 value is represented by 0.00 volts. For a quantum computer, there are some differences. For example, the basic unit is the <strong>qubit</strong> (quantum bit) and can, at one time, represent value 0 and 1, by exploiting superposition. A qubit is defined by the equation presented below:</p><p>$$\newcommand{\ket}<a href="https://ardeleanasm.github.io/deutschs-algorithm/">1</a>{\left|{#1}\right\rangle}$$
+$$\newcommand{\bra}<a href="https://ardeleanasm.github.io/deutschs-algorithm/">1</a>{\left\langle{#1}\right|}$$
+$$\ket{v}=\alpha\ket{0}+\beta\ket{1}$$</p><p>Before diving deeper into the subject, we will firstly review some mathematical aspects of the topic.</p><h2 id="complex-numbers">Complex Numbers</h2><p>Since probability amplitudes of a qubit are complex numbers I prefer to start with a very short introduction in the mathematics of complex numbers.</p><p>A complex number q is defined as</p><p>$$q=a+bi$$ where a and b $$\in \mathcal{R}$$ and $$i=\sqrt{-1}$$ is the imaginary basis unit.</p><p>We can see that <strong>a</strong> is the real component of a complex number and <strong>bi</strong> is the imaginary one. We can obtain the complex conjugate by simply negating the sign of the imaginary component $$\overline{q}=a-bi$$.</p><p>Some basic formulas that we will use during this series of articles will be addition, multiplication, and modulus.</p><p>Let's consider 2 complex numbers x and y defined like:</p><p>$$x=a+bi$$</p><p>and</p><p>$$y=c+di$$</p><p>The addition of these 2 complex numbers is defined by:</p><p>$$z=x+y=a+bi+c+di=a+c+i(b+d)$$</p><p>while multiplication is defined by:</p><p>$$z=x*y=(a+bi)(c+di)=ac-bd+i(ad+cb)$$</p><p>The third operation, the modulus of the complex number x is defined by:</p><p>$$|x|=\sqrt{a<sup>2+b</sup>2}$$</p><h2 id="vectors">Vectors</h2><p>While Complex Numbers are used to represent the probability amplitudes of a qubit, vectors and linear algebra helps us to represent qubits, so I decided that it'll be usefull to present some notations and operations before starting to write code.</p><p>Basically, the state of a qubit is a unit vector in a 2-dimensional complex vector space $$\mathcal{C}^2$$.</p><p>The vector $$\begin{bmatrix}\alpha\ \beta\end{bmatrix}$$ can be written as</p><p>$$\alpha\ket{0}+\beta\ket{1}$$</p><p>where</p><p>$$\ket{0}=\begin{bmatrix}1\0\end{bmatrix}$$</p><p>and</p><p>$$\ket{1}=\begin{bmatrix}0\1\end{bmatrix}$$</p><p>In the above example I used the <strong>bra-ket</strong> notation, the notation of a column vector is called <strong>ket</strong> while the notation of a row vector is called <strong>bra</strong>. Next, I will define 3 basic operations that will be used heavily in the examples from the next articles on this topic, the inner product, outer product and tensor product.</p><p>The inner product, $$\bra{v}\ket{v}$$ is the product between the bra and the ket vectors:</p><p>$$\bra{v}\ket{v}=\begin{pmatrix}{c_1}<sup>* &amp; {c_2}</sup>* \end{pmatrix}\begin{pmatrix}{c_1} \ {c_2} \end{pmatrix}={c_1}<sup>*{c_1}+{c_2}</sup>*{c_2}={|c_1|}<sup>2+{|c_2|}</sup>2$$</p><p>Outer product is <strong>ket-bra</strong> and is given by:</p><p>$$\ket{v}\bra{v}=\begin{pmatrix}c_1 \ c_2 \end{pmatrix}\begin{pmatrix}{c_1}<sup>* &amp; {c_2}</sup><em>\end{pmatrix}=\begin{pmatrix} c_1{c_1}^</em> &amp; c_1{c_2}<sup>* \ c_2{c_1}</sup>* &amp; c_2{c_2}^* \end{pmatrix}$$</p><p>Lastly, if we consider $$\ket{v}=\begin{pmatrix}{c_1} \ {c_2} \end{pmatrix}$$ and
+$$\ket{x}=\begin{pmatrix}{c_3} \ {c_4} \end{pmatrix}$$ we can define the tensor product as:</p><p>$$\ket{v}\otimes\ket{x}=\ket{vx}=\begin{pmatrix}{c_1}{c_3} \ {c_2}{c_3} \ {c_1}{c_4} \ {c_2}{c_4} \end{pmatrix}$$</p><h2 id="qubits-and-gates">Qubits and Gates</h2><p>Quantum mechanics tells that any such system can exist in a superposition of states and as we saw in the second chapter, the state of a qubit is described by</p><p>$$\ket{v}=\alpha\ket{0}+\beta\ket{1}$$</p><p>where $$\alpha$$ and $$\beta$$ are complex number that satisfy the relation</p><p>$${|\alpha|}<sup>2+{|\beta|}</sup>2=1$$</p><p>We know that on a classic computer gate operations such as <strong>AND</strong>, <strong>OR</strong>,<strong>XOR</strong> constitute the core of data manipulation. On a quantum computer similar operations are possible on qubits by using quantum gates. The gate operations are exactly all unitary linear operations.</p><p>For example, the Hadamard transformation is defined as:</p><p>$$\alpha\ket{0}+\beta\ket{1}\rightarrow\frac{\alpha+\beta}{\sqrt{2}}\ket{0}+\frac{\alpha-\beta}{\sqrt{2}}\ket{1}$$</p><p>Knowing that $$\ket{0}=\begin{bmatrix}{1} \ {0} \end{bmatrix}$$ and $$\ket{1}=\begin{bmatrix}{0} \ {1} \end{bmatrix}$$ then we can represent the transformation as the matrix:</p><p>$$\frac{1}{\sqrt{2}}\begin{pmatrix}1 &amp; 1 \ 1 &amp; -1 \end{pmatrix}$$</p><p>A Hadamard gate creates a superposition state, often beginning and ending a quantum computation to initiate data processing and to collect data, respectively.</p><p>A set of useful 1-qubit gates are the Pauli Gates, the X gate, Y gate and Z gate.</p><p>$$X\ket{0}=\ket{1} and X\ket{1}=\ket{1}; X=\begin{pmatrix}0 &amp; 1 \ 1 &amp; 0 \end{pmatrix}$$</p><p>$$Y\ket{0}=i\ket{1} and Y\ket{1}=-i\ket{0}; Y=\begin{pmatrix}0 &amp; -i \ i &amp; 0 \end{pmatrix}$$</p><p>$$Z\ket{0}=\ket{0} and Z\ket{1}=-\ket{1}; Z=\begin{pmatrix}1 &amp; 0 \ 0 &amp; -1 \end{pmatrix}$$</p><p>Two more gates that we will use in our examples are the Controlled-Not and Controlled Phase Shift and they are defined by the following matrices:</p><p>$$Controlled Phase Shift=\begin{pmatrix} 1 &amp; 0 &amp; 0 &amp; 0 \ 0 &amp; 1 &amp; 0 &amp; 0 \ 0 &amp; 0 &amp; 1 &amp; 0 \ 0 &amp; 0 &amp; 0 &amp; -1\end{pmatrix}$$</p><p>$$Controlled Not=\begin{pmatrix} 1 &amp; 0 &amp; 0 &amp; 0 \ 0 &amp; 1 &amp; 0 &amp; 0 \ 0 &amp; 0 &amp; 0 &amp; 1 \ 0 &amp; 0 &amp; 1 &amp; 0 \end{pmatrix}$$</p><p>In the next article we will write some code that implements some basic operations.</p>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/tags-output/haskell/">haskell</a>
+    
+    <a href="/tags-output/quantum%20computing/">quantum computing</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        <a href="/posts-output/2017-07-28-Quantum-Computing-in-Haskell-second-part/">&laquo; Quantum Computing in Haskell - II part</a>
+        
+        
+        <a class="right" href="/posts-output/2016-08-17-deutschs-algorithm/">Deutsch&#39;s Algorithm &raquo;</a>
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = "http://ardeleanasm.github.io/posts-output/2017-07-26-Quantum-Computing-in-Haskell/";
+            this.page.identifier = "Quantum Computing in Haskell - I part";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//23ars.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    <li><a href="http://sebastianardelean.github.io">Personal Website</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/posts-output/2022-04-10-Deploy-Cryogen-blog/">Deploy Cryogen blog on Github</a></li>
+                        
+                        <li><a href="/posts-output/2022-03-07-Decimal-to-binary-in-clojure/">Decimal to binary conversion in Clojure</a></li>
+                        
+                        <li><a href="/posts-output/2021-11-29-Simple-GA-in-Clojure/">Simple GA in Clojure</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+                <div id="tags">
+                    <h3>Tags</h3>
+                    <ul>
+                        
+                        <li><a href="/tags-output/latex/">latex</a></li>
+                        
+                        <li><a href="/tags-output/heuristics/">heuristics</a></li>
+                        
+                        <li><a href="/tags-output/clojure/">clojure</a></li>
+                        
+                        <li><a href="/tags-output/gdb/">gdb</a></li>
+                        
+                        <li><a href="/tags-output/shell%20script/">shell script</a></li>
+                        
+                        <li><a href="/tags-output/linux/">linux</a></li>
+                        
+                        <li><a href="/tags-output/electronics/">electronics</a></li>
+                        
+                        <li><a href="/tags-output/java/">java</a></li>
+                        
+                        <li><a href="/tags-output/haskell/">haskell</a></li>
+                        
+                        <li><a href="/tags-output/c%2B%2B/">c++</a></li>
+                        
+                        <li><a href="/tags-output/quantum%20computing/">quantum computing</a></li>
+                        
+                        <li><a href="/tags-output/drivers/">drivers</a></li>
+                        
+                        <li><a href="/tags-output/functional%20programming/">functional programming</a></li>
+                        
+                        <li><a href="/tags-output/algorithms/">algorithms</a></li>
+                        
+                        <li><a href="/tags-output/design%20patterns/">design patterns</a></li>
+                        
+                        <li><a href="/tags-output/scripts/">scripts</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2022 ardeleanasm
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>
