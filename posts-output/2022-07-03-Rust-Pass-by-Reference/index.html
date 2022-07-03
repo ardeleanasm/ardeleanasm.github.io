@@ -2,12 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Bending bits...: Posts Tagged &quot;quantum computing&quot;</title>
+    <title>Bending bits...: Rust Pass by Reference</title>
     
-    <meta name="description" content="Bytes and words...">
-    <meta name="keywords" content="">
-    
-    <link rel="canonical" href="http://ardeleanasm.github.io/tags-output/quantum%20computing/">
+<meta name="keywords" content="latex,heuristics,clojure,gdb,rust,shell script,linux,electronics,java,haskell,c++,quantum computing,drivers,functional programming,algorithms,design patterns,scripts">
+
+<meta property="og:url" content="http://ardeleanasm.github.io/posts-output/2022-07-03-Rust-Pass-by-Reference/" />
+<meta property="og:title" content="Rust Pass by Reference" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="http://ardeleanasm.github.io/posts-output/2022-07-03-Rust-Pass-by-Reference/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -55,29 +58,61 @@
         <div class="col-lg-9">
             <div id="content">
                 
-<div id="posts-by-tag">
-    <div id="page-header">
-        <h2>Posts Tagged &quot;quantum computing&quot;</h2>
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">July 3, 2022</div>
+        
     </div>
-    <ul>
+    <h2>Rust Pass by Reference</h2>
+</div>
+<div>
     
-        <li>
-            <a href="/posts-output/2017-08-18-Quantum-Computing-in-Haskell-fourth-part/">Quantum Computing in Haskell - IV part</a>
-        </li>
+    <hr /><pre><code class="rust">fn square (x_value: &amp;mut u32) -&gt; () {
+    *x_value = 10;
+}
+
+fn main() {
+    let mut x : u32 = 5;
+
+    square(&amp;mut x);
+    println!("x is {0}", x);
     
-        <li>
-            <a href="/posts-output/2017-08-01-Quantum-Computing-in-Haskell-third-part/">Quantum Computing in Haskell - III part</a>
-        </li>
+}
+</code></pre>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
     
-        <li>
-            <a href="/posts-output/2017-07-28-Quantum-Computing-in-Haskell-second-part/">Quantum Computing in Haskell - II part</a>
-        </li>
+    <a href="/tags-output/rust/">rust</a>
     
-        <li>
-            <a href="/posts-output/2017-07-26-Quantum-Computing-in-Haskell/">Quantum Computing in Haskell - I part</a>
-        </li>
+</div>
+
+
+    <div id="prev-next">
+        
+        
+        <a class="right" href="/posts-output/2022-04-10-Deploy-Cryogen-blog/">Deploy Cryogen blog on Github &raquo;</a>
+        
+    </div>
+
     
-    </ul>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = "http://ardeleanasm.github.io/posts-output/2022-07-03-Rust-Pass-by-Reference/";
+            this.page.identifier = "Rust Pass by Reference";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//23ars.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
 </div>
 
             </div>
