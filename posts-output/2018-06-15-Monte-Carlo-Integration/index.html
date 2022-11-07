@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Bending bits...: Monte Carlo Integration</title>
+    
+<meta name="keywords" content="latex,heuristics,clojure,gdb,rust,shell script,linux,electronics,java,haskell,c++,quantum computing,drivers,functional programming,algorithms,design patterns,scripts">
+
+<meta name="description" content="Monte Carlo methods are numerical techniques which rely on random
+sampling to approximate their results. Thus, in Monte Carlo integration,
+the process of numerical estimation of integrals is applied.">
+
+<meta property="og:description" content="Monte Carlo methods are numerical techniques which rely on random
+sampling to approximate their results. Thus, in Monte Carlo integration,
+the process of numerical estimation of integrals is applied.">
+
+<meta property="og:url" content="http://ardeleanasm.github.io/posts-output/2018-06-15-Monte-Carlo-Integration/" />
+<meta property="og:title" content="Monte Carlo Integration" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="http://ardeleanasm.github.io/posts-output/2018-06-15-Monte-Carlo-Integration/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Bending bits...</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/">Home</a></li>
+                <li
+                ><a href="/archives/">Archives</a></li>
+                
+                <li
+                >
+                <a href="/pages-output/about/">About</a>
+                </li>
+                
+                <li><a href="/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">June 15, 2018</div>
+        
+    </div>
+    <h2>Monte Carlo Integration</h2>
+</div>
+<div>
+    
+    <p>Monte Carlo methods are numerical techniques which rely on random
+sampling to approximate their results. Thus, in Monte Carlo integration,
+the process of numerical estimation of integrals is applied.</p><!--more--><p>Considering we want to integrate a one-dimensional function $f(x)$ from
+$\textit{a}$ to $\textit{b}$: $$F=\int_a^b f(x),\mathrm{d}x$$. Since the integral of a function $f(x)$ can be
+interpreted as the area below the function's curve, we can pick up a random value $x \in [a,b]$ and evaluate the function at $\textit{x}$ and multiply the result by $(b-a)$. If we plot the function's curve and the result we will obtain a rectangle where <em>f(x)</em> is the height and <em>(b-a)</em> is the width, basically a crude approximation of the area under the curve. If we continue to evaluate the function at different random points between <em>a</em> and <em>b</em>, adding up the area of the rectangles and averaging the sum, the resulting number gets closer to the actual results of the integral.</p><p>Let's consider an example in which the function we want to integrate is $f(x)=\sin{x}$ on interval $[0,\pi]$ and write some <strong>OCaml</strong> code. The function plot can be seen in Fig. 1.</p><p><img src="//img/integration-sinx-curve.png" alt="Fig. 1:sin(x) curve" /></p><p>We will create a new module <strong>MonteCarlo</strong> with the interface defined in the below snippet:</p><pre><code class="ocaml">module type MonteCarlo_type=sig
+  val initializePRNG:unit-&gt;unit
+  val getRandomNumber:unit-&gt;float
+  val approximate:(float-&gt;float)-&gt;float-&gt;float-&gt;int-&gt;int-&gt;float-&gt;float  
+end
+</code></pre><p>We have a function <em>initializePRNG</em> which will initialize the pseudorandom number generator, <code>let initializePRNG ()=Random.self_init()</code>. <code>let getRandomNumber ()=Random.float 1.0</code> function will only generate a pseudorandom number distributed on $[0,1]$. Finally, the most interesting function, <em>approximate</em> receives 6 parameters as follow:
+*. First parameter is the function $f(x)$
+*. Second and third parameters are the limits <em>a</em> and <em>b</em>.
+*. Fourth parameter is the number of iterations.
+*. Fifth parameter is the current iteration
+*. Sixth parameter is the sumed value.</p><pre><code class="ocaml">let rec approximate f a b n index value=
+    if index=(n-1) then
+      ((b-.a)/.(float_of_int index))*.value
+    else
+      let randVal=getRandomNumber() in
+      let inInterval=a+.randVal*.(b-.a) in
+      let fVal=f inInterval in
+      approximate f a b n (index+1) (value+.fVal)
+
+</code></pre><p>The complete <em>MonteCarlo</em> module is implemented bellow:</p><pre><code class="ocaml">open Random
+open MonteCarlo_type
+
+module MonteCarlo:MonteCarlo_type=struct
+  let initializePRNG ()=Random.self_init()
+  let getRandomNumber ()=Random.float 1.0
+  
+  let rec approximate f a b n index value=
+    if index=(n-1) then
+      ((b-.a)/.(float_of_int index))*.value
+    else
+      let randVal=getRandomNumber() in
+      let inInterval=a+.randVal*.(b-.a) in
+      let fVal=f inInterval in
+      approximate f a b n (index+1) (value+.fVal)
+end
+</code></pre><p>Finally, to use the code we just need to define the function that we want to integrate and call approximate, as bellow:</p><pre><code class="ocaml">open MonteCarlo
+
+let pi = 4.0 *. atan 1.0;;
+let func (x:float)=sin x
+let () = 
+  MonteCarlo.initializePRNG();
+  print_float (MonteCarlo.approximate func 0.0 pi 100000 0 0.0)
+
+</code></pre>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/tags-output/functional%20programming/">functional programming</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        <a href="/posts-output/2018-06-22-checksum-generator-haskell/">&laquo; Checksum generator in Haskell</a>
+        
+        
+        <a class="right" href="/posts-output/2018-02-15-Monte-Carlo-Pi-Estimation/">Monte Carlo Pi Estimation &raquo;</a>
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = "http://ardeleanasm.github.io/posts-output/2018-06-15-Monte-Carlo-Integration/";
+            this.page.identifier = "Monte Carlo Integration";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//23ars.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    <li><a href="http://sebastianardelean.github.io">Personal Website</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/posts-output/2022-07-03-Rust-Pass-by-Reference/">Rust Pass by Reference</a></li>
+                        
+                        <li><a href="/posts-output/2022-04-10-Deploy-Cryogen-blog/">Deploy Cryogen blog on Github</a></li>
+                        
+                        <li><a href="/posts-output/2022-03-07-Decimal-to-binary-in-clojure/">Decimal to binary conversion in Clojure</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+                <div id="tags">
+                    <h3>Tags</h3>
+                    <ul>
+                        
+                        <li><a href="/tags-output/latex/">latex</a></li>
+                        
+                        <li><a href="/tags-output/heuristics/">heuristics</a></li>
+                        
+                        <li><a href="/tags-output/clojure/">clojure</a></li>
+                        
+                        <li><a href="/tags-output/gdb/">gdb</a></li>
+                        
+                        <li><a href="/tags-output/rust/">rust</a></li>
+                        
+                        <li><a href="/tags-output/shell%20script/">shell script</a></li>
+                        
+                        <li><a href="/tags-output/linux/">linux</a></li>
+                        
+                        <li><a href="/tags-output/electronics/">electronics</a></li>
+                        
+                        <li><a href="/tags-output/java/">java</a></li>
+                        
+                        <li><a href="/tags-output/haskell/">haskell</a></li>
+                        
+                        <li><a href="/tags-output/c%2B%2B/">c++</a></li>
+                        
+                        <li><a href="/tags-output/quantum%20computing/">quantum computing</a></li>
+                        
+                        <li><a href="/tags-output/drivers/">drivers</a></li>
+                        
+                        <li><a href="/tags-output/functional%20programming/">functional programming</a></li>
+                        
+                        <li><a href="/tags-output/algorithms/">algorithms</a></li>
+                        
+                        <li><a href="/tags-output/design%20patterns/">design patterns</a></li>
+                        
+                        <li><a href="/tags-output/scripts/">scripts</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2022 ardeleanasm
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Bending bits...: Thread-safe Singleton Design Pattern in C++</title>
+    
+<meta name="keywords" content="latex,heuristics,clojure,gdb,rust,shell script,linux,electronics,java,haskell,c++,quantum computing,drivers,functional programming,algorithms,design patterns,scripts">
+
+<meta property="og:url" content="http://ardeleanasm.github.io/posts-output/2021-10-06-Thread-safe-Singleton-Design-Pattern-in-C++/" />
+<meta property="og:title" content="Thread-safe Singleton Design Pattern in C++" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="http://ardeleanasm.github.io/posts-output/2021-10-06-Thread-safe-Singleton-Design-Pattern-in-C++/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Bending bits...</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/">Home</a></li>
+                <li
+                ><a href="/archives/">Archives</a></li>
+                
+                <li
+                >
+                <a href="/pages-output/about/">About</a>
+                </li>
+                
+                <li><a href="/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">October 6, 2021</div>
+        
+    </div>
+    <h2>Thread-safe Singleton Design Pattern in C++</h2>
+</div>
+<div>
+    
+    <pre><code class="C++">class Singleton {
+public:
+  static std::shared_ptr&lt;Singleton&gt; &amp;GetInstance() {
+    static std::shared_ptr&lt;Singleton&gt; instance = nullptr;
+    if (!instance) {
+      std::lock_guard&lt;std::mutex&gt; lock(Singleton::_mutex);
+
+      if (!instance) {
+        instance.reset(new Singleton());
+      }
+
+    }
+    return instance;
+  }
+ 
+  ~Singleton() {}
+private:
+    Singleton() {
+    }
+  Singleton(const Singleton &amp;) = delete;
+  Singleton(Singleton &amp;&amp;) = delete;
+  Singleton &amp;operator=(const Singleton &amp;) = delete;
+  Singleton &amp;operator=(Singleton &amp;&amp;) = delete;
+  static std::mutex _mutex;
+};
+
+std::mutex Singleton::_mutex;
+</code></pre>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/tags-output/c%2B%2B/">c++</a>
+    
+    <a href="/tags-output/design%20patterns/">design patterns</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        <a href="/posts-output/2021-11-11-Latexdiff-sometimes-is-just-a-pain/">&laquo; Latexdiff – sometimes is just a pain</a>
+        
+        
+        <a class="right" href="/posts-output/2021-09-28-C++-map-of-member-functions/">C++ map of member functions &raquo;</a>
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = "http://ardeleanasm.github.io/posts-output/2021-10-06-Thread-safe-Singleton-Design-Pattern-in-C++/";
+            this.page.identifier = "Thread-safe Singleton Design Pattern in C++";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//23ars.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    <li><a href="http://sebastianardelean.github.io">Personal Website</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/posts-output/2022-07-03-Rust-Pass-by-Reference/">Rust Pass by Reference</a></li>
+                        
+                        <li><a href="/posts-output/2022-04-10-Deploy-Cryogen-blog/">Deploy Cryogen blog on Github</a></li>
+                        
+                        <li><a href="/posts-output/2022-03-07-Decimal-to-binary-in-clojure/">Decimal to binary conversion in Clojure</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+                <div id="tags">
+                    <h3>Tags</h3>
+                    <ul>
+                        
+                        <li><a href="/tags-output/latex/">latex</a></li>
+                        
+                        <li><a href="/tags-output/heuristics/">heuristics</a></li>
+                        
+                        <li><a href="/tags-output/clojure/">clojure</a></li>
+                        
+                        <li><a href="/tags-output/gdb/">gdb</a></li>
+                        
+                        <li><a href="/tags-output/rust/">rust</a></li>
+                        
+                        <li><a href="/tags-output/shell%20script/">shell script</a></li>
+                        
+                        <li><a href="/tags-output/linux/">linux</a></li>
+                        
+                        <li><a href="/tags-output/electronics/">electronics</a></li>
+                        
+                        <li><a href="/tags-output/java/">java</a></li>
+                        
+                        <li><a href="/tags-output/haskell/">haskell</a></li>
+                        
+                        <li><a href="/tags-output/c%2B%2B/">c++</a></li>
+                        
+                        <li><a href="/tags-output/quantum%20computing/">quantum computing</a></li>
+                        
+                        <li><a href="/tags-output/drivers/">drivers</a></li>
+                        
+                        <li><a href="/tags-output/functional%20programming/">functional programming</a></li>
+                        
+                        <li><a href="/tags-output/algorithms/">algorithms</a></li>
+                        
+                        <li><a href="/tags-output/design%20patterns/">design patterns</a></li>
+                        
+                        <li><a href="/tags-output/scripts/">scripts</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2022 ardeleanasm
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

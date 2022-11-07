@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Bending bits...: Fractals Generator in Haskell</title>
+    
+<meta name="keywords" content="latex,heuristics,clojure,gdb,rust,shell script,linux,electronics,java,haskell,c++,quantum computing,drivers,functional programming,algorithms,design patterns,scripts">
+
+<meta name="description" content="IntroductionIn this post I&#39;ll shortly describe some functions from a fractals generator that I wrote in Haskell. Some parts of the application are from the repository mentioned in this post. Some modules, like Plots, are reused from that module since I don&#39;t have experience with working with images in Haskell.
+Currently there are not so much differences between the original repository and what I pushed into my repository but I hope that, in future, after I implement my ideas, the code will look more different.">
+
+<meta property="og:description" content="IntroductionIn this post I&#39;ll shortly describe some functions from a fractals generator that I wrote in Haskell. Some parts of the application are from the repository mentioned in this post. Some modules, like Plots, are reused from that module since I don&#39;t have experience with working with images in Haskell.
+Currently there are not so much differences between the original repository and what I pushed into my repository but I hope that, in future, after I implement my ideas, the code will look more different.">
+
+<meta property="og:url" content="http://ardeleanasm.github.io/posts-output/2020-05-19-Fractals-Generator-in-Haskell/" />
+<meta property="og:title" content="Fractals Generator in Haskell" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="http://ardeleanasm.github.io/posts-output/2020-05-19-Fractals-Generator-in-Haskell/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
+    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Bending bits...</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="/">Home</a></li>
+                <li
+                ><a href="/archives/">Archives</a></li>
+                
+                <li
+                >
+                <a href="/pages-output/about/">About</a>
+                </li>
+                
+                <li><a href="/feed.xml">RSS</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>
+
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="content">
+                
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">May 19, 2020</div>
+        
+    </div>
+    <h2>Fractals Generator in Haskell</h2>
+</div>
+<div>
+    <ol class="toc"><li><a href="#introduction">Introduction</a></li><li><a href="#implementation">Implementation</a></li><li><a href="#conclusions">Conclusions</a></li><li><a href="#links">Links</a></li></ol>
+    <h3 id="introduction">Introduction</h3><p>In this post I'll shortly describe some functions from a fractals generator that I wrote in Haskell. Some parts of the application are from the repository mentioned in this <a href="https://gregheartsfield.com/fractal-hs/">post</a>. Some modules, like <code>Plots</code>, are reused from that module since I don't have experience with working with images in Haskell.
+Currently there are not so much differences between the original repository and what I pushed into <a href="https://github.com/ardeleanasm/project-fractals">my repository</a> but I hope that, in future, after I implement my ideas, the code will look more different.</p><p>Regarding the ideas that I have and the fractals generator, maybe this post will start a short series of posts regarding this topic. First of all I want to have a generator that will use threads to draw parts of the fractal, to implement some command line arguments and to switch between a mode that will only save the drawing of a specified fractal and a mode that will permit also zooming.</p><h3 id="implementation">Implementation</h3><p>First of all, let's start with a colors' palette. For this project I will start by generating a palette of 4096 colors.</p><pre><code class="haskell">colorPalette::[[Int]]
+colorPalette = [[r,g,b] | r&lt;-[0,16..255],g&lt;-[0,16..255],b&lt;-[0,16..255]]
+</code></pre><p>Basically I organize the data as a list of lists. Each inner list contains three values corresponding to RGB. Function <code>getColor</code> defined below returns the selected color based on the current iteration.</p><pre><code class="haskell">getColor::Int -&gt; Color
+getColor x
+    | x &gt; maxNumberOfIterations = rgb 255 255 255
+    | otherwise = let c = colorPalette !! x
+                in rgb (c !! 0) (c !! 1) (c !! 2)
+</code></pre><p>Regarding the actual fractal generation, I will present only the function for drawing the Mandelbrot fractal.</p><pre><code class="haskell">mandelbrot::Complex Double
+    -&gt; Complex Double
+    -&gt; Int
+    -&gt; Int
+mandelbrot z c iter
+    | iter &gt; maxNumberOfIterations = 0
+    | otherwise = let zNext = z^2 + c in
+                if magnitude zNext &gt; 2
+                then iter
+                else mandelbrot zNext c (iter+1)
+</code></pre><p>Without getting too much into details, this function has 3 parameters, <code>z</code>, <code>c</code> and <code>iter</code>, of <code>Complex Double</code> and <code>Int</code> types and returns an <code>Int</code> value. From implementation point of view, if current iteration is greater than the maximum allowed number of iterations, then the function returns 0, otherwise, it will calculate <code>zNext</code>.</p><h3 id="conclusions">Conclusions</h3><p>No words, only pictures!</p><p><img src="//img/julia.png" alt="Julia Fractal" title="Julia fractal" /></p><p><img src="//img/julia2.png" alt="Julia Fractal" title="Julia fractal" /></p><p><img src="//img/mandelbrot.png" alt="Mandelbrot Fractal" title="Mandelbrot fractal" /></p><p><img src="//img/ship.png" alt="Burning Ship Fractal" title="Burning Ship fractal" /></p><h3 id="links">Links</h3><p><a href="https://gregheartsfield.com/fractal-hs/">Fractals in Haskell</a><a href="https://github.com/ardeleanasm/project-fractals">Source Code Repository</a></p>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/tags-output/haskell/">haskell</a>
+    
+    <a href="/tags-output/functional%20programming/">functional programming</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        <a href="/posts-output/2020-06-03-Keep-Processes-Running-after-SSH-session-ended/">&laquo; Keep processes running after SSH session ended</a>
+        
+        
+        <a class="right" href="/posts-output/2019-05-04-Neighborhood-Search-in-Haskell/">Neighborhood Search &raquo;</a>
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = "http://ardeleanasm.github.io/posts-output/2020-05-19-Fractals-Generator-in-Haskell/";
+            this.page.identifier = "Fractals Generator in Haskell";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//23ars.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
+</div>
+
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div id="sidebar">
+                <h3>Links</h3>
+                <ul id="links">
+                    <li><a href="http://sebastianardelean.github.io">Personal Website</a></li>
+                    
+                </ul>
+                
+                <div id="recent">
+                    <h3>Recent Posts</h3>
+                    <ul>
+                        
+                        <li><a href="/posts-output/2022-07-03-Rust-Pass-by-Reference/">Rust Pass by Reference</a></li>
+                        
+                        <li><a href="/posts-output/2022-04-10-Deploy-Cryogen-blog/">Deploy Cryogen blog on Github</a></li>
+                        
+                        <li><a href="/posts-output/2022-03-07-Decimal-to-binary-in-clojure/">Decimal to binary conversion in Clojure</a></li>
+                        
+                    </ul>
+                </div>
+                
+                
+                <div id="tags">
+                    <h3>Tags</h3>
+                    <ul>
+                        
+                        <li><a href="/tags-output/latex/">latex</a></li>
+                        
+                        <li><a href="/tags-output/heuristics/">heuristics</a></li>
+                        
+                        <li><a href="/tags-output/clojure/">clojure</a></li>
+                        
+                        <li><a href="/tags-output/gdb/">gdb</a></li>
+                        
+                        <li><a href="/tags-output/rust/">rust</a></li>
+                        
+                        <li><a href="/tags-output/shell%20script/">shell script</a></li>
+                        
+                        <li><a href="/tags-output/linux/">linux</a></li>
+                        
+                        <li><a href="/tags-output/electronics/">electronics</a></li>
+                        
+                        <li><a href="/tags-output/java/">java</a></li>
+                        
+                        <li><a href="/tags-output/haskell/">haskell</a></li>
+                        
+                        <li><a href="/tags-output/c%2B%2B/">c++</a></li>
+                        
+                        <li><a href="/tags-output/quantum%20computing/">quantum computing</a></li>
+                        
+                        <li><a href="/tags-output/drivers/">drivers</a></li>
+                        
+                        <li><a href="/tags-output/functional%20programming/">functional programming</a></li>
+                        
+                        <li><a href="/tags-output/algorithms/">algorithms</a></li>
+                        
+                        <li><a href="/tags-output/design%20patterns/">design patterns</a></li>
+                        
+                        <li><a href="/tags-output/scripts/">scripts</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <footer>Copyright &copy; 2022 ardeleanasm
+        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
+</div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>
