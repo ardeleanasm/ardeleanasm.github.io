@@ -58,6 +58,58 @@
 <div id="post">
     
     <div class="post-header">
+        <h2>Vicsek fractal</h2>
+        <div id="post-meta">
+            
+            <div class="date">November 10, 2022</div>
+        </div>
+    </div>
+    <hr /><pre><code class="clojure">
+(def header-xml "&lt;?xml version=\"1.0\"?&gt;")
+(def header-svg "&lt;svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"&gt;")
+(def footer "\"/&gt;\n&lt;/svg&gt;")
+
+(defn append-to-file
+  [file-name s]
+  (spit file-name s :append true))
+
+
+
+(defn print-line [x y len file]
+  (append-to-file file (str "M " x " " y))
+  (append-to-file file (str "h " len))
+  (append-to-file file (str "v " len))
+  (append-to-file file (str "h " (- 0 len)))
+  (append-to-file file (str "v -" len))  
+  )
+
+(defn fractal-cross [x y len file]
+  (if (&lt; len 3)
+    (print-line x y len file)
+    (let [l3 (/ len 3.0) l23 (* l3 2)]
+      (fractal-cross x y l3 file)
+      (fractal-cross (+ x l23) y l3 file)
+      (fractal-cross (+ x l3) (+ y l3) l3 file)
+      (fractal-cross x (+ y l23) l3 file)
+      (fractal-cross (+ x l23) (+ y l23) l3 file))))
+
+(defn run [x,y,len file]
+  (let [content "&lt;path d=\""]
+    (append-to-file file header-xml)
+    (append-to-file file header-svg)
+    (append-to-file file content)
+    (fractal-cross x y len file)
+    (append-to-file file footer)))
+
+
+(run 0.0 0.0 729.0 "test.svg")
+
+
+</code></pre>
+    <a href="/posts-output/2022-11-10-Vicsek-fractal/">Continue reading &#8594;</a>
+    <hr>
+    
+    <div class="post-header">
         <h2>Rust Pass by Reference</h2>
         <div id="post-meta">
             
@@ -152,56 +204,6 @@ The task of the Genetic Algorithm is to evolve, starting from random generated i
     <a href="/posts-output/2021-11-29-Simple-GA-in-Clojure/">Continue reading &#8594;</a>
     <hr>
     
-    <div class="post-header">
-        <h2>Clojure -&gt; Some recursive functions</h2>
-        <div id="post-meta">
-            
-            <div class="date">November 26, 2021</div>
-        </div>
-    </div>
-    <pre><code class="clojure">(defn fibonacci
-  ([n]
-    (fibonacci [0 1] n))
-  ([x,n]
-    (if (&lt; (count x) n)
-      (fibonacci (conj x (+ (last x) (nth x (- (count x) 2)))) n)
-    x))
-)
-
-(defn factorial [n]
-  (cond 
-    (= n 0)  1
-    (&gt; n 0) (* n (factorial (- n 1)))
-    )
-)
-
-(defn collatz [n,s]
-  (if (not= n 1)
-    (cond 
-      (even? n) (collatz (/ n 2) (+ 1 s) )
-      (odd? n) (collatz (+ (* 3 n) 1) (+ 1 s))
-    )
-    s )
-)
-
-(defn collatz-sequence [n s]
-  (do (println n) 
-    (if (not= n 1)
-      (cond 
-        (even? n) (collatz-sequence (/ n 2) (+ 1 s) )
-        (odd? n) (collatz-sequence (+ (* 3 n) 1) (+ 1 s))
-      )
-    )
-
-  )
-)
-
-(println (collatz 141151 0))
-(collatz-sequence 1441151 0)
-</code></pre>
-    <a href="/posts-output/2021-11-26-Clojure-Some-recursive-functions/">Continue reading &#8594;</a>
-    <hr>
-    
 
     <div id="prev-next">
         
@@ -226,11 +228,11 @@ The task of the Genetic Algorithm is to evolve, starting from random generated i
                     <h3>Recent Posts</h3>
                     <ul>
                         
+                        <li><a href="/posts-output/2022-11-10-Vicsek-fractal/">Vicsek fractal</a></li>
+                        
                         <li><a href="/posts-output/2022-07-03-Rust-Pass-by-Reference/">Rust Pass by Reference</a></li>
                         
                         <li><a href="/posts-output/2022-04-10-Deploy-Cryogen-blog/">Deploy Cryogen blog on Github</a></li>
-                        
-                        <li><a href="/posts-output/2022-03-07-Decimal-to-binary-in-clojure/">Decimal to binary conversion in Clojure</a></li>
                         
                     </ul>
                 </div>

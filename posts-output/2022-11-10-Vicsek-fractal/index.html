@@ -2,12 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Bending bits...: Tags</title>
+    <title>Bending bits...: Vicsek fractal</title>
     
-    <meta name="description" content="Bytes and words...">
-    <meta name="keywords" content="">
-    
-    <link rel="canonical" href="http://ardeleanasm.github.io/tags/">
+<meta name="keywords" content="latex,heuristics,clojure,gdb,rust,shell script,linux,electronics,java,haskell,c++,quantum computing,drivers,functional programming,algorithms,design patterns,scripts">
+
+<meta property="og:url" content="http://ardeleanasm.github.io/posts-output/2022-11-10-Vicsek-fractal/" />
+<meta property="og:title" content="Vicsek fractal" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="http://ardeleanasm.github.io/posts-output/2022-11-10-Vicsek-fractal/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -55,48 +58,91 @@
         <div class="col-lg-9">
             <div id="content">
                 
-<div id="tags-page">
-    <div id="page-header">
-        <h2>Tags</h2>
+<div id="post">
+    <div class="post-header">
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">November 10, 2022</div>
+        
+    </div>
+    <h2>Vicsek fractal</h2>
+</div>
+<div>
+    
+    <hr /><pre><code class="clojure">
+(def header-xml "&lt;?xml version=\"1.0\"?&gt;")
+(def header-svg "&lt;svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"&gt;")
+(def footer "\"/&gt;\n&lt;/svg&gt;")
+
+(defn append-to-file
+  [file-name s]
+  (spit file-name s :append true))
+
+
+
+(defn print-line [x y len file]
+  (append-to-file file (str "M " x " " y))
+  (append-to-file file (str "h " len))
+  (append-to-file file (str "v " len))
+  (append-to-file file (str "h " (- 0 len)))
+  (append-to-file file (str "v -" len))  
+  )
+
+(defn fractal-cross [x y len file]
+  (if (&lt; len 3)
+    (print-line x y len file)
+    (let [l3 (/ len 3.0) l23 (* l3 2)]
+      (fractal-cross x y l3 file)
+      (fractal-cross (+ x l23) y l3 file)
+      (fractal-cross (+ x l3) (+ y l3) l3 file)
+      (fractal-cross x (+ y l23) l3 file)
+      (fractal-cross (+ x l23) (+ y l23) l3 file))))
+
+(defn run [x,y,len file]
+  (let [content "&lt;path d=\""]
+    (append-to-file file header-xml)
+    (append-to-file file header-svg)
+    (append-to-file file content)
+    (fractal-cross x y len file)
+    (append-to-file file footer)))
+
+
+(run 0.0 0.0 729.0 "test.svg")
+
+
+</code></pre>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/tags-output/clojure/">clojure</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        
+        <a class="right" href="/posts-output/2022-07-03-Rust-Pass-by-Reference/">Rust Pass by Reference &raquo;</a>
+        
     </div>
 
-    <ul>
-        
-        <li><a href="/tags-output/latex/">latex</a></li>
-        
-        <li><a href="/tags-output/heuristics/">heuristics</a></li>
-        
-        <li><a href="/tags-output/clojure/">clojure</a></li>
-        
-        <li><a href="/tags-output/gdb/">gdb</a></li>
-        
-        <li><a href="/tags-output/rust/">rust</a></li>
-        
-        <li><a href="/tags-output/shell%20script/">shell script</a></li>
-        
-        <li><a href="/tags-output/linux/">linux</a></li>
-        
-        <li><a href="/tags-output/electronics/">electronics</a></li>
-        
-        <li><a href="/tags-output/java/">java</a></li>
-        
-        <li><a href="/tags-output/haskell/">haskell</a></li>
-        
-        <li><a href="/tags-output/c%2B%2B/">c++</a></li>
-        
-        <li><a href="/tags-output/quantum%20computing/">quantum computing</a></li>
-        
-        <li><a href="/tags-output/drivers/">drivers</a></li>
-        
-        <li><a href="/tags-output/functional%20programming/">functional programming</a></li>
-        
-        <li><a href="/tags-output/algorithms/">algorithms</a></li>
-        
-        <li><a href="/tags-output/design%20patterns/">design patterns</a></li>
-        
-        <li><a href="/tags-output/scripts/">scripts</a></li>
-        
-    </ul>
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = "http://ardeleanasm.github.io/posts-output/2022-11-10-Vicsek-fractal/";
+            this.page.identifier = "Vicsek fractal";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//23ars.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
 </div>
 
             </div>
