@@ -1,7 +1,7 @@
 {
   :title "Vicsek fractal"
   :layout :post
-  :tags ["clojure"]
+  :tags ["clojure", "fractals"]
   :toc true}
  
  ---
