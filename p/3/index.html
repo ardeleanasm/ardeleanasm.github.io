@@ -58,14 +58,49 @@
 <div id="post">
     
     <div class="post-header">
-        <h2>Debugging with GDB</h2>
+        <h2>C++ map of member functions</h2>
         <div id="post-meta">
             
-            <div class="date">September 23, 2021</div>
+            <div class="date">September 28, 2021</div>
         </div>
     </div>
-    <p>Some useful comands for debugging C/C++ applications using GDB from command line:</p><h2 id="starting-gdb">Starting GDB:</h2>
-    <a href="/posts-output/2021-09-23-Debugging-with-GDB/">Continue reading &#8594;</a>
+    <p>Using look-up tables of member functions is a common use case for implementing and registering callbacks for certain events.
+The syntax for doing this is not quite straightforward.</p><pre><code class="C++">#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include &lt;memory&gt;
+#include &lt;functional&gt;
+#include &lt;map&gt;
+class SomeObj
+{
+    public:
+       void Run(){
+           fct_t funct;
+           for (auto entry:functionsMap) {
+               funct = entry.second;
+               funct("some string");
+           }
+       }
+    private:
+        void myFunction(const std::string &amp;str)
+        {
+            std::cout&lt;&lt;str;
+        }
+        using fct_t = std::function&lt;void(const std::string &amp;)&gt;;
+        const std::map&lt;int,fct_t&gt; functionsMap = 
+        {
+                {1,std::bind(&amp;SomeObj::myFunction, this,
+                  std::placeholders::_1)},
+        };
+};
+
+int main() {
+    SomeObj obj;
+    obj.Run();
+
+  return 0;
+}
+</code></pre>
+    <a href="/posts-output/2021-09-28-C++-map-of-member-functions/">Continue reading &#8594;</a>
     <hr>
     
     <div class="post-header">
@@ -153,6 +188,17 @@ int main() {
     <hr>
     
     <div class="post-header">
+        <h2>Debugging with GDB</h2>
+        <div id="post-meta">
+            
+            <div class="date">September 23, 2021</div>
+        </div>
+    </div>
+    <p>Some useful comands for debugging C/C++ applications using GDB from command line:</p><h2 id="starting-gdb">Starting GDB:</h2>
+    <a href="/posts-output/2021-09-23-Debugging-with-GDB/">Continue reading &#8594;</a>
+    <hr>
+    
+    <div class="post-header">
         <h2>Keep processes running after SSH session ended</h2>
         <div id="post-meta">
             
@@ -173,20 +219,6 @@ int main() {
     <h3 id="introduction">Introduction</h3><p>In this post I'll shortly describe some functions from a fractals generator that I wrote in Haskell. Some parts of the application are from the repository mentioned in this <a href="https://gregheartsfield.com/fractal-hs/">post</a>. Some modules, like <code>Plots</code>, are reused from that module since I don't have experience with working with images in Haskell.
 Currently there are not so much differences between the original repository and what I pushed into <a href="https://github.com/ardeleanasm/project-fractals">my repository</a> but I hope that, in future, after I implement my ideas, the code will look more different.</p>
     <a href="/posts-output/2020-05-19-Fractals-Generator-in-Haskell/">Continue reading &#8594;</a>
-    <hr>
-    
-    <div class="post-header">
-        <h2>Neighborhood Search</h2>
-        <div id="post-meta">
-            
-            <div class="date">May 4, 2019</div>
-        </div>
-    </div>
-    <h3 id="implementation">Implementation</h3><pre><code class="haskell">import System.Random
-import System.IO.Unsafe
-import Control.Monad ( replicateM)
-</code></pre>
-    <a href="/posts-output/2019-05-04-Neighborhood-Search-in-Haskell/">Continue reading &#8594;</a>
     <hr>
     
 
@@ -215,11 +247,11 @@ import Control.Monad ( replicateM)
                     <h3>Recent Posts</h3>
                     <ul>
                         
+                        <li><a href="/posts-output/2022-11-16-Fractal-canopy/">Fractal canopy</a></li>
+                        
                         <li><a href="/posts-output/2022-11-10-Vicsek-fractal/">Vicsek fractal</a></li>
                         
                         <li><a href="/posts-output/2022-07-03-Rust-Pass-by-Reference/">Rust Pass by Reference</a></li>
-                        
-                        <li><a href="/posts-output/2022-04-10-Deploy-Cryogen-blog/">Deploy Cryogen blog on Github</a></li>
                         
                     </ul>
                 </div>
@@ -258,6 +290,8 @@ import Control.Monad ( replicateM)
                         <li><a href="/tags-output/functional%20programming/">functional programming</a></li>
                         
                         <li><a href="/tags-output/algorithms/">algorithms</a></li>
+                        
+                        <li><a href="/tags-output/fractals/">fractals</a></li>
                         
                         <li><a href="/tags-output/design%20patterns/">design patterns</a></li>
                         

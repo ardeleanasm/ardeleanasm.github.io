@@ -2,12 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta charset="utf-8"/>
-    <title>Bending bits...</title>
+    <title>Bending bits...: Fractal canopy</title>
     
-    <meta name="description" content="Bytes and words...">
-    <meta name="keywords" content="">
-    
-    <link rel="canonical" href="http://ardeleanasm.github.io">
+<meta name="keywords" content="latex,heuristics,clojure,gdb,rust,shell script,linux,electronics,java,haskell,c++,quantum computing,drivers,functional programming,algorithms,fractals,design patterns,scripts">
+
+<meta property="og:url" content="http://ardeleanasm.github.io/posts-output/2022-11-16-Fractal-canopy/" />
+<meta property="og:title" content="Fractal canopy" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="http://ardeleanasm.github.io/posts-output/2022-11-16-Fractal-canopy/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
@@ -56,41 +59,106 @@
             <div id="content">
                 
 <div id="post">
-    
     <div class="post-header">
-        <h2>Quantum Computing in Haskell - I part</h2>
-        <div id="post-meta">
-            
-            <div class="date">July 26, 2017</div>
-        </div>
+    <div id="post-meta" class="row">
+        <div class="col-lg-6">November 16, 2022</div>
+        
     </div>
-    <h2 id="articles">Articles</h2><ul><li><a href="../Quantum-Computing-in-Haskell/">Quantum Computing in Haskell - I part</a></li><li><a href="../Quantum-Computing-in-Haskell-second-part/">Quantum Computing in Haskell - II part</a></li><li><a href="../Quantum-Computing-in-Haskell-third-part/">Quantum Computing in Haskell - III part</a></li><li><a href="../Quantum-Computing-in-Haskell-fourth-part/">Quantum Computing in Haskell - IV part</a></li><li><a href="https://github.com/ardeleanasm/qchas">Github Repository</a></li><li><a href="https://ardeleanasm.github.io/qchas/">Project's Haddock Documentation</a></li><li><a href="https://hackage.haskell.org/package/qchas">QChas Package</a></li></ul>
-    <a href="/posts-output/2017-07-26-Quantum-Computing-in-Haskell/">Continue reading &#8594;</a>
-    <hr>
+    <h2>Fractal canopy</h2>
+</div>
+<div>
     
-    <div class="post-header">
-        <h2>Deutsch&#39;s Algorithm</h2>
-        <div id="post-meta">
-            
-            <div class="date">August 17, 2016</div>
-        </div>
-    </div>
-    <p>In this post I'll present a quantum implementation of the Deutsch's algorithm using a library <strong>QuantumComputingLib</strong> that I wrote this week.</p><p>First, I should write a little about the library. It's version <em>1.0-SNAPSHOT</em> only and it doesn't have an official release version.
-For now, it only has a basic Javadoc and only provides methods for well-known operations on qubits and matrices.
-I hope that I will able to offer support for it and that this project will be active for a long time, I hope that at least 2 years.
-If someone want to use and test the library, it can be found at the next <a href="https://github.com/ardeleanasm/quantum_computing/tree/master/quantum">link</a>.
-Also, for using this algorithm, you'll need the <strong>ComplexNumber</strong> library.
-This library can be found at the next <a href="https://github.com/ardeleanasm/projects/tree/master/complexnumbers">link</a>.</p>
-    <a href="/posts-output/2016-08-17-deutschs-algorithm/">Continue reading &#8594;</a>
-    <hr>
+    <hr /><pre><code class="clojure">(ns fractals.core
+  (:gen-class))
+
+(def tree-fractal-file "tree.svg")
+
+
+(defn append-to-file
+  "Uses spit to append to a file specified with its name as a string, or
+   anything else that writer can take as an argument.  s is the string to
+   append."     
+  [file-name s]
+  (spit file-name s :append true))
+
+
+
+(def header-xml "&lt;?xml version=\"1.0\"?&gt;")
+(def header-svg "&lt;svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"&gt;")
+(def footer "\" stroke=\"black\" stroke-width=\"1\"/&gt;\n&lt;/svg&gt;")
+
+
+
+(defn map-y-coordinate [y]
+  (- 600 y))
+
+(defn draw-line [x y x1 y1 file]
+  (append-to-file file (str " M " x " " (map-y-coordinate y)))
+  (append-to-file file (str " L " x1 " " (map-y-coordinate y1)))
+  )
+
+(defn draw-tree [x y angle depth len fork-angle]
+  (if (&gt; depth 0)
+    (let [x2 (- x (* (Math/sin (Math/toRadians angle)) depth len))
+          y2 (- y (* (Math/cos (Math/toRadians angle)) depth len))]
+      (draw-line x y x2 y2 tree-fractal-file)
+      (draw-tree x2 y2 (- angle fork-angle) (- depth 1) len fork-angle)
+      (draw-tree x2 y2 (+ angle fork-angle) (- depth 1) len fork-angle)
+      )))
+
+
+(defn run-tree []
+  (let [content "&lt;path d=\""
+        
+        ]
+    (append-to-file tree-fractal-file header-xml)
+    (append-to-file tree-fractal-file header-svg)
+    (append-to-file tree-fractal-file content)
+    (draw-tree 600 50 180 10 10 20)
+    (append-to-file tree-fractal-file footer)
+    ))
+
+(defn -main
+  [&amp; args]
+  ;;  (run 0.0 0.0 729.0 )
+  (run-tree)
+  )
+</code></pre>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
     
+    <a href="/tags-output/clojure/">clojure</a>
+    
+    <a href="/tags-output/fractals/">fractals</a>
+    
+</div>
+
 
     <div id="prev-next">
         
-        <a class="left" href="/p/5/">&laquo; Prev</a>
         
+        <a class="right" href="/posts-output/2022-11-10-Vicsek-fractal/">Vicsek fractal &raquo;</a>
         
     </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = "http://ardeleanasm.github.io/posts-output/2022-11-16-Fractal-canopy/";
+            this.page.identifier = "Fractal canopy";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//23ars.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
 </div>
 
             </div>

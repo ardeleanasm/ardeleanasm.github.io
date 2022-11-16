@@ -58,6 +58,24 @@
 <div id="post">
     
     <div class="post-header">
+        <h2>Simple GA in Clojure</h2>
+        <div id="post-meta">
+            
+            <div class="date">November 29, 2021</div>
+        </div>
+    </div>
+    <p>In this blog post I’ll present a simple Genetic Algorithm implementation made in Clojure. The application is based on the one presented by Lee Spector in <a href="https://gist.github.com/lspector/1291789?fbclid=IwAR3NHmrqQVDgmPrtKg6L_nPCc70KCK2xsZ2h98k5-Cw7bN-2R96a0t6S6kc">HERE</a>.
+The task of the Genetic Algorithm is to evolve, starting from random generated individuals, to a sequence of bits that sums to a particular number.</p><pre><code class="clojure">(defn new-individual
+    "Function used for creating a new individual"
+    [genome-length]
+    {:genome (vec (repeatedly genome-length #(rand-int 2))) :fitness 0}
+    )
+
+</code></pre>
+    <a href="/posts-output/2021-11-29-Simple-GA-in-Clojure/">Continue reading &#8594;</a>
+    <hr>
+    
+    <div class="post-header">
         <h2>Clojure -&gt; Some recursive functions</h2>
         <div id="post-meta">
             
@@ -170,52 +188,6 @@ std::mutex Singleton::_mutex;
     <a href="/posts-output/2021-10-06-Thread-safe-Singleton-Design-Pattern-in-C++/">Continue reading &#8594;</a>
     <hr>
     
-    <div class="post-header">
-        <h2>C++ map of member functions</h2>
-        <div id="post-meta">
-            
-            <div class="date">September 28, 2021</div>
-        </div>
-    </div>
-    <p>Using look-up tables of member functions is a common use case for implementing and registering callbacks for certain events.
-The syntax for doing this is not quite straightforward.</p><pre><code class="C++">#include &lt;iostream&gt;
-#include &lt;string&gt;
-#include &lt;memory&gt;
-#include &lt;functional&gt;
-#include &lt;map&gt;
-class SomeObj
-{
-    public:
-       void Run(){
-           fct_t funct;
-           for (auto entry:functionsMap) {
-               funct = entry.second;
-               funct("some string");
-           }
-       }
-    private:
-        void myFunction(const std::string &amp;str)
-        {
-            std::cout&lt;&lt;str;
-        }
-        using fct_t = std::function&lt;void(const std::string &amp;)&gt;;
-        const std::map&lt;int,fct_t&gt; functionsMap = 
-        {
-                {1,std::bind(&amp;SomeObj::myFunction, this,
-                  std::placeholders::_1)},
-        };
-};
-
-int main() {
-    SomeObj obj;
-    obj.Run();
-
-  return 0;
-}
-</code></pre>
-    <a href="/posts-output/2021-09-28-C++-map-of-member-functions/">Continue reading &#8594;</a>
-    <hr>
-    
 
     <div id="prev-next">
         
@@ -242,11 +214,11 @@ int main() {
                     <h3>Recent Posts</h3>
                     <ul>
                         
+                        <li><a href="/posts-output/2022-11-16-Fractal-canopy/">Fractal canopy</a></li>
+                        
                         <li><a href="/posts-output/2022-11-10-Vicsek-fractal/">Vicsek fractal</a></li>
                         
                         <li><a href="/posts-output/2022-07-03-Rust-Pass-by-Reference/">Rust Pass by Reference</a></li>
-                        
-                        <li><a href="/posts-output/2022-04-10-Deploy-Cryogen-blog/">Deploy Cryogen blog on Github</a></li>
                         
                     </ul>
                 </div>
@@ -285,6 +257,8 @@ int main() {
                         <li><a href="/tags-output/functional%20programming/">functional programming</a></li>
                         
                         <li><a href="/tags-output/algorithms/">algorithms</a></li>
+                        
+                        <li><a href="/tags-output/fractals/">fractals</a></li>
                         
                         <li><a href="/tags-output/design%20patterns/">design patterns</a></li>
                         
