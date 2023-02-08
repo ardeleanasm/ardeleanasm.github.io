@@ -58,6 +58,44 @@
 <div id="post">
     
     <div class="post-header">
+        <h2>Thread-safe Singleton Design Pattern in C++</h2>
+        <div id="post-meta">
+            
+            <div class="date">October 6, 2021</div>
+        </div>
+    </div>
+    <pre><code class="C++">class Singleton {
+public:
+  static std::shared_ptr&lt;Singleton&gt; &amp;GetInstance() {
+    static std::shared_ptr&lt;Singleton&gt; instance = nullptr;
+    if (!instance) {
+      std::lock_guard&lt;std::mutex&gt; lock(Singleton::_mutex);
+
+      if (!instance) {
+        instance.reset(new Singleton());
+      }
+
+    }
+    return instance;
+  }
+ 
+  ~Singleton() {}
+private:
+    Singleton() {
+    }
+  Singleton(const Singleton &amp;) = delete;
+  Singleton(Singleton &amp;&amp;) = delete;
+  Singleton &amp;operator=(const Singleton &amp;) = delete;
+  Singleton &amp;operator=(Singleton &amp;&amp;) = delete;
+  static std::mutex _mutex;
+};
+
+std::mutex Singleton::_mutex;
+</code></pre>
+    <a href="/posts-output/2021-10-06-Thread-safe-Singleton-Design-Pattern-in-C++/">Continue reading &#8594;</a>
+    <hr>
+    
+    <div class="post-header">
         <h2>C++ map of member functions</h2>
         <div id="post-meta">
             
@@ -209,18 +247,6 @@ int main() {
     <a href="/posts-output/2020-06-03-Keep-Processes-Running-after-SSH-session-ended/">Continue reading &#8594;</a>
     <hr>
     
-    <div class="post-header">
-        <h2>Fractals Generator in Haskell</h2>
-        <div id="post-meta">
-            
-            <div class="date">May 19, 2020</div>
-        </div>
-    </div>
-    <h3 id="introduction">Introduction</h3><p>In this post I'll shortly describe some functions from a fractals generator that I wrote in Haskell. Some parts of the application are from the repository mentioned in this <a href="https://gregheartsfield.com/fractal-hs/">post</a>. Some modules, like <code>Plots</code>, are reused from that module since I don't have experience with working with images in Haskell.
-Currently there are not so much differences between the original repository and what I pushed into <a href="https://github.com/ardeleanasm/project-fractals">my repository</a> but I hope that, in future, after I implement my ideas, the code will look more different.</p>
-    <a href="/posts-output/2020-05-19-Fractals-Generator-in-Haskell/">Continue reading &#8594;</a>
-    <hr>
-    
 
     <div id="prev-next">
         
@@ -303,7 +329,7 @@ Currently there are not so much differences between the original repository and 
             </div>
         </div>
     </div>
-    <footer>Copyright &copy; 2022 ardeleanasm
+    <footer>Copyright &copy; 2023 ardeleanasm
         <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
 </div>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
