@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
     <meta charset="utf-8"/>
     <title>Bending bits...</title>
     
@@ -9,62 +13,64 @@
     
     <link rel="canonical" href="http://ardeleanasm.github.io">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+    <!-- <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
-    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">-->
+    <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/nord.min.css"> -->
+    <link href="https://unpkg.com/nord-highlightjs@0.1.0/dist/nord.css" rel="stylesheet" type="text/css" />
+    <link href="/css/blue.css" rel="stylesheet" type="text/css" />
+    <link href="/css/background_dark.css" rel="stylesheet" type="text/css" />
+    <link href="/css/font-hack-subset.css" rel="stylesheet" type="text/css" />
+    <link href="/css/style.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
-
-
-<nav class="navbar navbar-default">
+<body class ="">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Bending bits...</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li ><a href="/">Home</a></li>
-                <li
-                ><a href="/archives/">Archives</a></li>
-                
-                <li
-                >
-                <a href="/pages-output/about/">About</a>
-                </li>
-                
-                <li><a href="/feed.xml">RSS</a></li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div><!--/.container-fluid -->
-</nav>
+        <header class="header">
+            <div class="header__inner">
+                <div class="header__logo">
+                        
+                    <a href="/" style="text-decoration: none;">
+                        <div class="logo">
+                          
+                                Bending bits...
+                            
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!-- Header menu -->
+            <nav class="menu">
+                <ul class="menu__inner">
+                    <li ><a href="/">Home</a></li>
+                    <li ><a href="/archives/">Archives</a></li>
+                    
+                        <li
+                            >
+                            <a href="/pages-output/about/">About</a>
+                        </li>
+                    
+                    <li><a href="/feed.xml">RSS</a></li>
+                </ul>
+            </nav>
 
-
-<div class="container">
-
-
-    <div class="row">
-        <div class="col-lg-9">
-            <div id="content">
-                
-<div id="post">
+        </header>
     
-    <div class="post-header">
-        <h2>Thread-safe Singleton Design Pattern in C++</h2>
-        <div id="post-meta">
+
+        <div class ="content">
             
-            <div class="date">October 6, 2021</div>
+                
+<div class="posts">
+    
+    <div class="post on-list">
+        
+        <h1 class="post-title">Thread-safe Singleton Design Pattern in C++</h1>
+        <div class="post-meta-inline">
+            <span class="post-date">
+                October 6, 2021
+            </span>
         </div>
-    </div>
-    <pre><code class="C++">class Singleton {
+        <pre><code class="C++">class Singleton {
 public:
   static std::shared_ptr&lt;Singleton&gt; &amp;GetInstance() {
     static std::shared_ptr&lt;Singleton&gt; instance = nullptr;
@@ -92,17 +98,18 @@ private:
 
 std::mutex Singleton::_mutex;
 </code></pre>
-    <a href="/posts-output/2021-10-06-Thread-safe-Singleton-Design-Pattern-in-C++/">Continue reading &#8594;</a>
-    <hr>
-    
-    <div class="post-header">
-        <h2>C++ map of member functions</h2>
-        <div id="post-meta">
-            
-            <div class="date">September 28, 2021</div>
-        </div>
+        <a href="/posts-output/2021-10-06-Thread-safe-Singleton-Design-Pattern-in-C++/">Continue reading &#8594;</a>
     </div>
-    <p>Using look-up tables of member functions is a common use case for implementing and registering callbacks for certain events.
+    
+    <div class="post on-list">
+        
+        <h1 class="post-title">C++ map of member functions</h1>
+        <div class="post-meta-inline">
+            <span class="post-date">
+                September 28, 2021
+            </span>
+        </div>
+        <p>Using look-up tables of member functions is a common use case for implementing and registering callbacks for certain events.
 The syntax for doing this is not quite straightforward.</p><pre><code class="C++">#include &lt;iostream&gt;
 #include &lt;string&gt;
 #include &lt;memory&gt;
@@ -138,17 +145,18 @@ int main() {
   return 0;
 }
 </code></pre>
-    <a href="/posts-output/2021-09-28-C++-map-of-member-functions/">Continue reading &#8594;</a>
-    <hr>
-    
-    <div class="post-header">
-        <h2>Decorator Design Pattern in C++</h2>
-        <div id="post-meta">
-            
-            <div class="date">September 23, 2021</div>
-        </div>
+        <a href="/posts-output/2021-09-28-C++-map-of-member-functions/">Continue reading &#8594;</a>
     </div>
-    <pre><code class="C++">#include &lt;iostream&gt;
+    
+    <div class="post on-list">
+        
+        <h1 class="post-title">Decorator Design Pattern in C++</h1>
+        <div class="post-meta-inline">
+            <span class="post-date">
+                September 23, 2021
+            </span>
+        </div>
+        <pre><code class="C++">#include &lt;iostream&gt;
 #include &lt;string&gt;
 #include &lt;memory&gt;
 /**
@@ -222,30 +230,32 @@ int main() {
   return 0;
 }
 </code></pre>
-    <a href="/posts-output/2021-09-23-Decorator-Design-Pattern-in-C++/">Continue reading &#8594;</a>
-    <hr>
-    
-    <div class="post-header">
-        <h2>Debugging with GDB</h2>
-        <div id="post-meta">
-            
-            <div class="date">September 23, 2021</div>
-        </div>
+        <a href="/posts-output/2021-09-23-Decorator-Design-Pattern-in-C++/">Continue reading &#8594;</a>
     </div>
-    <p>Some useful comands for debugging C/C++ applications using GDB from command line:</p><h2 id="starting-gdb">Starting GDB:</h2>
-    <a href="/posts-output/2021-09-23-Debugging-with-GDB/">Continue reading &#8594;</a>
-    <hr>
     
-    <div class="post-header">
-        <h2>Keep processes running after SSH session ended</h2>
-        <div id="post-meta">
-            
-            <div class="date">June 3, 2020</div>
+    <div class="post on-list">
+        
+        <h1 class="post-title">Debugging with GDB</h1>
+        <div class="post-meta-inline">
+            <span class="post-date">
+                September 23, 2021
+            </span>
         </div>
+        <p>Some useful comands for debugging C/C++ applications using GDB from command line:</p><h2 id="starting-gdb">Starting GDB:</h2>
+        <a href="/posts-output/2021-09-23-Debugging-with-GDB/">Continue reading &#8594;</a>
     </div>
-    <p>Ssh into remote OS, type <code>screen</code> and start the process you want. Use <strong>CTRL-A</strong> then <strong>CTRL-D</strong> to detach the screen session and log out. Use <code>screen -r</code> to resume the detached screen session.</p>
-    <a href="/posts-output/2020-06-03-Keep-Processes-Running-after-SSH-session-ended/">Continue reading &#8594;</a>
-    <hr>
+    
+    <div class="post on-list">
+        
+        <h1 class="post-title">Keep processes running after SSH session ended</h1>
+        <div class="post-meta-inline">
+            <span class="post-date">
+                June 3, 2020
+            </span>
+        </div>
+        <p>Ssh into remote OS, type <code>screen</code> and start the process you want. Use <strong>CTRL-A</strong> then <strong>CTRL-D</strong> to detach the screen session and log out. Use <code>screen -r</code> to resume the detached screen session.</p>
+        <a href="/posts-output/2020-06-03-Keep-Processes-Running-after-SSH-session-ended/">Continue reading &#8594;</a>
+    </div>
     
 
     <div id="prev-next">
@@ -258,80 +268,22 @@ int main() {
     </div>
 </div>
 
-            </div>
+            
         </div>
+        <footer class="footer">
+            <div class="footer__inner">
+                <div class="copyright">
+                    <span>Copyright &copy; 2023 ardeleanasm
+                    Powered by <a href="https://cryogenweb.org">Cryogen</a>
+                    <span class="copyright-theme-sep">:: </span>
+                    Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                </span>
+            </div>
+            </div>
+        </footer>
+            
 
-        <div class="col-md-3">
-            <div id="sidebar">
-                <h3>Links</h3>
-                <ul id="links">
-                    <li><a href="http://sebastianardelean.github.io">Personal Website</a></li>
-                    
-                </ul>
-                
-                <div id="recent">
-                    <h3>Recent Posts</h3>
-                    <ul>
-                        
-                        <li><a href="/posts-output/2022-11-16-Fractal-canopy/">Fractal canopy</a></li>
-                        
-                        <li><a href="/posts-output/2022-11-10-Vicsek-fractal/">Vicsek fractal</a></li>
-                        
-                        <li><a href="/posts-output/2022-07-03-Rust-Pass-by-Reference/">Rust Pass by Reference</a></li>
-                        
-                    </ul>
-                </div>
-                
-                
-                <div id="tags">
-                    <h3>Tags</h3>
-                    <ul>
-                        
-                        <li><a href="/tags-output/latex/">latex</a></li>
-                        
-                        <li><a href="/tags-output/heuristics/">heuristics</a></li>
-                        
-                        <li><a href="/tags-output/clojure/">clojure</a></li>
-                        
-                        <li><a href="/tags-output/gdb/">gdb</a></li>
-                        
-                        <li><a href="/tags-output/rust/">rust</a></li>
-                        
-                        <li><a href="/tags-output/shell%20script/">shell script</a></li>
-                        
-                        <li><a href="/tags-output/linux/">linux</a></li>
-                        
-                        <li><a href="/tags-output/electronics/">electronics</a></li>
-                        
-                        <li><a href="/tags-output/java/">java</a></li>
-                        
-                        <li><a href="/tags-output/haskell/">haskell</a></li>
-                        
-                        <li><a href="/tags-output/c%2B%2B/">c++</a></li>
-                        
-                        <li><a href="/tags-output/quantum%20computing/">quantum computing</a></li>
-                        
-                        <li><a href="/tags-output/drivers/">drivers</a></li>
-                        
-                        <li><a href="/tags-output/functional%20programming/">functional programming</a></li>
-                        
-                        <li><a href="/tags-output/algorithms/">algorithms</a></li>
-                        
-                        <li><a href="/tags-output/fractals/">fractals</a></li>
-                        
-                        <li><a href="/tags-output/design%20patterns/">design patterns</a></li>
-                        
-                        <li><a href="/tags-output/scripts/">scripts</a></li>
-                        
-                    </ul>
-                </div>
-                
-            </div>
-        </div>
     </div>
-    <footer>Copyright &copy; 2023 ardeleanasm
-        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
-</div>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="/js/highlight.pack.js" type="application/javascript"></script>

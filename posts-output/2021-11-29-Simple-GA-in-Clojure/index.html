@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
     <meta charset="utf-8"/>
-    <title>Bending bits...: Simple GA in Clojure</title>
+    <title>Bending bits...: 
+<h1 class="post-title">Simple GA in Clojure</h1>
+</title>
     
 <meta name="keywords" content="latex,heuristics,clojure,gdb,rust,shell script,linux,electronics,java,haskell,c++,quantum computing,drivers,functional programming,algorithms,fractals,design patterns,scripts">
 
@@ -18,61 +24,64 @@ The task of the Genetic Algorithm is to evolve, starting from random generated i
 
     <link rel="canonical" href="http://ardeleanasm.github.io/posts-output/2021-11-29-Simple-GA-in-Clojure/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+    <!-- <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
           type="text/css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/default.min.css">
-    <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">-->
+    <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/nord.min.css"> -->
+    <link href="https://unpkg.com/nord-highlightjs@0.1.0/dist/nord.css" rel="stylesheet" type="text/css" />
+    <link href="/css/blue.css" rel="stylesheet" type="text/css" />
+    <link href="/css/background_dark.css" rel="stylesheet" type="text/css" />
+    <link href="/css/font-hack-subset.css" rel="stylesheet" type="text/css" />
+    <link href="/css/style.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
-
-
-<nav class="navbar navbar-default">
+<body class ="">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/">Bending bits...</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li ><a href="/">Home</a></li>
-                <li
-                ><a href="/archives/">Archives</a></li>
-                
-                <li
-                >
-                <a href="/pages-output/about/">About</a>
-                </li>
-                
-                <li><a href="/feed.xml">RSS</a></li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div><!--/.container-fluid -->
-</nav>
+        <header class="header">
+            <div class="header__inner">
+                <div class="header__logo">
+                        
+                    <a href="/" style="text-decoration: none;">
+                        <div class="logo">
+                          
+                                Bending bits...
+                            
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!-- Header menu -->
+            <nav class="menu">
+                <ul class="menu__inner">
+                    <li ><a href="/">Home</a></li>
+                    <li ><a href="/archives/">Archives</a></li>
+                    
+                        <li
+                            >
+                            <a href="/pages-output/about/">About</a>
+                        </li>
+                    
+                    <li><a href="/feed.xml">RSS</a></li>
+                </ul>
+            </nav>
 
+        </header>
+    
 
-<div class="container">
-
-
-    <div class="row">
-        <div class="col-lg-9">
-            <div id="content">
+        <div class ="content">
+            
                 
 <div id="post">
-    <div class="post-header">
-    <div id="post-meta" class="row">
-        <div class="col-lg-6">November 29, 2021</div>
+    <div class="post">
+    <h1 class="post-title">Simple GA in Clojure</h1>
+    <div class="post-meta-inline">
+        <span class="post-date">
+            November 29, 2021
+        </span>
         
     </div>
-    <h2>Simple GA in Clojure</h2>
 </div>
-<div>
+<div class="post-content">
     
     <p>In this blog post I’ll present a simple Genetic Algorithm implementation made in Clojure. The application is based on the one presented by Lee Spector in <a href="https://gist.github.com/lspector/1291789?fbclid=IwAR3NHmrqQVDgmPrtKg6L_nPCc70KCK2xsZ2h98k5-Cw7bN-2R96a0t6S6kc">HERE</a>.
 The task of the Genetic Algorithm is to evolve, starting from random generated individuals, to a sequence of bits that sums to a particular number.</p><pre><code class="clojure">(defn new-individual
@@ -240,80 +249,22 @@ Generation 12 -&gt; best individual {:genome [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
 
 </div>
 
-            </div>
+            
         </div>
+        <footer class="footer">
+            <div class="footer__inner">
+                <div class="copyright">
+                    <span>Copyright &copy; 2023 ardeleanasm
+                    Powered by <a href="https://cryogenweb.org">Cryogen</a>
+                    <span class="copyright-theme-sep">:: </span>
+                    Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                </span>
+            </div>
+            </div>
+        </footer>
+            
 
-        <div class="col-md-3">
-            <div id="sidebar">
-                <h3>Links</h3>
-                <ul id="links">
-                    <li><a href="http://sebastianardelean.github.io">Personal Website</a></li>
-                    
-                </ul>
-                
-                <div id="recent">
-                    <h3>Recent Posts</h3>
-                    <ul>
-                        
-                        <li><a href="/posts-output/2022-11-16-Fractal-canopy/">Fractal canopy</a></li>
-                        
-                        <li><a href="/posts-output/2022-11-10-Vicsek-fractal/">Vicsek fractal</a></li>
-                        
-                        <li><a href="/posts-output/2022-07-03-Rust-Pass-by-Reference/">Rust Pass by Reference</a></li>
-                        
-                    </ul>
-                </div>
-                
-                
-                <div id="tags">
-                    <h3>Tags</h3>
-                    <ul>
-                        
-                        <li><a href="/tags-output/latex/">latex</a></li>
-                        
-                        <li><a href="/tags-output/heuristics/">heuristics</a></li>
-                        
-                        <li><a href="/tags-output/clojure/">clojure</a></li>
-                        
-                        <li><a href="/tags-output/gdb/">gdb</a></li>
-                        
-                        <li><a href="/tags-output/rust/">rust</a></li>
-                        
-                        <li><a href="/tags-output/shell%20script/">shell script</a></li>
-                        
-                        <li><a href="/tags-output/linux/">linux</a></li>
-                        
-                        <li><a href="/tags-output/electronics/">electronics</a></li>
-                        
-                        <li><a href="/tags-output/java/">java</a></li>
-                        
-                        <li><a href="/tags-output/haskell/">haskell</a></li>
-                        
-                        <li><a href="/tags-output/c%2B%2B/">c++</a></li>
-                        
-                        <li><a href="/tags-output/quantum%20computing/">quantum computing</a></li>
-                        
-                        <li><a href="/tags-output/drivers/">drivers</a></li>
-                        
-                        <li><a href="/tags-output/functional%20programming/">functional programming</a></li>
-                        
-                        <li><a href="/tags-output/algorithms/">algorithms</a></li>
-                        
-                        <li><a href="/tags-output/fractals/">fractals</a></li>
-                        
-                        <li><a href="/tags-output/design%20patterns/">design patterns</a></li>
-                        
-                        <li><a href="/tags-output/scripts/">scripts</a></li>
-                        
-                    </ul>
-                </div>
-                
-            </div>
-        </div>
     </div>
-    <footer>Copyright &copy; 2023 ardeleanasm
-        <p style="text-align: center;">Powered by <a href="http://cryogenweb.org">Cryogen</a></p></footer>
-</div>
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="/js/highlight.pack.js" type="application/javascript"></script>
