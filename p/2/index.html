@@ -64,6 +64,25 @@
     
     <div class="post on-list">
         
+        <h1 class="post-title">Decimal to binary conversion in Clojure</h1>
+        <div class="post-meta-inline">
+            <span class="post-date">
+                March 7, 2022
+            </span>
+        </div>
+        <hr /><pre><code class="clojure">(defn convert-to-binary [value bits]
+  (letfn [(to-binary [value bits] 
+            (-&gt; value (Integer/toString 2)
+                (Integer/parseInt) (-&gt;&gt; (format (str "%0" bits "d")))))]
+    (let [binary-value (to-binary value bits) result-size (count binary-value)
+          default-value (apply str (repeat bits 1))]
+      (if (not= result-size bits) default-value  binary-value))))
+</code></pre>
+        <a href="/posts-output/2022-03-07-Decimal-to-binary-in-clojure/">Continue reading &#8594;</a>
+    </div>
+    
+    <div class="post on-list">
+        
         <h1 class="post-title">Conway&#39;s game of life implementation in Rust using ChatGPT</h1>
         <div class="post-meta-inline">
             <span class="post-date">
@@ -235,19 +254,6 @@ The task of the Genetic Algorithm is to evolve, starting from random generated i
 #include &lt;cstdint&gt;
 </code></pre><h2 id="fibonacci">Fibonacci</h2>
         <a href="/posts-output/2021-11-25-Some-recursive-algorithms-using-C++-template-metaprogramming/">Continue reading &#8594;</a>
-    </div>
-    
-    <div class="post on-list">
-        
-        <h1 class="post-title">Latexdiff – sometimes is just a pain</h1>
-        <div class="post-meta-inline">
-            <span class="post-date">
-                November 11, 2021
-            </span>
-        </div>
-        <p>Just posting a command for <strong>latexdiff</strong> that saved me from trying to solve a lot of errors:</p><pre><code>latexdiff --append-safecmd=subfile --config="PICTUREENV=(?:picture|DIFnomarkup|align|tabular)[\w\d*@]*" draft.tex revision.tex --flatten &gt; diff_new.tex
-</code></pre>
-        <a href="/posts-output/2021-11-11-Latexdiff-sometimes-is-just-a-pain/">Continue reading &#8594;</a>
     </div>
     
 

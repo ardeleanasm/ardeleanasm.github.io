@@ -64,6 +64,18 @@
     
     <div class="post on-list">
         
+        <h1 class="post-title">Jupyter notebook in Docker</h1>
+        <div class="post-meta-inline">
+            <span class="post-date">
+                March 8, 2023
+            </span>
+        </div>
+        <hr /><h2 id="why">Why?</h2>
+        <a href="/posts-output/2023-03-08-Jupyter-notebook-docker/">Continue reading &#8594;</a>
+    </div>
+    
+    <div class="post on-list">
+        
         <h1 class="post-title">Fractal canopy</h1>
         <div class="post-meta-inline">
             <span class="post-date">
@@ -241,25 +253,6 @@ git commit -m "Publish"
 git push
 </code></pre>
         <a href="/posts-output/2022-04-10-Deploy-Cryogen-blog/">Continue reading &#8594;</a>
-    </div>
-    
-    <div class="post on-list">
-        
-        <h1 class="post-title">Decimal to binary conversion in Clojure</h1>
-        <div class="post-meta-inline">
-            <span class="post-date">
-                March 7, 2022
-            </span>
-        </div>
-        <hr /><pre><code class="clojure">(defn convert-to-binary [value bits]
-  (letfn [(to-binary [value bits] 
-            (-&gt; value (Integer/toString 2)
-                (Integer/parseInt) (-&gt;&gt; (format (str "%0" bits "d")))))]
-    (let [binary-value (to-binary value bits) result-size (count binary-value)
-          default-value (apply str (repeat bits 1))]
-      (if (not= result-size bits) default-value  binary-value))))
-</code></pre>
-        <a href="/posts-output/2022-03-07-Decimal-to-binary-in-clojure/">Continue reading &#8594;</a>
     </div>
     
 
