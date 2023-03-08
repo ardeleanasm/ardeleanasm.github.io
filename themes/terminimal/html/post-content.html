@@ -1,0 +1,21 @@
+<div class="post">
+    <h1 class="post-title">{{post.title}}</h1>
+    <div class="post-meta-inline">
+        <span class="post-date">
+            {{post.date|date:longDate}}
+        </span>
+        
+    </div>
+</div>
+<div class="post-content">
+    {% if post.toc %}{{post.toc|safe}}{% endif %}
+    {{post.content|safe}}
+</div>
+{% if post.tags|not-empty %}
+<div id="post-tags">
+    <b>Tags: </b>
+    {% for tag in post.tags %}
+    <a href="{{tag.uri}}">{{tag.name}}</a>
+    {% endfor %}
+</div>
+{% endif %}

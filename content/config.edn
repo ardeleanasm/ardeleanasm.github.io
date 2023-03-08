@@ -17,7 +17,7 @@
  :archive-group-format         "yyyy MMMM"
  :sass-src                     []
  :sass-path                    "sass"
- :theme                        "blue"
+ :theme                        "terminimal"
  :resources                    ["img" "CNAME"]
  :keep-files                   [".git"]
  :disqus?                      true

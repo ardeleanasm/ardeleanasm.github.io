@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <meta charset="utf-8"/>
+    <title>{{title}}{% block subtitle %}{% endblock %}</title>
+    {% block meta %}
+    <meta name="description" content="{{description}}">
+    <meta name="keywords" content="">
+    {% endblock %}
+    <link rel="canonical" href="{{site-url}}{{uri}}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">-->
+    <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/nord.min.css"> -->
+    <link href="https://unpkg.com/nord-highlightjs@0.1.0/dist/nord.css" rel="stylesheet" type="text/css" />
+    {% style "css/blue.css" %}
+    {% style "css/background_dark.css" %}
+    {% style "css/font-hack-subset.css" %}
+    {% style "css/style.css" %}
+</head>
+<body class ="">
+    <div class="container">
+        <header class="header">
+            <div class="header__inner">
+                <div class="header__logo">
+                        
+                    <a href="{{index-uri}}" style="text-decoration: none;">
+                        <div class="logo">
+                          
+                                {{title}}
+                            
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!-- Header menu -->
+            <nav class="menu">
+                <ul class="menu__inner">
+                    <li {% if home %} class="active" {% endif %}><a href="{{index-uri}}">Home</a></li>
+                    <li {% if archives %} class="active" {% endif %}><a href="{{archives-uri}}">Archives</a></li>
+                    {% for nav-page in navbar-pages %}
+                        <li
+                            {%ifequal page.uri nav-page.uri %} class="active" {% endifequal %}>
+                            <a href="{{nav-page.uri}}">{{nav-page.title}}</a>
+                        </li>
+                    {% endfor %}
+                    <li><a href="{{rss-uri}}">RSS</a></li>
+                </ul>
+            </nav>
+
+        </header>
+    
+
+        <div class ="content">
+            
+                {% block content %} 
+                {% endblock %}
+            
+        </div>
+        <footer class="footer">
+            <div class="footer__inner">
+                <div class="copyright">
+                    <span>Copyright &copy; {{today|date:yyyy}} {{author}}
+                    Powered by <a href="https://cryogenweb.org">Cryogen</a>
+                    <span class="copyright-theme-sep">:: </span>
+                    Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                </span>
+            </div>
+            </div>
+        </footer>
+            
+
+    </div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+{% script "js/highlight.pack.js" %}
+<script>hljs.initHighlightingOnLoad();</script>
+{% if post.klipse %} {{post.klipse|safe}} {% endif %}
+{% if page.klipse %} {{page.klipse|safe}} {% endif %}
+</body>
+</html>
