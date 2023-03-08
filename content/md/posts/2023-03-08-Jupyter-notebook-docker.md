@@ -23,7 +23,7 @@ Since I mainly use Windows OS, installing Python and R was not a solution. Insta
 
 ## Setup
 
-I just needed to have Jupyter Lab installed, Python and, of course, R. So, first step was to find a Jupyter docker image. And found it really easy ([Jupyter/datascience-notebook](https://hub.docker.com/r/jupyter/datascience-notebook)). but I didn't need all the stacks. So, let's create our basic image starting from this image.
+I just needed to have Jupyter Lab installed, Python and, of course, R. So, first step was to find a Jupyter docker image. And found it really easy ([Jupyter/datascience-notebook](https://hub.docker.com/r/jupyter/datascience-notebook)). But I didn't need all the stacks. So, let's create a basic image starting from official one.
 
 ```docker
 ARG ROOT_CONTAINER=jupyter/base-notebook:latest
