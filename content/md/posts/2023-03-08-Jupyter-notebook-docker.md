@@ -54,6 +54,9 @@ RUN apt-get update --yes && \
 Ok, now we should switch back the user and install in R with mamba. And, some Python libraries.
 
 ```dockerfile
+
+USER ${NB_UID}
+
 RUN mamba install --quiet --yes \
     'r-base' \
     'r-caret' \
