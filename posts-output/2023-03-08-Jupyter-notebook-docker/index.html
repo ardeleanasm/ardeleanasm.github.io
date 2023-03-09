@@ -99,7 +99,10 @@ RUN apt-get update --yes &amp;&amp; \
     gfortran \
     gcc &amp;&amp; \
     apt-get clean &amp;&amp; rm -rf /var/lib/apt/lists/*
-</code></pre><p>Ok, now we should switch back the user and install in R with mamba. And, some Python libraries.</p><pre><code class="dockerfile">RUN mamba install --quiet --yes \
+</code></pre><p>Ok, now we should switch back the user and install in R with mamba. And, some Python libraries.</p><pre><code class="dockerfile">
+USER ${NB_UID}
+
+RUN mamba install --quiet --yes \
     'r-base' \
     'r-caret' \
     'r-crayon' \
@@ -142,6 +145,8 @@ RUN pip install -U matplotlib numpy scikit-learn jupyterlab ipywidgets ipympl
 
 
     <div id="prev-next">
+        
+        <a href="/posts-output/2023-03-09-QRNG-using-Qiskit-and-IBM/">&laquo; QRNG using Qiskit and IBMQ</a>
         
         
         <a class="right" href="/posts-output/2022-11-16-Fractal-canopy/">Fractal canopy &raquo;</a>

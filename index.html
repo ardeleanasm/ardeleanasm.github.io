@@ -64,6 +64,18 @@
     
     <div class="post on-list">
         
+        <h1 class="post-title">QRNG using Qiskit and IBMQ</h1>
+        <div class="post-meta-inline">
+            <span class="post-date">
+                March 9, 2023
+            </span>
+        </div>
+        <hr /><h2 id="tools">Tools</h2>
+        <a href="/posts-output/2023-03-09-QRNG-using-Qiskit-and-IBM/">Continue reading &#8594;</a>
+    </div>
+    
+    <div class="post on-list">
+        
         <h1 class="post-title">Jupyter notebook in Docker</h1>
         <div class="post-meta-inline">
             <span class="post-date">
@@ -215,44 +227,6 @@ fn main() {
 }
 </code></pre>
         <a href="/posts-output/2022-07-03-Rust-Pass-by-Reference/">Continue reading &#8594;</a>
-    </div>
-    
-    <div class="post on-list">
-        
-        <h1 class="post-title">Deploy Cryogen blog on Github</h1>
-        <div class="post-meta-inline">
-            <span class="post-date">
-                April 10, 2022
-            </span>
-        </div>
-        <hr /><pre><code>SOURCE_BRANCH = "dev"
-MASTER_BRANCH = "master"
-
-# checkout correct branch
-git checkout $SOURCE_BRANCH
-
-
-# build
-lein run
-
-# stash
-git stash
-
-# checkout master branch
-git checkout $MASTER_BRANCH
-git fetch --all
-git stash pop
-cp -r public/blog/* blog/
-cp -r public/blog/404.html .
-cp -r public/blog/cryogen.xml .
-cp -r public/blog/feed.xml .
-cp -r public/blog/index.html .
-cp -r public/blog/sitemap.xml .
-
-git commit -m "Publish"
-git push
-</code></pre>
-        <a href="/posts-output/2022-04-10-Deploy-Cryogen-blog/">Continue reading &#8594;</a>
     </div>
     
 

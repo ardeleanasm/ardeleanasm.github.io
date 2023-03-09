@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <meta charset="utf-8"/>
+    <title>Bending bits...: QRNG using Qiskit and IBMQ 
+</title>
+    
+<meta name="keywords" content="latex,heuristics,clojure,gdb,rust,shell script,linux,electronics,java,haskell,c++,quantum computing,drivers,functional programming,docker,python,algorithms,fractals,design patterns,scripts">
+
+<meta name="description" content="Tools">
+
+<meta property="og:description" content="Tools">
+
+<meta property="og:url" content="http://ardeleanasm.github.io/posts-output/2023-03-09-QRNG-using-Qiskit-and-IBM/" />
+<meta property="og:title" content="QRNG using Qiskit and IBMQ" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="http://ardeleanasm.github.io/posts-output/2023-03-09-QRNG-using-Qiskit-and-IBM/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">-->
+    <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/nord.min.css"> -->
+    <link href="https://unpkg.com/nord-highlightjs@0.1.0/dist/nord.css" rel="stylesheet" type="text/css" />
+    <link href="/css/blue.css" rel="stylesheet" type="text/css" />
+    <link href="/css/background_dark.css" rel="stylesheet" type="text/css" />
+    <link href="/css/font-hack-subset.css" rel="stylesheet" type="text/css" />
+    <link href="/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body class ="">
+    <div class="container">
+        <header class="header">
+            <div class="header__inner">
+                <div class="header__logo">
+                        
+                    <a href="/" style="text-decoration: none;">
+                        <div class="logo">
+                          
+                                Bending bits...
+                            
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!-- Header menu -->
+            <nav class="menu">
+                <ul class="menu__inner">
+                    <li ><a href="/">Home</a></li>
+                    <li ><a href="/archives/">Archives</a></li>
+                    
+                        <li
+                            >
+                            <a href="/pages-output/about/">About</a>
+                        </li>
+                    
+                    <li><a href="/feed.xml">RSS</a></li>
+                </ul>
+            </nav>
+
+        </header>
+    
+
+        <div class ="content">
+            
+                
+<div id="post">
+    <div class="post">
+    <h1 class="post-title">QRNG using Qiskit and IBMQ</h1>
+    <div class="post-meta-inline">
+        <span class="post-date">
+            March 9, 2023
+        </span>
+        
+    </div>
+</div>
+<div class="post-content">
+    <ol class="toc"><li><a href="#tools">Tools</a></li><li><a href="#implementation">Implementation</a></li><li><a href="#how-to-use-it">How to use it?</a></li><li><a href="#known-limitations">Known Limitations</a></li></ol>
+    <hr /><h2 id="tools">Tools</h2><ol><li>Python environment</li><li>Account on <a href="https://quantum-computing.ibm.com/">IBM Quantum</a></li><li>Qiskit Library</li></ol><h2 id="implementation">Implementation</h2><pre><code class="python">from qiskit import IBMQ, Aer, assemble, transpile
+from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
+from qiskit.providers.ibmq import least_busy
+from qiskit.tools.monitor import job_monitor
+import operator
+import struct
+
+class QRNG:
+    def __init__(self, account_token="", use_real_quantum_device=False):
+        self.__bits_pool=[]
+        self.__account_token=account_token
+        self.__real_quantum = use_real_quantum_device
+        
+    def initialize(self):
+        self.__init_ibmq()
+        self.__create_circuit()
+        self.__init_pool()
+        
+    def get_int32(self):
+        return int(self.__get_bit_string(32),2)
+    
+    def get_int8(self):
+        return int(self.__get_bit_string(8),2)
+    
+    def get_int16(self):
+        return int(self.__get_bit_string(16),2)
+    
+    def get_int64(self):
+        return int(self.__get_bit_string(64),2)
+    
+    def get_float(self, min=0, max=1):
+        unpacked = 0x3F800000 | self.get_int32() &gt;&gt; 9
+        packed = struct.pack('I',unpacked)
+        value = struct.unpack('f',packed)[0] - 1.0
+        return (max-min)*value+min
+    
+    def get_double(self, min=0,max=1):
+        unpacked = 0x3FF0000000000000 | self.get_int64() &gt;&gt; 12
+        packed = struct.pack('Q',unpacked)
+        value = struct.unpack('d',packed)[0] - 1.0
+        return (max-min)*value+min # Scale double to given range
+    
+    def __init_ibmq(self):
+        if not self.__account_token or self.__real_quantum==False:
+            # no token, so use simulator
+            self.__backend=Aer.get_backend('aer_simulator')
+            self.__no_of_qubits_available=32
+        else:
+            IBMQ.save_account(self.__account_token)
+            IBMQ.load_account()
+            provider = IBMQ.get_provider("ibm-q")
+            self.__backend = least_busy(provider.backends(filters=lambda x: int(x.configuration().n_qubits) &gt;= 3 and 
+                                   not x.configuration().simulator and x.status().operational==True))
+            self.__no_of_qubits_available = self.__backend.configuration().n_qubits
+            print(f"least busy backend: {self.__backend}, with {self.__no_of_qubits_available} qubits available")
+    
+    def __create_circuit(self):
+        qr = QuantumRegister(self.__no_of_qubits_available)
+        cr = ClassicalRegister(self.__no_of_qubits_available)
+        self.__qcircuit = QuantumCircuit(qr,cr)
+        self.__qcircuit.h(qr)
+        self.__qcircuit.measure(qr,cr)
+        self.__transpiled_circuit = transpile(self.__qcircuit, self.__backend, optimization_level=3)
+        
+    def __init_pool(self):
+        #print("Init pool")
+        self.__bits_pool=self.__get_random_bits()
+        self.__pool_size = len(self.__bits_pool)
+        # print(f"{len(self.__bits_pool)}")
+    
+    def __get_random_bits(self):
+        job = self.__backend.run(self.__transpiled_circuit)
+        job_monitor(job, interval=2)
+        counts = job.result().get_counts(self.__qcircuit)
+        return self.__bits_from_counts(counts)
+    
+    def __bits_from_counts(self,counts):
+        #max_item =max(counts.items(), key=operator.itemgetter(1))
+        #return max_item[0]
+        value = [k for k, v in counts.items()]
+        return ''.join(value)
+    
+    def __get_bit_string(self,n):
+        if n&gt;(self.__pool_size*self.__no_of_qubits_available):
+            raise Exception("The number of required bits is greater than the number of bits available in pool")
+        if not self.__bits_pool or n&gt;len(self.__bits_pool):
+            self.initialize() #reinitialize the circuit if the pool is empty. This way, we can run again on the least busy quantum processor
+        bit_string = self.__bits_pool[:n]
+        self.__bits_pool = self.__bits_pool[n:]
+        return bit_string
+</code></pre><h2 id="how-to-use-it">How to use it?</h2><pre><code class="python">qrng = QRNG("&lt;IBMQ Account Token&gt;",use_real_quantum_device=True)
+qrng.initialize()
+for _ in range(10):
+    value = qrng.get_int8()
+    print(f"Random value: {value}")
+</code></pre><h2 id="known-limitations">Known Limitations</h2><p>Currently it can only generate unsigned int values on 8,16,32, and 64 bits. I will update this post as soon as the support for signed values is added.</p>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/tags-output/quantum%20computing/">quantum computing</a>
+    
+    <a href="/tags-output/python/">python</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        
+        <a class="right" href="/posts-output/2023-03-08-Jupyter-notebook-docker/">Jupyter notebook in Docker &raquo;</a>
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = "http://ardeleanasm.github.io/posts-output/2023-03-09-QRNG-using-Qiskit-and-IBM/";
+            this.page.identifier = "QRNG using Qiskit and IBMQ";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//23ars.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
+</div>
+
+            
+        </div>
+        <footer class="footer">
+            <div class="footer__inner">
+                <div class="copyright">
+                    <span>Copyright &copy; 2023 ardeleanasm
+                    Powered by <a href="https://cryogenweb.org">Cryogen</a>
+                    <span class="copyright-theme-sep">:: </span>
+                    Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                </span>
+            </div>
+            </div>
+        </footer>
+            
+
+    </div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>

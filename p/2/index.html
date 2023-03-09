@@ -64,6 +64,44 @@
     
     <div class="post on-list">
         
+        <h1 class="post-title">Deploy Cryogen blog on Github</h1>
+        <div class="post-meta-inline">
+            <span class="post-date">
+                April 10, 2022
+            </span>
+        </div>
+        <hr /><pre><code>SOURCE_BRANCH = "dev"
+MASTER_BRANCH = "master"
+
+# checkout correct branch
+git checkout $SOURCE_BRANCH
+
+
+# build
+lein run
+
+# stash
+git stash
+
+# checkout master branch
+git checkout $MASTER_BRANCH
+git fetch --all
+git stash pop
+cp -r public/blog/* blog/
+cp -r public/blog/404.html .
+cp -r public/blog/cryogen.xml .
+cp -r public/blog/feed.xml .
+cp -r public/blog/index.html .
+cp -r public/blog/sitemap.xml .
+
+git commit -m "Publish"
+git push
+</code></pre>
+        <a href="/posts-output/2022-04-10-Deploy-Cryogen-blog/">Continue reading &#8594;</a>
+    </div>
+    
+    <div class="post on-list">
+        
         <h1 class="post-title">Decimal to binary conversion in Clojure</h1>
         <div class="post-meta-inline">
             <span class="post-date">
@@ -240,20 +278,6 @@ The task of the Genetic Algorithm is to evolve, starting from random generated i
 (collatz-sequence 1441151 0)
 </code></pre>
         <a href="/posts-output/2021-11-26-Clojure-Some-recursive-functions/">Continue reading &#8594;</a>
-    </div>
-    
-    <div class="post on-list">
-        
-        <h1 class="post-title">Some recursive algorithms using C++ template metaprogramming</h1>
-        <div class="post-meta-inline">
-            <span class="post-date">
-                November 25, 2021
-            </span>
-        </div>
-        <pre><code class="C++">#include &lt;iostream&gt;
-#include &lt;cstdint&gt;
-</code></pre><h2 id="fibonacci">Fibonacci</h2>
-        <a href="/posts-output/2021-11-25-Some-recursive-algorithms-using-C++-template-metaprogramming/">Continue reading &#8594;</a>
     </div>
     
 
