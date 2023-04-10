@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <meta charset="utf-8"/>
+    <title>Bending bits...: Flask API served using Gunicorn and Nginx 
+</title>
+    
+<meta name="keywords" content="latex,heuristics,clojure,gdb,rust,shell script,linux,electronics,java,haskell,c++,nginx,quantum computing,drivers,functional programming,docker,python,algorithms,fractals,design patterns,scripts">
+
+<meta name="description" content="Notes">
+
+<meta property="og:description" content="Notes">
+
+<meta property="og:url" content="http://ardeleanasm.github.io/posts-output/2023-04-10-Flask-With-Gunicorn-and-Nginx/" />
+<meta property="og:title" content="Flask API served using Gunicorn and Nginx" />
+<meta property="og:type" content="article" />
+
+    <link rel="canonical" href="http://ardeleanasm.github.io/posts-output/2023-04-10-Flask-With-Gunicorn-and-Nginx/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link href="//fonts.googleapis.com/css?family=Alegreya:400italic,700italic,400,700" rel="stylesheet"
+          type="text/css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">-->
+    <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/styles/nord.min.css"> -->
+    <link href="https://unpkg.com/nord-highlightjs@0.1.0/dist/nord.css" rel="stylesheet" type="text/css" />
+    <link href="/css/blue.css" rel="stylesheet" type="text/css" />
+    <link href="/css/background_dark.css" rel="stylesheet" type="text/css" />
+    <link href="/css/font-hack-subset.css" rel="stylesheet" type="text/css" />
+    <link href="/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body class ="">
+    <div class="container">
+        <header class="header">
+            <div class="header__inner">
+                <div class="header__logo">
+                        
+                    <a href="/" style="text-decoration: none;">
+                        <div class="logo">
+                          
+                                Bending bits...
+                            
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!-- Header menu -->
+            <nav class="menu">
+                <ul class="menu__inner">
+                    <li ><a href="/">Home</a></li>
+                    <li ><a href="/archives/">Archives</a></li>
+                    
+                        <li
+                            >
+                            <a href="/pages-output/about/">About</a>
+                        </li>
+                    
+                    <li><a href="/feed.xml">RSS</a></li>
+                </ul>
+            </nav>
+
+        </header>
+    
+
+        <div class ="content">
+            
+                
+<div id="post">
+    <div class="post">
+    <h1 class="post-title">Flask API served using Gunicorn and Nginx</h1>
+    <div class="post-meta-inline">
+        <span class="post-date">
+            April 10, 2023
+        </span>
+        
+    </div>
+</div>
+<div class="post-content">
+    <ol class="toc"><li><a href="#notes">Notes</a></li><li><a href="#install-dependencies">Install dependencies</a></li><li><a href="#python-environment">Python environment</a></li><li><a href="#python-application">Python Application</a></li><li><a href="#create-wsgi-entrypoint">Create WSGI entrypoint</a></li><li><a href="#create-systemd-service-file-for-flask-application">Create Systemd service file for Flask Application</a></li><li><a href="#configure-nginx-as-reverse-proxy">Configure Nginx as reverse proxy</a></li><li><a href="#support-materials">Support Materials</a></li></ol>
+    <hr /><h2 id="notes">Notes</h2><p>Configurations for using a Flask application using Gunicorn and Nginx. The application will respond to http and https requests
+over port 5000.</p><h2 id="install-dependencies">Install dependencies</h2><pre><code>&gt; sudo apt install python3-pip python3-dev python3-venv nginx
+
+</code></pre><h2 id="python-environment">Python environment</h2><pre><code>&gt; python3 -m venv env
+&gt; source env/bin/activate
+&gt; pip3 install flask gunicorn
+
+</code></pre><h2 id="python-application">Python Application</h2><pre><code>&gt;vim ~/project/app.py
+</code></pre><pre><code class="python">
+from flask import Flask
+app = Flask(__name__)
+@app.route("/")
+def hello():
+    return "Welcome to Flask Application!"
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
+
+</code></pre><h2 id="create-wsgi-entrypoint">Create WSGI entrypoint</h2><pre><code>&gt; vim ~/project/wsgi.py
+</code></pre><pre><code class="python">from app import app
+if __name__ == "__main__":
+    app.run()
+</code></pre><pre><code>&gt; deactivate
+</code></pre><h2 id="create-systemd-service-file-for-flask-application">Create Systemd service file for Flask Application</h2><pre><code>&gt; vi /etc/systemd/system/flask.service
+</code></pre><pre><code>[Unit]
+Description=Gunicorn instance to serve Flask
+After=network.target
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/home/&lt;user&gt;/project
+Environment="PATH=/home/&lt;user&gt;/project/env/bin"
+ExecStart=/home/&lt;user&gt;/project/env/bin/gunicorn --bind unix:/home/&lt;user&gt;/project/request.sock wsgi:app
+[Install]
+WantedBy=multi-user.target
+
+</code></pre><pre><code>&gt; chown -R root:www-data /home/&lt;user&gt;/project
+&gt; chmod -R 775 /home/&lt;user&gt;/project
+&gt; systemctl daemon-reload
+&gt; systemctl start flask
+&gt; systemctl enable flask
+&gt; systemctl status flask
+</code></pre><h2 id="configure-nginx-as-reverse-proxy">Configure Nginx as reverse proxy</h2><pre><code>&gt; vim /etc/nginx/sites-available/flask.conf
+</code></pre><pre><code>server {
+  listen &lt;server_ip&gt;:5002 ssl http2;
+  listen &lt;server_ip&gt;:5001;
+
+  ssl_certificate /home/&lt;user&gt;/project/cert.pem;
+  ssl_certificate_key /home/&lt;user&gt;/project/key.pem;
+
+  access_log /home/&lt;user&gt;/project/rest_api.access.log;
+  error_log /home/&lt;user&gt;/project/rest_api.error.log;
+
+
+
+  location / {
+    include proxy_params;
+    proxy_pass http://unix:/home/&lt;user&gt;/project/request.sock;
+   }
+
+}
+
+</code></pre><pre><code>&gt; vim /etc/nginx/nginx.conf
+</code></pre><p>At the end of file add:</p><pre><code>stream {
+    upstream http {
+        server &lt;server_ip&gt;:5001;
+    }
+
+    upstream https {
+        server &lt;server_ip&gt;:5002;
+    }
+
+    map $ssl_preread_protocol $upstream {
+        default https;
+        "" http;
+    }
+
+    # SSH and SSL on the same port
+    server {
+        listen 5000;
+
+        proxy_pass $upstream;
+        ssl_preread on;
+    }
+}
+
+
+</code></pre><pre><code>&gt; sudo ln -s /etc/nginx/sites-available/flask.conf /etc/nginx/sites-enabled
+</code></pre><pre><code>&gt; nginx -t
+&gt; systemctl restart nginx
+</code></pre><h2 id="support-materials">Support Materials</h2><p><a href="https://www.rosehosting.com/blog/how-to-deploy-flask-application-with-nginx-and-gunicorn-on-ubuntu-20-04/">Rosehosting</a><a href="https://kevalnagda.github.io/flask-app-with-wsgi-and-nginx">Keval Nagda</a><a href="https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https">miguelgrinberg.com</a></p>
+</div>
+
+<div id="post-tags">
+    <b>Tags: </b>
+    
+    <a href="/tags-output/nginx/">nginx</a>
+    
+    <a href="/tags-output/python/">python</a>
+    
+</div>
+
+
+    <div id="prev-next">
+        
+        
+        <a class="right" href="/posts-output/2023-03-09-QRNG-using-Qiskit-and-IBM/">QRNG using Qiskit and IBMQ &raquo;</a>
+        
+    </div>
+
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_config = function () {
+            this.page.url = "http://ardeleanasm.github.io/posts-output/2023-04-10-Flask-With-Gunicorn-and-Nginx/";
+            this.page.identifier = "Flask API served using Gunicorn and Nginx";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//23ars.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    
+
+
+</div>
+
+            
+        </div>
+        <footer class="footer">
+            <div class="footer__inner">
+                <div class="copyright">
+                    <span>Copyright &copy; 2023 ardeleanasm
+                    Powered by <a href="https://cryogenweb.org">Cryogen</a>
+                    <span class="copyright-theme-sep">:: </span>
+                    Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                </span>
+            </div>
+            </div>
+        </footer>
+            
+
+    </div>
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="/js/highlight.pack.js" type="application/javascript"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+</body>
+</html>
